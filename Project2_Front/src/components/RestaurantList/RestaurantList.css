@@ -1,0 +1,264 @@
+/* 📁 src/components/RestaurantList/RestaurantList.css */
+/* 역할: 맛집 목록 그리드 섹션의 스타일 정의 */
+/* 필터 탭, 정렬 드롭다운, 카드 그리드 레이아웃, 반응형 포함 */
+
+/* ── 섹션 배경 구분 ── */
+.restaurant-list {
+  background-color: var(--color-surface-alt);
+}
+
+/* ── 필터 & 정렬 컨트롤 영역 ── */
+.restaurant-list__controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+/* ── 카테고리 필터 버튼 목록 ── */
+.restaurant-list__filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.restaurant-list__filter-btn {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  padding: 7px 16px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.restaurant-list__filter-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* 활성화된 필터 버튼 */
+.restaurant-list__filter-btn--active {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff !important;
+}
+
+/* ── 정렬 드롭다운 ── */
+.restaurant-list__sort {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  cursor: pointer;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.restaurant-list__sort:hover,
+.restaurant-list__sort:focus {
+  border-color: var(--color-primary);
+}
+
+/* ── 맛집 카드 그리드 ── */
+/* 반응형: 데스크톱 3열, 태블릿 2열, 모바일 1열 */
+.restaurant-list__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* ── 개별 맛집 카드 ── */
+.restaurant-card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.restaurant-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ── 카드 이미지 래퍼 (뱃지 포지셔닝 기준점) ── */
+.restaurant-card__image-wrap {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.restaurant-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-base);
+}
+
+.restaurant-card:hover .restaurant-card__image {
+  transform: scale(1.06);
+}
+
+/* ── NEW / HOT 뱃지 ── */
+.restaurant-card__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.5px;
+}
+
+.restaurant-card__badge--new {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+.restaurant-card__badge--hot {
+  background-color: var(--color-accent);
+  color: var(--color-primary-dark);
+}
+
+/* ── 좋아요 버튼 ── */
+.restaurant-card__like-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: var(--color-text-muted);
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.restaurant-card__like-btn:hover {
+  transform: scale(1.15);
+  color: var(--color-primary);
+}
+
+/* 좋아요 활성 상태 */
+.restaurant-card__like-btn--active {
+  color: var(--color-primary) !important;
+}
+
+/* ── 카드 정보 영역 ── */
+.restaurant-card__info {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 카테고리 뱃지 + 가격대 행 */
+.restaurant-card__tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.restaurant-card__price {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  letter-spacing: 1px;
+}
+
+/* 맛집 이름 */
+.restaurant-card__name {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+/* 별점 행 */
+.restaurant-card__rating-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.restaurant-card__rating-num {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.restaurant-card__review-count {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* 위치 정보 행 */
+.restaurant-card__location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.restaurant-card__distance {
+  color: var(--color-text-muted);
+}
+
+/* 해시태그 목록 */
+.restaurant-card__tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 2px;
+}
+
+.restaurant-card__tag {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* ── 더보기 버튼 래퍼 ── */
+.restaurant-list__more {
+  margin-top: 36px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ── 반응형: 태블릿 ── */
+@media (max-width: 900px) {
+  .restaurant-list__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── 반응형: 모바일 ── */
+@media (max-width: 520px) {
+  .restaurant-list__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .restaurant-list__controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .restaurant-list__sort {
+    width: 100%;
+  }
+}

@@ -1,0 +1,174 @@
+/* 📁 src/components/LikedList/LikedList.css */
+/* 역할: 좋아요 기록 페이지의 스타일 정의 */
+/* 좋아요 카드 가로형 레이아웃, 빈 상태 UI, 반응형 포함 */
+
+/* ── 좋아요 카드 그리드 ── */
+/* 가로형 카드를 세로로 쌓는 단일 열 레이아웃 */
+.liked-list__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── 개별 좋아요 카드 (가로형) ── */
+.liked-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  padding: 16px;
+  transition: box-shadow var(--transition-base);
+  cursor: pointer;
+}
+
+.liked-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* ── 카드 썸네일 이미지 ── */
+.liked-card__image-wrap {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.liked-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-base);
+}
+
+.liked-card:hover .liked-card__image {
+  transform: scale(1.06);
+}
+
+/* ── 카드 정보 영역 ── */
+.liked-card__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0; /* flex 자식이 텍스트 truncation 되도록 */
+}
+
+.liked-card__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.liked-card__price {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  letter-spacing: 1px;
+}
+
+/* 맛집 이름 - 한 줄 말줄임 처리 */
+.liked-card__name {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.liked-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.liked-card__rating-num {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.liked-card__review-count {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.liked-card__location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+/* ── 좋아요 취소 버튼 ── */
+.liked-card__unlike-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary);
+  background-color: var(--color-accent-soft);
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+  flex-shrink: 0;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.liked-card__unlike-btn:hover {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+/* ── 빈 상태 UI ── */
+.liked-list__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+/* 큰 하트 아이콘 */
+.liked-list__empty-icon {
+  font-size: 56px;
+  color: var(--color-border);
+  margin-bottom: 20px;
+  line-height: 1;
+}
+
+.liked-list__empty-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 8px;
+}
+
+.liked-list__empty-desc {
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+/* ── 반응형: 모바일 ── */
+@media (max-width: 480px) {
+  .liked-card {
+    /* 모바일에서 카드를 세로 방향으로 변경 */
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .liked-card__image-wrap {
+    width: 100%;
+    height: 160px;
+  }
+
+  .liked-card__unlike-btn {
+    align-self: flex-end;
+  }
+}

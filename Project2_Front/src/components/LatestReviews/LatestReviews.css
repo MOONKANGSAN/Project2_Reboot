@@ -1,0 +1,198 @@
+/* 📁 src/components/LatestReviews/LatestReviews.css */
+/* 역할: 최신 리뷰 섹션의 스타일 정의 */
+/* 가로 스크롤 카드 리스트, 카드 내부 레이아웃, 반응형 포함 */
+
+/* ── 섹션 헤더: 제목 + 전체 보기 버튼 가로 배치 ── */
+.latest-reviews__header {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* 전체 보기 버튼을 오른쪽 끝으로 밀기 */
+.latest-reviews__more-btn {
+  margin-left: auto;
+}
+
+/* ── 카드 목록 컨테이너 ── */
+/* 가로 스크롤 가능한 flex 레이아웃 */
+.latest-reviews__list {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  /* 스크롤바 숨김 처리 (UX) */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* 패딩으로 좌우 여백 확보 (스냅 스크롤 효과) */
+  padding-bottom: 8px;
+  scroll-snap-type: x mandatory;
+}
+
+.latest-reviews__list::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── 개별 리뷰 카드 ── */
+.review-card {
+  /* 카드 최소/최대 너비 고정 (가로 스크롤 아이템) */
+  min-width: 280px;
+  max-width: 300px;
+  flex-shrink: 0;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  scroll-snap-align: start;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.review-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ── 카드 이미지 영역 ── */
+.review-card__image {
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+}
+
+.review-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-base);
+}
+
+.review-card:hover .review-card__image img {
+  /* 호버 시 이미지 살짝 확대 */
+  transform: scale(1.04);
+}
+
+/* ── 카드 본문 영역 ── */
+.review-card__body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── 작성자 메타 정보: 아바타 + 이름 + 날짜 ── */
+.review-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 이니셜 아바타 원형 */
+.review-card__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--color-accent-soft);
+  color: var(--color-primary-dark);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.review-card__user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.review-card__username {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.review-card__date {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+/* ── 리뷰 대상 식당 정보 ── */
+.review-card__restaurant {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.review-card__restaurant-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* ── 별점 ── */
+.review-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.review-card__rating-num {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+/* ── 리뷰 본문 ── */
+/* 최대 3줄까지만 표시 (line-clamp) */
+.review-card__content {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── 카드 하단: 좋아요 버튼 ── */
+.review-card__footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 4px;
+  border-top: 1px solid var(--color-border);
+}
+
+.review-card__like-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.review-card__like-btn:hover {
+  color: var(--color-primary);
+  background-color: var(--color-accent-soft);
+}
+
+/* ── 반응형: 모바일 ── */
+@media (max-width: 480px) {
+  .review-card {
+    min-width: 240px;
+    max-width: 260px;
+  }
+
+  .latest-reviews__more-btn {
+    /* 모바일에서는 전체 너비로 */
+    width: 100%;
+    justify-content: center;
+    margin-left: 0;
+    margin-top: 4px;
+  }
+}

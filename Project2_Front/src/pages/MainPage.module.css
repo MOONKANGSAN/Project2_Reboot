@@ -1,0 +1,58 @@
+/* 메인 콘텐츠 최대 너비 제한 및 중앙 정렬 */
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+/* 섹션 타이틀 + 정렬 셀렉트 행 */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.sectionTitle {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* 필터링된 식당 수 강조 표시 */
+.count {
+  color: var(--accent);
+  margin-left: 6px;
+}
+
+.sortSelect {
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-family: var(--font-sans);
+  color: var(--text-secondary);
+  background: var(--surface);
+  outline: none;
+  cursor: pointer;
+}
+
+/* 반응형 카드 그리드: 최소 320px, 여백 24px */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* 결과 없음 빈 상태 */
+.empty {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+.emptyIcon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}

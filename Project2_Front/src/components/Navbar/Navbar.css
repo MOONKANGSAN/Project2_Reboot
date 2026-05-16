@@ -1,0 +1,204 @@
+/* 📁 src/components/Navbar/Navbar.css */
+/* 역할: 네비게이션 바의 스타일 정의 */
+/* 고정(fixed) 포지션, 스크롤 감지 스타일, 모바일 반응형 메뉴 포함 */
+
+/* ── 네브바 컨테이너 ── */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: var(--navbar-height);
+  background-color: rgba(250, 249, 247, 0.92);
+  /* 배경 블러 - 모던 글래스모피즘 효과 */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+/* 스크롤 시 네브바에 그림자 및 테두리 추가 */
+.navbar--scrolled {
+  border-bottom-color: var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── 내부 레이아웃: 로고 + 탭 + 액션 버튼 가로 배치 ── */
+.navbar__inner {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* ── 로고 ── */
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.navbar__logo-icon {
+  font-size: 22px;
+}
+
+/* ── 데스크톱 탭 네비게이션 ── */
+.navbar__tabs {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.navbar__tab {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.navbar__tab:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-alt);
+}
+
+/* 활성화된 탭 스타일 */
+.navbar__tab--active {
+  color: var(--color-primary) !important;
+  background-color: var(--color-accent-soft) !important;
+  font-weight: 600;
+}
+
+/* ── 우측 액션 버튼 영역 ── */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+/* 아이콘 버튼 (검색 등) */
+.navbar__icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.navbar__icon-btn:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-alt);
+}
+
+/* 리뷰 쓰기 버튼 - 모바일에서는 숨김 */
+.navbar__review-btn {
+  white-space: nowrap;
+}
+
+/* ── 모바일 햄버거 버튼 ── */
+/* 기본적으로 숨기고, 모바일에서만 표시 */
+.navbar__hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+}
+
+/* 햄버거 버튼의 각 줄 (막대) */
+.navbar__hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: var(--color-text-primary);
+  border-radius: 2px;
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+  transform-origin: center;
+}
+
+/* 열린 상태: X 모양으로 변환 */
+.navbar__hamburger--open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.navbar__hamburger--open span:nth-child(2) {
+  opacity: 0;
+}
+.navbar__hamburger--open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ── 모바일 드롭다운 메뉴 ── */
+.navbar__mobile-menu {
+  display: none;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height var(--transition-base);
+}
+
+.navbar__mobile-menu--open {
+  max-height: 300px;
+}
+
+.navbar__mobile-tab {
+  font-size: 16px;
+  font-weight: 500;
+  text-align: left;
+  padding: 16px 20px;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.navbar__mobile-tab:last-child {
+  border-bottom: none;
+}
+
+.navbar__mobile-tab:hover {
+  background-color: var(--color-surface-alt);
+  color: var(--color-text-primary);
+}
+
+.navbar__mobile-tab--active {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* ── 반응형: 태블릿 이하 ── */
+@media (max-width: 768px) {
+  /* 데스크톱 탭 숨김 */
+  .navbar__tabs {
+    display: none;
+  }
+
+  /* 리뷰 쓰기 버튼 숨김 */
+  .navbar__review-btn {
+    display: none;
+  }
+
+  /* 햄버거 버튼 표시 */
+  .navbar__hamburger {
+    display: flex;
+  }
+
+  /* 모바일 드롭다운 메뉴 표시 가능하게 */
+  .navbar__mobile-menu {
+    display: flex;
+  }
+}

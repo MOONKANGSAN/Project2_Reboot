@@ -1,0 +1,55 @@
+/* 📁 src/components/Footer/Footer.css */
+/* 역할: 하단 푸터 스타일 정의 */
+
+.footer {
+  background-color: var(--color-text-primary);
+  color: rgba(255, 255, 255, 0.6);
+  padding: 40px 0 28px;
+  margin-top: auto;
+}
+
+.footer__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.footer__logo {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.footer__tagline {
+  font-size: 13px;
+}
+
+.footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  justify-content: center;
+  font-size: 13px;
+}
+
+.footer__links span {
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.footer__links span:hover {
+  color: #fff;
+}
+
+.footer__copyright {
+  font-size: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
+  width: 100%;
+  text-align: center;
+}

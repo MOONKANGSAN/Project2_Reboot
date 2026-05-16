@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    /* 📁 tsconfig.json */
+    /* 역할: TypeScript 컴파일러 설정 파일 */
+    /* CRA(Create React App) 기본값 기준에서 strict 옵션을 강화한 설정 */
+
+    "target": "ES2020",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+
+    /* 엄격 타입 검사 모음 활성화 - null/undefined 체크, 암묵적 any 방지 등 포함 */
+    "strict": true,
+
+    /* noUnusedLocals: 선언 후 사용하지 않는 로컬 변수 오류 처리 */
+    "noUnusedLocals": true,
+    /* noUnusedParameters: 사용하지 않는 함수 파라미터 오류 처리 */
+    "noUnusedParameters": true,
+
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+
+    /* jsx: React 17+ 자동 import 방식 사용 */
+    "jsx": "react-jsx",
+
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+
+    /* paths: 절대 경로 import 별칭 설정 (@/components/... 형태로 사용 가능) */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src"]
+}

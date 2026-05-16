@@ -1,0 +1,26 @@
+# Docker MySQL 데이터 저장소 제외 (가장 중요)
+/mysql_data/
+
+# OS 관련 파일 제외
+.DS_Store
+Thumbs.db
+
+# IntelliJ 및 IDE 설정 파일 제외
+.idea/
+*.iml
+.gradle/
+build/
+
+# 백엔드 빌드 결과물 제외
+/project2_spring/build/
+/project2_spring/.gradle/
+
+# 프론트엔드(Project2_Front) 의존성 및 빌드 파일 제외 (★이름 매칭)
+node_modules/
+dist/
+/Project2_Front/dist/
+/Project2_Front/node_modules/
+*.local
+
+# 로그 파일
+*.log

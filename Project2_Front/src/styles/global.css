@@ -1,0 +1,221 @@
+/* 📁 src/styles/global.css */
+/* 역할: 전체 앱에 공통으로 적용되는 기본 스타일 및 CSS 변수 정의 */
+
+/* ─────────────────────────────────────────
+   CSS 변수 (디자인 토큰)
+   앱 전반에서 색상, 폰트, 반경 등을 일관성 있게 관리
+───────────────────────────────────────── */
+:root {
+  /* 주요 색상 팔레트 - 따뜻한 식욕 자극 계열 */
+  --color-primary: #e8470a;
+  --color-primary-light: #ff6b35;
+  --color-primary-dark: #b83200;
+  --color-accent: #ffd166;
+  --color-accent-soft: #fff3cc;
+
+  /* 중립 색상 */
+  --color-bg: #faf9f7;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f5f3ef;
+  --color-border: #e8e4de;
+  --color-text-primary: #1a1714;
+  --color-text-secondary: #6b635a;
+  --color-text-muted: #a39d96;
+
+  /* 별점 색상 */
+  --color-star: #f4a41b;
+
+  /* 폰트 패밀리 */
+  --font-heading: "Playfair Display", "Noto Serif KR", serif;
+  --font-body: "Pretendard", "Noto Sans KR", sans-serif;
+
+  /* 반경 */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-full: 999px;
+
+  /* 그림자 */
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.07);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.13);
+
+  /* 트랜지션 */
+  --transition-fast: 0.18s ease;
+  --transition-base: 0.28s ease;
+
+  /* 레이아웃 */
+  --max-width: 1180px;
+  --navbar-height: 64px;
+}
+
+/* ─────────────────────────────────────────
+   CSS 리셋 및 기본 설정
+───────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* 모바일 폰트 자동 크기 조정 방지 */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  /* 모바일 터치 스크롤 최적화 */
+  -webkit-overflow-scrolling: touch;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ─────────────────────────────────────────
+   앱 레이아웃 구조
+───────────────────────────────────────── */
+
+/* 전체 앱을 감싸는 최상위 래퍼 */
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 메인 컨텐츠 영역 - 네브바 높이만큼 상단 여백 */
+.main-content {
+  flex: 1;
+  padding-top: var(--navbar-height);
+}
+
+/* ─────────────────────────────────────────
+   공통 유틸리티 클래스
+───────────────────────────────────────── */
+
+/* 컨텐츠 최대 너비 제한 및 중앙 정렬 */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* 섹션 공통 여백 */
+.section {
+  padding: 56px 0;
+}
+
+/* 섹션 헤더 (제목 + 부제목 묶음) */
+.section-header {
+  margin-bottom: 36px;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(22px, 3.5vw, 30px);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.section-subtitle {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  margin-top: 6px;
+}
+
+/* 별점 표시 공통 스타일 */
+.star-rating {
+  color: var(--color-star);
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+/* 카테고리 뱃지 */
+.badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-accent-soft);
+  color: var(--color-primary-dark);
+}
+
+/* 버튼 - 기본 (primary) */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 22px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  color: #fff;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-light);
+  transform: translateY(-1px);
+}
+
+/* 버튼 - 아웃라인 */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 22px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-border);
+  color: var(--color-text-secondary);
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ─────────────────────────────────────────
+   반응형 브레이크포인트 기준 (참고용 주석)
+   모바일: ~ 480px
+   태블릿: 481px ~ 768px
+   데스크톱: 769px ~
+───────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  /* 모바일에서 섹션 세로 여백 줄임 */
+  .section {
+    padding: 40px 0;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+}

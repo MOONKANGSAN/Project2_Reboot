@@ -1,0 +1,193 @@
+/* 📁 src/components/MainBanner/MainBanner.css */
+/* 역할: 메인 히어로 배너의 스타일 정의 */
+/* 배경 그라디언트, 검색 폼, 카테고리 버튼, 반응형 레이아웃 포함 */
+
+/* ── 배너 컨테이너 ── */
+.main-banner {
+  position: relative;
+  /* 배경: 따뜻한 음식 분위기의 그라디언트 */
+  background: linear-gradient(
+    135deg,
+    #2d1b10 0%,
+    #5c2d0e 35%,
+    #8b3a0f 60%,
+    #c4520d 100%
+  );
+  padding: 80px 0 64px;
+  overflow: hidden;
+}
+
+/* 배경에 식감 느낌의 패턴 추가 (의사 요소) */
+.main-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+      ellipse at 20% 50%,
+      rgba(255, 200, 100, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 80% 20%,
+      rgba(255, 100, 50, 0.12) 0%,
+      transparent 50%
+    );
+  pointer-events: none;
+}
+
+/* 하단 물결 처리 (섹션 전환부 자연스럽게 연결) */
+.main-banner::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: var(--color-bg);
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+
+/* 오버레이 - 가독성 향상용 */
+.main-banner__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+
+/* ── 배너 내용 영역 ── */
+.main-banner__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+/* ── 타이틀 텍스트 ── */
+.main-banner__text {
+  text-align: center;
+}
+
+.main-banner__title {
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+/* 강조 텍스트 - 노란색 악센트 */
+.main-banner__title-accent {
+  color: var(--color-accent);
+}
+
+.main-banner__desc {
+  margin-top: 14px;
+  font-size: clamp(14px, 2vw, 17px);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ── 검색 폼 ── */
+.main-banner__search {
+  display: flex;
+  width: 100%;
+  max-width: 580px;
+  background-color: #fff;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.main-banner__search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: var(--font-body);
+  font-size: 15px;
+  padding: 16px 22px;
+  color: var(--color-text-primary);
+  background: transparent;
+}
+
+.main-banner__search-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.main-banner__search-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  background-color: var(--color-primary);
+  padding: 14px 24px;
+  border-radius: 0;
+  transition: background-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.main-banner__search-btn:hover {
+  background-color: var(--color-primary-light);
+}
+
+/* ── 카테고리 바로가기 버튼 목록 ── */
+.main-banner__categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.main-banner__category-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-full);
+  padding: 8px 18px;
+  backdrop-filter: blur(8px);
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.main-banner__category-btn:hover {
+  background-color: rgba(255, 255, 255, 0.28);
+  transform: translateY(-2px);
+}
+
+.main-banner__category-emoji {
+  font-size: 16px;
+}
+
+/* ── 반응형: 모바일 ── */
+@media (max-width: 480px) {
+  .main-banner {
+    padding: 60px 0 50px;
+  }
+
+  /* 검색창을 세로로 쌓기 */
+  .main-banner__search {
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    max-width: 100%;
+  }
+
+  .main-banner__search-btn {
+    justify-content: center;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  }
+
+  /* 카테고리 버튼 크기 조정 */
+  .main-banner__category-btn {
+    font-size: 13px;
+    padding: 7px 14px;
+  }
+}
