@@ -1,57 +1,57 @@
 // 📁 src/App.tsx
-// 역할: 앱 전체의 최상위 컴포넌트. 라우팅 및 전역 레이아웃을 담당
-//       TabId 타입으로 허용되지 않는 탭 값 사용을 컴파일 타임에 차단
-//       추후 React Router를 사용해 페이지 전환을 관리할 예정
+// 역할: 앱 전체의 최상위 컴포넌트
+//       React Router를 사용하여 라우팅을 관리
+//       Navbar와 Footer는 모든 페이지에서 고정으로 표시
+//       URL 경로에 따라 다른 컴포넌트가 main 영역에 렌더링됨
+//       각 Route에 대응하는 Page 컴포넌트로 분리되어 있음
 
-import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import Navbar from "@/components/Navbar/Navbar";
-import MainBanner from "@/components/MainBanner/MainBanner";
-import LatestReviews from "@/components/LatestReviews/LatestReviews";
-import RestaurantList from "@/components/RestaurantList/RestaurantList";
-import LikedList from "@/components/LikedList/LikedList";
 import Footer from "@/components/Footer/Footer";
-import type { TabId } from "./types";
+
+// 페이지 컴포넌트 임포트
+import HomePage from "@/pages/Home";
+import RestaurantsPage from "@/pages/RestaurantsPage";
+import LikedPage from "@/pages/LikedPage";
+import SignupPage from "@/pages/SignupPage";
+import NotFoundPage from "@/pages/NotFoundPage";
+
 import "./styles/global.css";
 
+// ─────────────────────────────────────────
+// 메인 컴포넌트: App
+// ─────────────────────────────────────────
+
 function App(): JSX.Element {
-  // 현재 활성화된 탭 메뉴를 추적하는 상태 - TabId 타입으로 허용 값을 제한
-  const [activeTab, setActiveTab] = useState<TabId>("home");
-
-  // 탭에 따라 렌더링할 컨텐츠를 결정하는 함수
-  // JSX.Element | null 반환 타입으로 렌더링 결과를 명시
-  const renderContent = (): JSX.Element | null => {
-    switch (activeTab) {
-      case "home":
-        return (
-          <>
-            {/* 메인 배너 섹션 */}
-            <MainBanner />
-            {/* 최신 리뷰 섹션 */}
-            <LatestReviews />
-            {/* 맛집 리스트 섹션 */}
-            <RestaurantList />
-          </>
-        );
-      case "restaurants":
-        return <RestaurantList showAll />;
-      case "liked":
-        return <LikedList />;
-      default:
-        return null;
-    }
-  };
-
   return (
-    <div className="app-wrapper">
-      {/* 상단 고정 내비게이션 바 */}
-      <Navbar activeTab={activeTab} onTabChange={setActiveTab} />
+    // BrowserRouter로 전체 앱을 감싸서 라우팅 활성화
+      <div className="app-wrapper">
+        {/* 상단 고정 네비게이션 바 - 모든 페이지에서 표시 */}
+        <Navbar />
 
-      {/* 메인 컨텐츠 영역 */}
-      <main className="main-content">{renderContent()}</main>
+        {/* 메인 컨텐츠 영역 - URL 경로에 따라 다른 페이지 렌더링 */}
+        <main className="main-content">
+          <Routes>
+            {/* 홈 페이지: 배너 + 최신 리뷰 + 맛집 리스트 */}
+            <Route path="/" element={<HomePage />} />
 
-      {/* 하단 푸터 */}
-      <Footer />
-    </div>
+            {/* 전체 맛집 탐색 페이지 */}
+            <Route path="/restaurants" element={<RestaurantsPage />} />
+
+            {/* 좋아요 기록 페이지 */}
+            <Route path="/liked" element={<LikedPage />} />
+
+            {/* 회원가입 페이지 */}
+            <Route path="/signup" element={<SignupPage />} />
+
+            {/* 404 페이지 - 존재하지 않는 경로 */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </main>
+
+        {/* 하단 푸터 - 모든 페이지에서 표시 */}
+        <Footer />
+      </div>
   );
 }
 
