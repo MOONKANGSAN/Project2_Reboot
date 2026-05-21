@@ -1,35 +1,30 @@
-import ShopCard from '@/components/main/ShopCard';
-import ReviewCard from '@/components/main/ReviewCard';
-import { MOCK_LATEST_REVIEWS, MOCK_RESTAURANTS } from '@/data/mockData';
+// 📁 src/pages/HomePage.tsx
+// 역할: 홈 페이지 컴포넌트
+//       메인 배너, 최신 리뷰 섹션, 맛집 리스트 섹션을 조합한 페이지
+//       "/" 경로에서 렌더링됨
+//       각 섹션은 독립적인 컴포넌트로 분리되어 있음
 
-const Home = () => {
+import MainBanner from "@/components/MainBanner/MainBanner";
+import LatestReviews from "@/components/LatestReviews/LatestReviews";
+import RestaurantList from "@/components/RestaurantList/RestaurantList";
+
+// ─────────────────────────────────────────
+// 페이지 컴포넌트
+// ─────────────────────────────────────────
+
+function HomePage(): JSX.Element {
   return (
-    <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
-      <header style={{ marginBottom: '30px' }}>
-        <h1 style={{ color: '#FF5C00' }}>맛집 예약 시스템</h1>
-      </header>
+    <>
+      {/* 상단 메인 배너 섹션 */}
+      <MainBanner />
 
       {/* 최신 리뷰 섹션 */}
-      <section style={{ marginBottom: '40px' }}>
-        <h3>최신 리뷰 ✍️</h3>
-        <div style={{ display: 'flex', gap: '15px', overflowX: 'auto', paddingBottom: '10px' }}>
-          {MOCK_LATEST_REVIEWS.map(review => (
-            <ReviewCard key={review.id} review={review} />
-          ))}
-        </div>
-      </section>
+      <LatestReviews />
 
-      {/* 주변 맛집 섹션 */}
-      <section>
-        <h3>내 주변 맛집 📍</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
-          {MOCK_RESTAURANTS.map(restaurant => (
-            <ShopCard key={restaurant.id} restaurant={restaurant} />
-          ))}
-        </div>
-      </section>
-    </div>
+      {/* 맛집 리스트 섹션 (홈에서는 일부 아이템만 표시) */}
+      <RestaurantList showAll={false} />
+    </>
   );
-};
+}
 
-export default Home;
+export default HomePage;

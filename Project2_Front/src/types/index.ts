@@ -7,12 +7,10 @@
 // 네비게이션 관련 타입
 // ─────────────────────────────────────────
 
-// 탭 ID를 문자열 리터럴 유니온으로 제한 - 잘못된 탭 ID 사용을 컴파일 타임에 방지
-export type TabId = "home" | "restaurants" | "liked";
-
 // 개별 탭 메뉴 항목 데이터 구조
 export interface NavTab {
-  id: TabId;
+  id: string;
+  path: string;
   label: string;
 }
 
@@ -136,10 +134,9 @@ export interface SortOption {
 // 컴포넌트 Props 타입
 // ─────────────────────────────────────────
 
-// Navbar 컴포넌트 Props
+// Navbar 컴포넌트 Props - 라우터 기반으로 변경되어 activeTab, onTabChange 제거
 export interface NavbarProps {
-  activeTab: TabId;
-  onTabChange: (tab: TabId) => void;
+  // 라우터가 URL을 관리하므로 더이상 tab 관련 props 불필요
 }
 
 // RestaurantCard 컴포넌트 Props

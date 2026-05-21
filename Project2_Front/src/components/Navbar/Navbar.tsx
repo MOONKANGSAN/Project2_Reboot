@@ -1,22 +1,27 @@
 // 📁 src/components/Navbar/Navbar.tsx
 // 역할: 상단 고정 네비게이션 바 컴포넌트
-//       로고, 탭 메뉴, 검색, 로그인/회원가입, 로그인 후 유저 드롭다운 포함
+//       로고, 라우터 기반 네비게이션, 검색, 로그인/회원가입, 로그인 후 유저 드롭다운 포함
+//       URL 경로에 따라 활성 탭이 자동으로 표시됨 (React Router useLocation 사용)
 //       isLoggedIn 상태에 따라 우측 버튼 영역이 두 가지 모드로 전환됨
 //       추후 JWT 토큰 기반 인증 상태를 Context 또는 전역 상태(Zustand 등)로 관리 예정
 
 import { useState, useEffect, useRef } from "react";
-import type { NavbarProps, NavTab, TabId } from "../../types";
+import { useNavigate, useLocation } from "react-router-dom";
+import type { NavTab } from "@/types";
 import "./Navbar.css";
 
 // ─────────────────────────────────────────
 // 상수 데이터
 // ─────────────────────────────────────────
 
-// 탭 메뉴 정의 - NavTab[] 타입으로 구조 보장
+// 라우터 기반 탭 메뉴 정의
+// id: 탭 고유 식별자
+// path: 라우터 경로
+// label: 사용자에게 표시될 텍스트
 const NAV_TABS: NavTab[] = [
-  { id: "home",        label: "홈"       },
-  { id: "restaurants", label: "맛집 탐색" },
-  { id: "liked",       label: "좋아요 기록" },
+  { id: "home",        path: "/",            label: "홈"       },
+  { id: "restaurants", path: "/restaurants", label: "맛집 탐색" },
+  { id: "liked",       path: "/liked",       label: "좋아요 기록" },
 ];
 
 // 로그인한 유저 목업 데이터 - 추후 API 응답 / Context로 교체 예정
@@ -54,9 +59,10 @@ function GuestActions({ onLogin, onSignup }: GuestActionsProps): JSX.Element {
 // ─────────────────────────────────────────
 interface UserMenuProps {
   onLogout: () => void;
+  onMyProfile: () => void;
 }
 
-function UserMenu({ onLogout }: UserMenuProps): JSX.Element {
+function UserMenu({ onLogout, onMyProfile }: UserMenuProps): JSX.Element {
   // 드롭다운 열림/닫힘 상태
   const [open, setOpen] = useState<boolean>(false);
   // 드롭다운 외부 클릭 감지를 위한 ref
@@ -113,8 +119,14 @@ function UserMenu({ onLogout }: UserMenuProps): JSX.Element {
 
           <div className="navbar__dropdown-divider" />
 
-          {/* 드롭다운 메뉴 항목 - 추후 각 페이지 연결 예정 */}
-          <button className="navbar__dropdown-item">
+          {/* 드롭다운 메뉴 항목 */}
+          <button 
+            className="navbar__dropdown-item"
+            onClick={() => {
+              onMyProfile();
+              setOpen(false);
+            }}
+          >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
             </svg>
@@ -138,7 +150,10 @@ function UserMenu({ onLogout }: UserMenuProps): JSX.Element {
           {/* 로그아웃 버튼 */}
           <button
             className="navbar__dropdown-item navbar__dropdown-item--logout"
-            onClick={() => { onLogout(); setOpen(false); }}
+            onClick={() => {
+              onLogout();
+              setOpen(false);
+            }}
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" />
@@ -154,7 +169,13 @@ function UserMenu({ onLogout }: UserMenuProps): JSX.Element {
 // ─────────────────────────────────────────
 // 메인 컴포넌트: Navbar
 // ─────────────────────────────────────────
-function Navbar({ activeTab, onTabChange }: NavbarProps): JSX.Element {
+
+// 라우터 기반 Navbar - Props가 필요 없음
+function Navbar(): JSX.Element {
+  // React Router 훅
+  const navigate = useNavigate();
+  const location = useLocation();
+
   // 모바일 메뉴 열림/닫힘 상태
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   // 스크롤 시 네브바 스타일 변경 여부
@@ -169,20 +190,38 @@ function Navbar({ activeTab, onTabChange }: NavbarProps): JSX.Element {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // 탭 클릭 핸들러
-  const handleTabClick = (tabId: TabId): void => {
-    onTabChange(tabId);
+  // 현재 경로에서 활성 탭 ID 반환
+  // location.pathname을 기반으로 어떤 탭이 활성화되어야 하는지 판단
+  const getActiveTabId = (): string => {
+    const path = location.pathname;
+    
+    if (path === "/") return "home";
+    if (path === "/restaurants") return "restaurants";
+    if (path === "/liked") return "liked";
+    
+    // 매칭되는 경로가 없으면 빈 문자열 반환
+    return "";
+  };
+
+  // 탭 클릭 핸들러 - 해당 경로로 네비게이트
+  const handleTabClick = (path: string): void => {
+    navigate(path);
     setMenuOpen(false);
   };
 
-  // 로그인 핸들러 - 추후 로그인 모달 오픈 또는 /login 라우팅으로 교체
+  // 로고 클릭 핸들러 - 홈으로 이동
+  const handleLogoClick = (): void => {
+    navigate("/");
+  };
+
+  // 로그인 핸들러 - 추후 로그인 모달 또는 /login 라우팅으로 교체
   const handleLogin = (): void => {
     setIsLoggedIn(true); // 임시: 목업 로그인 처리
   };
 
-  // 회원가입 핸들러 - 추후 회원가입 모달 또는 /signup 라우팅으로 교체
+  // 회원가입 핸들러 - /signup 경로로 이동
   const handleSignup = (): void => {
-    alert("회원가입 페이지로 이동합니다 (추후 구현)");
+    navigate("/signup");
   };
 
   // 로그아웃 핸들러 - 추후 토큰 삭제 및 상태 초기화 처리로 교체
@@ -190,23 +229,33 @@ function Navbar({ activeTab, onTabChange }: NavbarProps): JSX.Element {
     setIsLoggedIn(false);
   };
 
+  // 프로필 클릭 핸들러 - 추후 /profile 경로 추가
+  const handleMyProfile = (): void => {
+    // navigate("/profile"); // 추후 구현
+    alert("프로필 페이지 (준비 중)");
+  };
+
+  // 활성 탭 ID
+  const activeTabId = getActiveTabId();
+
   return (
     <header className={`navbar ${scrolled ? "navbar--scrolled" : ""}`}>
       <div className="navbar__inner container">
 
         {/* 로고 */}
-        <button className="navbar__logo" onClick={() => handleTabClick("home")}>
+        <button className="navbar__logo" onClick={handleLogoClick}>
           <span className="navbar__logo-icon">🍽</span>
           <span className="navbar__logo-text">맛지도</span>
         </button>
 
-        {/* 데스크톱 탭 메뉴 */}
+        {/* 데스크톱 탭 메뉴 - 라우터 기반 네비게이션 */}
         <nav className="navbar__tabs">
           {NAV_TABS.map((tab: NavTab) => (
             <button
               key={tab.id}
-              className={`navbar__tab ${activeTab === tab.id ? "navbar__tab--active" : ""}`}
-              onClick={() => handleTabClick(tab.id)}
+              // 현재 경로와 탭의 path가 일치하면 활성 클래스 적용
+              className={`navbar__tab ${activeTabId === tab.id ? "navbar__tab--active" : ""}`}
+              onClick={() => handleTabClick(tab.path)}
             >
               {tab.label}
             </button>
@@ -234,7 +283,7 @@ function Navbar({ activeTab, onTabChange }: NavbarProps): JSX.Element {
                 + 리뷰 쓰기
               </button>
               {/* 유저 아바타 + 드롭다운 메뉴 */}
-              <UserMenu onLogout={handleLogout} />
+              <UserMenu onLogout={handleLogout} onMyProfile={handleMyProfile} />
             </>
           ) : (
             /* 비로그인 상태: 로그인 + 회원가입 버튼 */
@@ -254,13 +303,14 @@ function Navbar({ activeTab, onTabChange }: NavbarProps): JSX.Element {
         </div>
       </div>
 
-      {/* 모바일 드롭다운 메뉴 */}
+      {/* 모바일 드롭다운 메뉴 - 라우터 기반 네비게이션 */}
       <div className={`navbar__mobile-menu ${menuOpen ? "navbar__mobile-menu--open" : ""}`}>
         {NAV_TABS.map((tab: NavTab) => (
           <button
             key={tab.id}
-            className={`navbar__mobile-tab ${activeTab === tab.id ? "navbar__mobile-tab--active" : ""}`}
-            onClick={() => handleTabClick(tab.id)}
+            // 현재 경로와 탭의 path가 일치하면 활성 클래스 적용
+            className={`navbar__mobile-tab ${activeTabId === tab.id ? "navbar__mobile-tab--active" : ""}`}
+            onClick={() => handleTabClick(tab.path)}
           >
             {tab.label}
           </button>

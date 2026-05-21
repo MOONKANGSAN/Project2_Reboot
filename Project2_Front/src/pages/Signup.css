@@ -1,0 +1,268 @@
+/* 📁 src/pages/Signup.css
+   역할: 회원가입 페이지 스타일
+         반응형 디자인, 폼 유효성 검증 시각적 피드백 포함 */
+
+/* ─────────────────────────────────────────
+   컨테이너 및 카드 레이아웃
+   ───────────────────────────────────────── */
+
+   .signup-container {
+    /* 최소 높이를 100vh로 설정하여 푸터가 하단에 고정되도록 함 */
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* 부드러운 그라데이션 배경 */
+    background: linear-gradient(135deg, #fff5f0 0%, #ffe8e0 100%);
+    padding: 2rem 1rem;
+  }
+  
+  .signup-card {
+    /* 카드 형태의 회원가입 폼 */
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 480px;
+    /* 부드러운 등장 애니메이션 */
+    animation: slideUp 0.4s ease-out;
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* ─────────────────────────────────────────
+     헤더 영역
+     ───────────────────────────────────────── */
+  
+  .signup-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .signup-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+  }
+  
+  .signup-subtitle {
+    font-size: 0.9375rem;
+    color: #666;
+    margin: 0;
+  }
+  
+  /* ─────────────────────────────────────────
+     폼 레이아웃
+     ───────────────────────────────────────── */
+  
+  .signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  /* ─────────────────────────────────────────
+     라벨 스타일
+     ───────────────────────────────────────── */
+  
+  .form-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  
+  .required {
+    /* 필수 입력 표시 */
+    color: #ff5c00;
+    font-weight: 700;
+  }
+  
+  /* ─────────────────────────────────────────
+     입력 필드 스타일
+     ───────────────────────────────────────── */
+  
+  .form-input {
+    /* 기본 입력 필드 스타일 */
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.9375rem;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    outline: none;
+    /* 부드러운 전환 효과 */
+    transition: all 0.2s ease;
+    background-color: #fafafa;
+  }
+  
+  .form-input::placeholder {
+    color: #aaa;
+  }
+  
+  /* 포커스 시 강조 효果 */
+  .form-input:focus {
+    border-color: #ff5c00;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(255, 92, 0, 0.1);
+  }
+  
+  /* 에러 상태 스타일 */
+  .form-input--error {
+    border-color: #e74c3c;
+    background-color: #fff5f5;
+  }
+  
+  .form-input--error:focus {
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+  }
+  
+  /* ─────────────────────────────────────────
+     에러 메시지 스타일
+     ───────────────────────────────────────── */
+  
+  .error-message {
+    /* 에러 메시지 텍스트 */
+    font-size: 0.8125rem;
+    color: #e74c3c;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  
+  .error-message::before {
+    /* 에러 아이콘 */
+    content: '⚠';
+    font-size: 0.875rem;
+  }
+  
+  /* ─────────────────────────────────────────
+     제출 버튼 스타일
+     ───────────────────────────────────────── */
+  
+  .submit-button {
+    /* 주요 액션 버튼 스타일 */
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, #ff5c00 0%, #ff8533 100%);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    /* 부드러운 전환 효과 */
+    transition: all 0.2s ease;
+    margin-top: 0.5rem;
+  }
+  
+  .submit-button:hover:not(:disabled) {
+    /* 호버 시 그림자 강조 */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 92, 0, 0.3);
+  }
+  
+  .submit-button:active:not(:disabled) {
+    /* 클릭 시 눌림 효과 */
+    transform: translateY(0);
+  }
+  
+  .submit-button:disabled {
+    /* 비활성 상태 */
+    background: linear-gradient(135deg, #ccc 0%, #ddd 100%);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  /* ─────────────────────────────────────────
+     푸터 영역 (로그인 링크)
+     ───────────────────────────────────────── */
+  
+  .signup-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f0f0f0;
+  }
+  
+  .footer-text {
+    font-size: 0.875rem;
+    color: #666;
+    margin: 0;
+  }
+  
+  .link-button {
+    /* 인라인 텍스트 링크 버튼 */
+    background: none;
+    border: none;
+    color: #ff5c00;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+    font-size: inherit;
+    transition: color 0.2s ease;
+  }
+  
+  .link-button:hover {
+    color: #ff8533;
+  }
+  
+  /* ─────────────────────────────────────────
+     반응형 디자인 (모바일)
+     ───────────────────────────────────────── */
+  
+  @media (max-width: 640px) {
+    .signup-container {
+      padding: 1rem;
+    }
+  
+    .signup-card {
+      padding: 1.5rem;
+      border-radius: 12px;
+    }
+  
+    .signup-title {
+      font-size: 1.5rem;
+    }
+  
+    .signup-subtitle {
+      font-size: 0.875rem;
+    }
+  
+    .form-input {
+      padding: 0.625rem 0.875rem;
+      font-size: 0.875rem;
+    }
+  
+    .submit-button {
+      padding: 0.75rem 1.25rem;
+      font-size: 0.9375rem;
+    }
+  }
+  
+  /* 태블릿 크기 */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .signup-card {
+      max-width: 500px;
+    }
+  }

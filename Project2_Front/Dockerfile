@@ -14,7 +14,11 @@ COPY . .
 RUN npm run build
 
 # 2단계: 실행 스테이지 (Nginx)
-FROM nginx:stable-alpine
+
+FROM nginx:alpine
+# 커스텀 설정 파일을 복사
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./dist /usr/share/nginx/html
 
 # 빌드 스테이지에서 생성된 dist 폴더를 Nginx 기본 서빙 디렉토리로 복사
 # Vite의 기본 빌드 결과물은 dist 폴더에 생성됩니다.

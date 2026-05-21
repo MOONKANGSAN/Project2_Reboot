@@ -36,6 +36,14 @@ public class UserInfo {
     @Column(name = "edit_date")
     private LocalDateTime editDate;
 
+    // 사용자 닉네임 (2-10자)
+    @Column(name = "nickname", length = 10, nullable = false)
+    private String nickname;
+
+    // 사용자 이메일 (고유값으로 설정 권장)
+    @Column(name = "email", length = 100, nullable = false, unique = true)
+    private String email;
+
     // 데이터 저장 전 자동으로 실행되는 메소드
     @PrePersist
     public void prePersist() {
