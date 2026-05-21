@@ -5,6 +5,15 @@
    CSS 변수 (디자인 토큰)
    앱 전반에서 색상, 폰트, 반경 등을 일관성 있게 관리
 ───────────────────────────────────────── */
+@font-face {
+  font-family: 'MyCustomFont';
+  src: url('fonts/Mapo_Regular.woff2') format('woff2'),
+       url('fonts/Mapo_Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* 폰트 로딩 중 fallback 폰트 표시 */
+}
+
 :root {
   /* 주요 색상 팔레트 - 따뜻한 식욕 자극 계열 */
   --color-primary: #e8470a;
@@ -26,8 +35,8 @@
   --color-star: #f4a41b;
 
   /* 폰트 패밀리 */
-  --font-heading: "Playfair Display", "Noto Serif KR", serif;
-  --font-body: "Pretendard", "Noto Sans KR", sans-serif;
+  --font-heading: "MyCustomFont", -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'MyCustomFont', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   /* 반경 */
   --radius-sm: 8px;
