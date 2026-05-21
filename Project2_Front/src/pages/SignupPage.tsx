@@ -209,7 +209,7 @@ function SignupPage(): JSX.Element {
         navigate('/');
       } else {
         // 백엔드에서 반환한 에러 메시지
-        alert('회원가입 실패: ' + response.data.message);
+        alert('1) 회원가입 실패: ' + response.data.message);
       }
     } catch (error: any) {
       console.error('회원가입 API 호출 실패:', error);
@@ -217,7 +217,7 @@ function SignupPage(): JSX.Element {
       // 에러 응답 처리
       if (error.response?.data?.message) {
         // 백엔드에서 반환한 에러 메시지 (아이디 중복, 이메일 중복 등)
-        alert('회원가입 실패: ' + error.response.data.message);
+        alert('2) 회원가입 실패: ' + error.response.data.message);
       } else if (error.response?.status === 400) {
         // 400 Bad Request (유효하지 않은 데이터)
         alert('잘못된 입력 데이터입니다. 다시 확인해주세요.');

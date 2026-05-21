@@ -17,7 +17,7 @@ import SignupPage from "@/pages/SignupPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 
 import "./styles/global.css";
-
+import "./styles/fonts/font.css";
 // ─────────────────────────────────────────
 // 메인 컴포넌트: App
 // ─────────────────────────────────────────
