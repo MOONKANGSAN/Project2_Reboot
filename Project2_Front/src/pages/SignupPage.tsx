@@ -6,6 +6,7 @@
 import { useState, FormEvent, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { logErrorToServer } from '../utils/errorLogger';
 import './SignupPage.css';
 
 // ─────────────────────────────────────────
@@ -209,19 +210,44 @@ function SignupPage(): JSX.Element {
         navigate('/');
       } else {
         // 백엔드에서 반환한 에러 메시지
+        await logErrorToServer(new Error(response.data.message), {
+          userId: formData.userId,
+          requestUrl: '/user/signup',
+          httpMethod: 'POST',
+          requestBody: {
+            userId: formData.userId,
+            password: formData.password,
+            nickname: formData.nickname,
+            email: formData.email,
+            phoneNumber: formData.phoneNumber,
+          },
+        });
         alert('1) 회원가입 실패: ' + response.data.message);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('회원가입 API 호출 실패:', error);
 
+      await logErrorToServer(error, {
+        userId: formData.userId,
+        requestUrl: '/user/signup',
+        httpMethod: 'POST',
+        requestBody: {
+          userId: formData.userId,
+          password: formData.password,
+          nickname: formData.nickname,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+        },
+      });
+
       // 에러 응답 처리
-      if (error.response?.data?.message) {
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
         // 백엔드에서 반환한 에러 메시지 (아이디 중복, 이메일 중복 등)
         alert('2) 회원가입 실패: ' + error.response.data.message);
-      } else if (error.response?.status === 400) {
+      } else if (axios.isAxiosError(error) && error.response?.status === 400) {
         // 400 Bad Request (유효하지 않은 데이터)
         alert('잘못된 입력 데이터입니다. 다시 확인해주세요.');
-      } else if (error.response?.status === 500) {
+      } else if (axios.isAxiosError(error) && error.response?.status === 500) {
         // 500 Internal Server Error
         alert('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
       } else {
