@@ -15,6 +15,7 @@ import RestaurantsPage from "@/pages/RestaurantsPage";
 import LikedPage from "@/pages/LikedPage";
 import SignupPage from "@/pages/SignupPage";
 import NotFoundPage from "@/pages/NotFoundPage";
+import BackofficeSignup from "@/pages/backoffice/signup/index"
 
 import "./styles/global.css";
 import "./styles/fonts/font.css";
@@ -32,6 +33,7 @@ function App(): JSX.Element {
         {/* 메인 컨텐츠 영역 - URL 경로에 따라 다른 페이지 렌더링 */}
         <main className="main-content">
           <Routes>
+
             {/* 홈 페이지: 배너 + 최신 리뷰 + 맛집 리스트 */}
             <Route path="/" element={<HomePage />} />
 
@@ -43,6 +45,9 @@ function App(): JSX.Element {
 
             {/* 회원가입 페이지 */}
             <Route path="/signup" element={<SignupPage />} />
+
+            {/* 회원가입 페이지 */}
+            <Route path="/backoffice" element={<BackofficeSignup />} />          
 
             {/* 404 페이지 - 존재하지 않는 경로 */}
             <Route path="*" element={<NotFoundPage />} />

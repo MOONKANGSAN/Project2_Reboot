@@ -1,0 +1,227 @@
+/* ================================================================
+   📁 src/pages/backoffice/signup/BackofficeSignupPage.css
+   역할: 백오피스 관리자 가입 폼 전용 스타일
+         BackofficeLayout.css의 CSS 변수를 그대로 사용
+         콘텐츠 영역 중앙에 카드 형태로 배치
+   ================================================================ */
+
+/* ── 가입 폼 페이지 래퍼 ──
+   메인 콘텐츠 영역 안에서 카드를 수직 중앙 정렬 */
+   .bo-signup-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0;
+  }
+  
+  /* ── 가입 카드 ── */
+  .bo-signup-card {
+    background-color: var(--bo-bg-surface);
+    border: 1px solid var(--bo-border);
+    border-radius: 12px;
+    padding: 36px 40px;
+    width: 100%;
+    max-width: 480px;
+  }
+  
+  /* ── 카드 헤더 ── */
+  .bo-signup-header {
+    margin-bottom: 28px;
+  }
+  
+  /* BACKOFFICE 구분 뱃지 */
+  .bo-signup-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--bo-accent);
+    background: var(--bo-accent-soft);
+    border: 1px solid var(--bo-accent-border);
+    border-radius: 4px;
+    padding: 3px 8px;
+    margin-bottom: 12px;
+  }
+  
+  .bo-signup-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--bo-text-primary);
+    margin-bottom: 6px;
+  }
+  
+  .bo-signup-subtitle {
+    font-size: 13px;
+    color: var(--bo-text-secondary);
+    line-height: 1.5;
+  }
+  
+  /* ── 폼 레이아웃 ── */
+  .bo-signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  
+  /* ── 폼 그룹 (라벨 + 인풋 + 에러) ── */
+  .bo-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  /* ── 라벨 ── */
+  .bo-form-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--bo-text-secondary);
+    letter-spacing: 0.3px;
+  }
+  
+  /* 필수 입력 표시 */
+  .bo-required {
+    color: var(--bo-accent);
+    margin-left: 1px;
+  }
+  
+  /* ── 텍스트 인풋 ── */
+  .bo-form-input {
+    width: 100%;
+    padding: 9px 13px;
+    font-size: 13px;
+    color: var(--bo-text-primary);
+    background-color: var(--bo-bg-dark);
+    border: 1px solid var(--bo-border);
+    border-radius: 6px;
+    outline: none;
+    transition: border-color var(--bo-transition), box-shadow var(--bo-transition);
+    box-sizing: border-box;
+  }
+  
+  .bo-form-input::placeholder {
+    color: var(--bo-text-muted);
+    font-size: 12px;
+  }
+  
+  /* 포커스: 액센트 컬러 강조 */
+  .bo-form-input:focus {
+    border-color: var(--bo-accent);
+    box-shadow: 0 0 0 3px var(--bo-accent-soft);
+  }
+  
+  /* 에러 상태 */
+  .bo-form-input--error {
+    border-color: var(--bo-error);
+    background-color: rgba(239, 68, 68, 0.05);
+  }
+  
+  .bo-form-input--error:focus {
+    border-color: var(--bo-error);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  }
+  
+  /* ── 셀렉트 (레벨 선택) ── */
+  .bo-form-select {
+    width: 100%;
+    padding: 9px 36px 9px 13px;
+    font-size: 13px;
+    color: var(--bo-text-primary);
+    background-color: var(--bo-bg-dark);
+    border: 1px solid var(--bo-border);
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    /* 커스텀 드롭다운 화살표 */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23606060' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    transition: border-color var(--bo-transition), box-shadow var(--bo-transition);
+    box-sizing: border-box;
+  }
+  
+  .bo-form-select option {
+    background-color: var(--bo-bg-surface);
+    color: var(--bo-text-primary);
+  }
+  
+  .bo-form-select:focus {
+    border-color: var(--bo-accent);
+    box-shadow: 0 0 0 3px var(--bo-accent-soft);
+  }
+  
+  /* ── 에러 메시지 ── */
+  .bo-error-message {
+    font-size: 11px;
+    color: var(--bo-error);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .bo-error-message::before {
+    content: '⚠';
+  }
+  
+  /* ── 제출 버튼 ── */
+  /* bo-btn--primary를 기반으로 full-width 확장 */
+  .bo-submit-button {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #000;
+    background-color: var(--bo-accent);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    margin-top: 4px;
+    transition: background-color var(--bo-transition), box-shadow var(--bo-transition), transform var(--bo-transition);
+  }
+  
+  .bo-submit-button:hover:not(:disabled) {
+    background-color: var(--bo-accent-hover);
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+    transform: translateY(-1px);
+  }
+  
+  .bo-submit-button:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  .bo-submit-button:disabled {
+    background-color: var(--bo-bg-active);
+    color: var(--bo-text-muted);
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  
+  /* ── 하단 로그인 링크 영역 ── */
+  .bo-signup-footer {
+    padding-top: 16px;
+    border-top: 1px solid var(--bo-border);
+    text-align: center;
+  }
+  
+  .bo-footer-text {
+    font-size: 12px;
+    color: var(--bo-text-muted);
+    margin: 0;
+  }
+  
+  .bo-link-button {
+    background: none;
+    border: none;
+    color: var(--bo-accent);
+    font-size: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+    transition: color var(--bo-transition);
+  }
+  
+  .bo-link-button:hover {
+    color: var(--bo-accent-hover);
+  }
