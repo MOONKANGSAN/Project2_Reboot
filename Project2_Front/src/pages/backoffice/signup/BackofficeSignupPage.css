@@ -6,12 +6,13 @@
    ================================================================ */
 
 /* ── 가입 폼 페이지 래퍼 ──
-   메인 콘텐츠 영역 안에서 카드를 수직 중앙 정렬 */
-   .bo-signup-wrap {
+  메인 콘텐츠 영역 안에서 카드를 수직 중앙 정렬 */
+.bo-signup-wrap,
+.bo-signup-container {
     display: flex;
     justify-content: center;
     padding: 8px 0;
-  }
+}
   
   /* ── 가입 카드 ── */
   .bo-signup-card {

@@ -11,7 +11,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # 정의된 프론트엔드 의존성 라이브러리들을 컨테이너 내부에 설치합니다.
-RUN npm install
+RUN npm ci
 
 # 리액트 프로젝트의 모든 소스 코드를 컨테이너 내부로 복사합니다.
 COPY . .

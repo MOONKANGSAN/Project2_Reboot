@@ -1,5 +1,6 @@
 package com.example.Project2_Spring.controller;
 
+import com.example.Project2_Spring.dto.BackofficeUserDto;
 import com.example.Project2_Spring.entity.BackofficeUserInfo;
 import com.example.Project2_Spring.service.BackofficeUserInfoService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,49 @@ import java.util.Map;
 public class BackofficeUserInfoController {
 
     private final BackofficeUserInfoService backofficeUserInfoService;
+
+    // ─────────────────────────────────────────────────────────────
+    // 1. 관리자 계정 가입
+    // POST /api/backoffice/signup
+    // Body: { "id": "admin01", "password": "Admin1234!", "level": 2 }
+    // ─────────────────────────────────────────────────────────────
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@RequestBody BackofficeUserDto dto) {
+        try {
+            // DTO → Entity 변환
+            BackofficeUserInfo adminInfo = new BackofficeUserInfo();
+            adminInfo.setId(dto.getId());
+            adminInfo.setPassword(dto.getPassword()); // Service에서 해싱됨
+            adminInfo.setLevel(dto.getLevel());        // null이면 @PrePersist에서 기본값 1 적용
+
+            // Service에서 중복 체크 + 비밀번호 해싱 + DB 저장 처리
+            BackofficeUserInfo saved = backofficeUserInfoService.signup(adminInfo);
+
+            // 성공 응답 구성 (비밀번호 해시는 응답에 포함하지 않음)
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "관리자 계정 생성 완료");
+            response.put("id", saved.getId());
+            response.put("level", saved.getLevel());
+            response.put("regDate", saved.getRegDate());
+
+            return ResponseEntity.ok(response);
+
+        } catch (IllegalStateException e) {
+            // 아이디 중복 시
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("success", false);
+            errorResponse.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
+
+        } catch (Exception e) {
+            // 기타 서버 오류
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("success", false);
+            errorResponse.put("message", "계정 생성 중 오류가 발생했습니다: " + e.getMessage());
+            return ResponseEntity.status(500).body(errorResponse);
+        }
+    }
 
     // ─────────────────────────────────────────────────────────────
     // 1. 관리자 로그인

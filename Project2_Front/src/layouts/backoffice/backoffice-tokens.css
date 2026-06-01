@@ -1,0 +1,84 @@
+/* Backoffice 영역 전용 토큰 및 기본 레이아웃 */
+.bo-root {
+  --bo-bg-darkest: #0a0a0a;
+  --bo-bg-dark: #111111;
+  --bo-bg-mid: #1a1a1a;
+  --bo-bg-surface: #222222;
+  --bo-bg-hover: #2a2a2a;
+  --bo-border: #2e2e2e;
+  --bo-text-primary: #f0f0f0;
+  --bo-text-secondary: #a0a0a0;
+  --bo-accent: #f59e0b;
+  --bo-accent-soft: rgba(245, 158, 11, 0.12);
+  --bo-accent-border: rgba(245, 158, 11, 0.3);
+  --bo-top-height: 56px;
+  --bo-side-width: 220px;
+
+  min-height: 100vh;
+  background-color: var(--bo-bg-darkest);
+  color: var(--bo-text-primary);
+}
+
+.bo-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.bo-topbar {
+  height: var(--bo-top-height);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  background-color: var(--bo-bg-mid);
+  border-bottom: 1px solid var(--bo-border);
+}
+
+.bo-topbar__brand {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--bo-accent);
+}
+
+.bo-layout__body {
+  display: flex;
+  min-height: calc(100vh - var(--bo-top-height));
+}
+
+.bo-sidebar {
+  width: var(--bo-side-width);
+  background-color: var(--bo-bg-dark);
+  border-right: 1px solid var(--bo-border);
+  padding: 14px 10px;
+}
+
+.bo-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bo-nav__item {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--bo-text-secondary);
+  font-size: 14px;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.bo-nav__item:hover {
+  background-color: var(--bo-bg-hover);
+  color: var(--bo-text-primary);
+}
+
+.bo-nav__item.is-active {
+  background-color: var(--bo-accent-soft);
+  border: 1px solid var(--bo-accent-border);
+  color: var(--bo-accent);
+}
+
+.bo-main-content {
+  flex: 1;
+  padding: 24px;
+}

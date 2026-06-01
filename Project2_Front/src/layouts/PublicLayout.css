@@ -1,0 +1,12 @@
+/* 고객용 공통 레이아웃 */
+.public-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar 높이만큼 본문 상단 여백 확보 */
+.public-main-content {
+  flex: 1;
+  padding-top: var(--navbar-height);
+}
