@@ -29,7 +29,7 @@ public class BackofficeUserInfoService {
     public BackofficeUserInfo signup(BackofficeUserInfo adminInfo) {
 
         // 아이디 중복 체크
-        if (backofficeUserInfoRepository.existsById(adminInfo.getId())) {
+        if (backofficeUserInfoRepository.existsByLoginId(adminInfo.getId())) {
             throw new IllegalStateException("이미 존재하는 아이디입니다.");
         }
 
@@ -46,7 +46,7 @@ public class BackofficeUserInfoService {
     // - 아이디 조회 → BCrypt 비밀번호 비교 → 활성 상태 확인
     // ─────────────────────────────────────────────────────────────
     public BackofficeUserInfo login(String id, String rawPassword) {
-        return backofficeUserInfoRepository.findById(id)
+        return backofficeUserInfoRepository.findByLoginId(id)
                 // 아이디 미존재 또는 비밀번호 불일치 시 필터링
                 .filter(admin -> passwordEncoder.matches(rawPassword, admin.getPassword()))
                 // 비활성화 계정(state=0) 차단
@@ -60,7 +60,7 @@ public class BackofficeUserInfoService {
     // - 로그인 후 세션 검증 등에 활용
     // ─────────────────────────────────────────────────────────────
     public BackofficeUserInfo getAdminInfo(String id) {
-        return backofficeUserInfoRepository.findById(id)
+        return backofficeUserInfoRepository.findByLoginId(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 관리자 계정입니다."));
     }
 }

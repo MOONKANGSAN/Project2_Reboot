@@ -14,8 +14,12 @@ import LikedPage from "@/pages/LikedPage";
 import SignupPage from "@/pages/SignupPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import BackofficeSignup from "@/pages/backoffice/signup/index";
+import BackofficeLogin from "@/pages/backoffice/login/index";
+import BackofficeMain from "@/pages/backoffice/main/index";
+import BackofficeRestaurantRegister from "@/pages/backoffice/restaurant/register/index";
 import PublicLayout from "@/layouts/PublicLayout";
 import BackofficeLayout from "@/layouts/BackofficeLayout";
+import BackofficeProtectedRoute from "@/layouts/BackofficeProtectedRoute";
 
 // ─────────────────────────────────────────
 // 메인 컴포넌트: App
@@ -44,8 +48,16 @@ function App(): JSX.Element {
 
       {/* Backoffice는 고객용 레이아웃과 분리 */}
       <Route path="/backoffice" element={<BackofficeLayout />}>
-        <Route index element={<BackofficeSignup />} />
+        {/* 비인증 공개 라우트 */}
+        <Route index element={<BackofficeLogin />} />
+        <Route path="login" element={<BackofficeLogin />} />
         <Route path="signup" element={<BackofficeSignup />} />
+
+        {/* 인증 필요 라우트: 세션 없으면 /backoffice/login 으로 리다이렉트 */}
+        <Route element={<BackofficeProtectedRoute />}>
+          <Route path="main" element={<BackofficeMain />} />
+          <Route path="restaurant/register" element={<BackofficeRestaurantRegister />} />
+        </Route>
       </Route>
     </Routes>
   );

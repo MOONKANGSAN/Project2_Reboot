@@ -1,0 +1,153 @@
+/* ================================================================
+   src/pages/backoffice/main/BackofficeMainPage.css
+   역할: 백오피스 메인(대시보드) 페이지 스타일
+   ================================================================ */
+
+.bo-main-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── 페이지 헤더 ── */
+.bo-main-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.bo-main-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--bo-text-primary);
+  margin: 0 0 4px 0;
+}
+
+.bo-main-subtitle {
+  font-size: 13px;
+  color: var(--bo-text-secondary);
+  margin: 0;
+}
+
+/* ── 로그아웃 버튼 ── */
+.bo-logout-btn {
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bo-error);
+  background: transparent;
+  border: 1px solid var(--bo-error);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color var(--bo-transition), color var(--bo-transition);
+  white-space: nowrap;
+}
+
+.bo-logout-btn:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* ── 세션 정보 카드 ── */
+.bo-session-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bo-bg-surface);
+  border: 1px solid var(--bo-border);
+  border-radius: 10px;
+  padding: 20px 24px;
+}
+
+.bo-session-card__left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* 아이디 첫 글자 아바타 */
+.bo-session-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: var(--bo-accent);
+  color: #000;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bo-session-id {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--bo-text-primary);
+  margin: 0 0 4px 0;
+}
+
+.bo-session-time {
+  font-size: 11px;
+  color: var(--bo-text-muted);
+  margin: 0;
+}
+
+/* 레벨 뱃지 */
+.bo-level-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.bo-level-badge--1 {
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--bo-info);
+}
+
+.bo-level-badge--2 {
+  background: rgba(245, 158, 11, 0.12);
+  color: var(--bo-warning);
+}
+
+.bo-level-badge--3 {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--bo-error);
+}
+
+/* ── 통계 카드 그리드 ── */
+.bo-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.bo-stat-card {
+  background-color: var(--bo-bg-surface);
+  border: 1px solid var(--bo-border);
+  border-radius: 10px;
+  padding: 20px 24px;
+}
+
+.bo-stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--bo-text-muted);
+  margin: 0 0 10px 0;
+}
+
+.bo-stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--bo-text-primary);
+  margin: 0 0 4px 0;
+}
+
+.bo-stat-desc {
+  font-size: 11px;
+  color: var(--bo-text-muted);
+  margin: 0;
+}
