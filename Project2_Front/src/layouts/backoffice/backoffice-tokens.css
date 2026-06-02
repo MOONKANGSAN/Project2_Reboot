@@ -5,12 +5,20 @@
   --bo-bg-mid: #1a1a1a;
   --bo-bg-surface: #222222;
   --bo-bg-hover: #2a2a2a;
+  --bo-bg-active: #333333;
   --bo-border: #2e2e2e;
   --bo-text-primary: #f0f0f0;
   --bo-text-secondary: #a0a0a0;
+  --bo-text-muted: #606060;
   --bo-accent: #f59e0b;
+  --bo-accent-hover: #fbbf24;
   --bo-accent-soft: rgba(245, 158, 11, 0.12);
   --bo-accent-border: rgba(245, 158, 11, 0.3);
+  --bo-error: #ef4444;
+  --bo-warning: #f59e0b;
+  --bo-success: #22c55e;
+  --bo-info: #3b82f6;
+  --bo-transition: 0.18s ease;
   --bo-top-height: 56px;
   --bo-side-width: 220px;
 
@@ -50,6 +58,14 @@
   background-color: var(--bo-bg-dark);
   border-right: 1px solid var(--bo-border);
   padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.bo-sidebar__bottom {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--bo-border);
 }
 
 .bo-nav {
@@ -76,6 +92,22 @@
   background-color: var(--bo-accent-soft);
   border: 1px solid var(--bo-accent-border);
   color: var(--bo-accent);
+}
+
+/* 로그아웃 버튼: nav item 스타일 기반 + 빨간색 */
+.bo-nav__logout {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--bo-error);
+  font-size: 14px;
+}
+
+.bo-nav__logout:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--bo-error);
 }
 
 .bo-main-content {

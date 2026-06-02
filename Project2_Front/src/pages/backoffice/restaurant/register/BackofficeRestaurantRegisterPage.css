@@ -1,0 +1,272 @@
+/* ================================================================
+   src/pages/backoffice/restaurant/register/BackofficeRestaurantRegisterPage.css
+   ================================================================ */
+
+.bo-register-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── 페이지 헤더 ── */
+.bo-register-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.bo-register-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--bo-text-primary);
+  margin: 0 0 4px 0;
+}
+
+.bo-register-subtitle {
+  font-size: 13px;
+  color: var(--bo-text-secondary);
+  margin: 0;
+}
+
+/* ── 폼 카드 ── */
+.bo-register-card {
+  background-color: var(--bo-bg-surface);
+  border: 1px solid var(--bo-border);
+  border-radius: 12px;
+  padding: 32px 36px;
+}
+
+/* ── 폼 ── */
+.bo-register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 2열 행 */
+.bo-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* 절반 너비 */
+.bo-form-group--half {
+  max-width: 50%;
+}
+
+/* ── 폼 그룹 ── */
+.bo-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bo-form-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bo-text-secondary);
+  letter-spacing: 0.3px;
+}
+
+.bo-required {
+  color: var(--bo-error);
+  margin-left: 2px;
+}
+
+/* ── 인풋 ── */
+.bo-form-input {
+  width: 100%;
+  padding: 9px 13px;
+  font-size: 13px;
+  color: var(--bo-text-primary);
+  background-color: var(--bo-bg-dark);
+  border: 1px solid var(--bo-border);
+  border-radius: 6px;
+  outline: none;
+  transition: border-color var(--bo-transition), box-shadow var(--bo-transition);
+  box-sizing: border-box;
+}
+
+.bo-form-input::placeholder {
+  color: var(--bo-text-muted);
+  font-size: 12px;
+}
+
+.bo-form-input:focus {
+  border-color: var(--bo-accent);
+  box-shadow: 0 0 0 3px var(--bo-accent-soft);
+}
+
+.bo-form-input--error {
+  border-color: var(--bo-error);
+  background-color: rgba(239, 68, 68, 0.05);
+}
+
+.bo-form-input--error:focus {
+  border-color: var(--bo-error);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* ── 셀렉트 ── */
+.bo-form-select {
+  width: 100%;
+  padding: 9px 36px 9px 13px;
+  font-size: 13px;
+  color: var(--bo-text-primary);
+  background-color: var(--bo-bg-dark);
+  border: 1px solid var(--bo-border);
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23606060' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  transition: border-color var(--bo-transition), box-shadow var(--bo-transition);
+  box-sizing: border-box;
+}
+
+.bo-form-select option {
+  background-color: var(--bo-bg-surface);
+  color: var(--bo-text-primary);
+}
+
+.bo-form-select:focus {
+  border-color: var(--bo-accent);
+  box-shadow: 0 0 0 3px var(--bo-accent-soft);
+}
+
+/* ── 텍스트에어리어 ── */
+.bo-form-textarea {
+  width: 100%;
+  padding: 9px 13px;
+  font-size: 13px;
+  color: var(--bo-text-primary);
+  background-color: var(--bo-bg-dark);
+  border: 1px solid var(--bo-border);
+  border-radius: 6px;
+  outline: none;
+  resize: vertical;
+  min-height: 100px;
+  transition: border-color var(--bo-transition), box-shadow var(--bo-transition);
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.bo-form-textarea::placeholder {
+  color: var(--bo-text-muted);
+  font-size: 12px;
+}
+
+.bo-form-textarea:focus {
+  border-color: var(--bo-accent);
+  box-shadow: 0 0 0 3px var(--bo-accent-soft);
+}
+
+/* ── 가격대 라디오 그룹 ── */
+.bo-price-group {
+  display: flex;
+  gap: 8px;
+}
+
+.bo-price-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bo-text-secondary);
+  background-color: var(--bo-bg-dark);
+  border: 1px solid var(--bo-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--bo-transition);
+  user-select: none;
+}
+
+.bo-price-option:hover {
+  border-color: var(--bo-accent);
+  color: var(--bo-accent);
+}
+
+.bo-price-option.is-selected {
+  background-color: var(--bo-accent-soft);
+  border-color: var(--bo-accent);
+  color: var(--bo-accent);
+}
+
+.bo-price-radio {
+  display: none;
+}
+
+/* ── 에러 메시지 ── */
+.bo-error-message {
+  font-size: 11px;
+  color: var(--bo-error);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bo-error-message::before {
+  content: '⚠';
+}
+
+/* ── 버튼 영역 ── */
+.bo-register-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--bo-border);
+  margin-top: 4px;
+}
+
+.bo-btn-cancel {
+  padding: 9px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bo-text-secondary);
+  background: transparent;
+  border: 1px solid var(--bo-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--bo-transition);
+}
+
+.bo-btn-cancel:hover {
+  background-color: var(--bo-bg-hover);
+  color: var(--bo-text-primary);
+}
+
+.bo-btn-submit {
+  padding: 9px 24px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #000;
+  background-color: var(--bo-accent);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--bo-transition);
+}
+
+.bo-btn-submit:hover:not(:disabled) {
+  background-color: var(--bo-accent-hover);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+  transform: translateY(-1px);
+}
+
+.bo-btn-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.bo-btn-submit:disabled {
+  background-color: var(--bo-bg-active);
+  color: var(--bo-text-muted);
+  cursor: not-allowed;
+}

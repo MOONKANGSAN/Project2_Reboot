@@ -2,6 +2,8 @@ package com.example.Project2_Spring.repository;
 
 import com.example.Project2_Spring.entity.BackofficeUserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
@@ -12,11 +14,11 @@ import java.util.Optional;
 @Repository
 public interface BackofficeUserInfoRepository extends JpaRepository<BackofficeUserInfo, Integer> {
 
-    // ── 로그인용: 아이디로 관리자 계정 조회 ──
-    // SELECT * FROM backoff_userinfo WHERE id = ?
-    Optional<BackofficeUserInfo> findById(String id);
+    // ── 로그인용: id 컬럼으로 관리자 계정 조회 ──
+    @Query("SELECT u FROM BackofficeUserInfo u WHERE u.id = :id")
+    Optional<BackofficeUserInfo> findByLoginId(@Param("id") String id);
 
-    // ── 아이디 중복 확인 (Postman으로 계정 생성 시 중복 방지용) ──
-    // SELECT COUNT(*) FROM backoff_userinfo WHERE id = ?
-    boolean existsById(String id);
+    // ── 아이디 중복 확인 ──
+    @Query("SELECT COUNT(u) > 0 FROM BackofficeUserInfo u WHERE u.id = :id")
+    boolean existsByLoginId(@Param("id") String id);
 }
