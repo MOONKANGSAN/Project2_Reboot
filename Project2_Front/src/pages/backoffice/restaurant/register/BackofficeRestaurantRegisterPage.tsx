@@ -1,13 +1,16 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, useRef, useEffect, ChangeEvent, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { RestaurantRegisterFormData, FormErrors, RestaurantCategory } from './types';
 import type { PriceRange } from '@/types/index';
 import { validateRestaurantForm, hasErrors } from './validators';
-import { registerRestaurant } from './api';
+import { registerRestaurant, uploadRestaurantImages } from './api';
+import HashtagInput from '../HashtagInput';
 import './BackofficeRestaurantRegisterPage.css';
 
 const CATEGORIES: RestaurantCategory[] = ['한식', '일식', '중식', '양식', '카페', '분식'];
 const PRICE_RANGES: PriceRange[] = ['₩', '₩₩', '₩₩₩', '₩₩₩₩'];
+const MAX_IMAGES = 5;
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
 const INITIAL_FORM: RestaurantRegisterFormData = {
   name: '',
@@ -17,13 +20,29 @@ const INITIAL_FORM: RestaurantRegisterFormData = {
   phone: '',
   priceRange: '',
   description: '',
+  hashtags: [],
 };
 
 function BackofficeRestaurantRegisterPage(): JSX.Element {
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [formData, setFormData] = useState<RestaurantRegisterFormData>(INITIAL_FORM);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // 선택된 이미지 파일 목록
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  // 미리보기 URL 목록 (objectURL)
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [imgError, setImgError] = useState<string>('');
+
+  // 컴포넌트 언마운트 시 objectURL 해제 (메모리 누수 방지)
+  useEffect(() => {
+    return () => {
+      previewUrls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [previewUrls]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -35,6 +54,47 @@ function BackofficeRestaurantRegisterPage(): JSX.Element {
     }
   };
 
+  // 이미지 파일 선택 처리
+  const handleImageSelect = (e: ChangeEvent<HTMLInputElement>): void => {
+    setImgError('');
+    const selected = Array.from(e.target.files ?? []);
+    if (!selected.length) return;
+
+    const remaining = MAX_IMAGES - imageFiles.length;
+    if (remaining <= 0) {
+      setImgError(`이미지는 최대 ${MAX_IMAGES}개까지 등록 가능합니다.`);
+      return;
+    }
+
+    const validFiles: File[] = [];
+    for (const file of selected.slice(0, remaining)) {
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        setImgError('JPG, PNG, WEBP, GIF 형식만 업로드 가능합니다.');
+        continue;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        setImgError('각 이미지는 10MB 이하여야 합니다.');
+        continue;
+      }
+      validFiles.push(file);
+    }
+
+    const newUrls = validFiles.map((f) => URL.createObjectURL(f));
+    setImageFiles((prev) => [...prev, ...validFiles]);
+    setPreviewUrls((prev) => [...prev, ...newUrls]);
+
+    // 같은 파일 재선택 허용을 위해 input 초기화
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  // 개별 이미지 제거
+  const handleImageRemove = (index: number): void => {
+    URL.revokeObjectURL(previewUrls[index]);
+    setImageFiles((prev) => prev.filter((_, i) => i !== index));
+    setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
+    setImgError('');
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     const newErrors = validateRestaurantForm(formData);
@@ -43,13 +103,29 @@ function BackofficeRestaurantRegisterPage(): JSX.Element {
 
     setIsSubmitting(true);
     try {
+      // 1단계: 점포 정보 등록
       const data = await registerRestaurant(formData);
-      if (data.success) {
-        alert(`점포 [${data.name}] 등록이 완료되었습니다.`);
-        navigate('/backoffice/restaurant/list');
-      } else {
+      if (!data.success) {
         alert('등록 실패: ' + data.message);
+        return;
       }
+
+      const restaurantIdx = data.idx!;
+
+      // 2단계: 이미지가 있으면 업로드
+      if (imageFiles.length > 0) {
+        const imgResult = await uploadRestaurantImages(restaurantIdx, imageFiles);
+        if (!imgResult.success) {
+          // 점포는 등록됐지만 이미지 실패 — 목록으로 가되 안내
+          alert(`점포 [${data.name}] 등록 완료.\n이미지 업로드 실패: ${imgResult.message}`);
+          navigate('/backoffice/restaurant/list');
+          return;
+        }
+      }
+
+      alert(`점포 [${data.name}] 등록이 완료되었습니다.`);
+      navigate('/backoffice/restaurant/list');
+
     } catch (error: any) {
       if (error.response?.data?.message) {
         alert('등록 실패: ' + error.response.data.message);
@@ -194,6 +270,82 @@ function BackofficeRestaurantRegisterPage(): JSX.Element {
               placeholder="점포 소개글을 입력하세요 (선택)"
               rows={4}
             />
+          </div>
+
+          {/* 6행: 해시태그 */}
+          <div className="bo-form-group">
+            <label className="bo-form-label">해시태그</label>
+            <HashtagInput
+              tags={formData.hashtags}
+              onChange={(tags) => setFormData((prev) => ({ ...prev, hashtags: tags }))}
+            />
+          </div>
+
+          {/* 7행: 이미지 업로드 */}
+          <div className="bo-form-group">
+            <label className="bo-form-label">
+              점포 이미지
+              <span className="bo-img-limit-hint">최대 {MAX_IMAGES}장 · JPG, PNG, WEBP, GIF · 각 10MB 이하</span>
+            </label>
+
+            {/* 미리보기 그리드 */}
+            {previewUrls.length > 0 && (
+              <div className="bo-img-preview-grid">
+                {previewUrls.map((url, idx) => (
+                  <div key={url} className="bo-img-preview-item">
+                    <img src={url} alt={`미리보기 ${idx + 1}`} className="bo-img-preview-thumb" />
+                    {idx === 0 && (
+                      <span className="bo-img-representative-badge">대표</span>
+                    )}
+                    <button
+                      type="button"
+                      className="bo-img-remove-btn"
+                      onClick={() => handleImageRemove(idx)}
+                      title="이미지 제거"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+
+                {/* 추가 버튼 (최대 미만일 때만 표시) */}
+                {imageFiles.length < MAX_IMAGES && (
+                  <button
+                    type="button"
+                    className="bo-img-add-more-btn"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    <span className="bo-img-add-more-icon">+</span>
+                    <span>추가</span>
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* 이미지가 없을 때 드롭존 */}
+            {previewUrls.length === 0 && (
+              <button
+                type="button"
+                className="bo-img-dropzone"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <span className="bo-img-dropzone-icon">🖼</span>
+                <span className="bo-img-dropzone-text">클릭하여 이미지 선택</span>
+                <span className="bo-img-dropzone-hint">첫 번째 이미지가 대표 이미지로 설정됩니다</span>
+              </button>
+            )}
+
+            {/* 숨겨진 파일 input */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              multiple
+              onChange={handleImageSelect}
+              className="bo-img-file-input"
+            />
+
+            {imgError && <p className="bo-error-message">{imgError}</p>}
           </div>
 
           {/* 버튼 */}
