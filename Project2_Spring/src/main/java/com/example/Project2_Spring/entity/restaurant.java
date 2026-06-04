@@ -51,6 +51,14 @@ public class restaurant {
     @Column(name = "image_url", length = 300)
     private String imageUrl;
 
+    // 대표 이미지 idx (restaurant_img.idx 참조, 애플리케이션 레벨에서 관리)
+    @Column(name = "img_idx")
+    private Integer imgIdx;
+
+    // 평균 별점 (스케줄러가 매일 00:00 review 테이블로부터 갱신)
+    @Column(name = "avg_rating")
+    private Double avgRating;
+
     // 상태 (1=활성, 0=비활성)
     @Column(name = "state", columnDefinition = "TINYINT", nullable = false)
     private Integer state;

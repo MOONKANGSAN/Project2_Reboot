@@ -1,7 +1,3 @@
-/* 📁 src/components/Navbar/Navbar.css */
-/* 역할: 네비게이션 바의 스타일 정의 */
-/* 고정(fixed) 포지션, 스크롤 감지 스타일, 모바일 반응형 메뉴 포함 */
-
 /* ── 네브바 컨테이너 ── */
 .navbar {
   position: fixed;
@@ -10,49 +6,69 @@
   right: 0;
   z-index: 1000;
   height: var(--navbar-height);
-  background-color: rgba(250, 249, 247, 0.92);
-  /* 배경 블러 - 모던 글래스모피즘 효과 */
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: rgba(250, 249, 247, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid transparent;
   transition: border-color var(--transition-base), box-shadow var(--transition-base);
 }
 
-/* 스크롤 시 네브바에 그림자 및 테두리 추가 */
 .navbar--scrolled {
   border-bottom-color: var(--color-border);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
 }
 
-/* ── 내부 레이아웃: 로고 + 탭 + 액션 버튼 가로 배치 ── */
+/* ── 내부 레이아웃 ── */
 .navbar__inner {
   height: 100%;
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
 }
 
 /* ── 로고 ── */
 .navbar__logo {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   font-family: var(--font-heading);
   font-size: 20px;
   font-weight: 700;
   color: var(--color-primary);
   flex-shrink: 0;
+  transition: opacity var(--transition-fast);
 }
 
-.navbar__logo-icon {
-  font-size: 22px;
+.navbar__logo:hover { opacity: 0.8; }
+
+.navbar__logo-icon { font-size: 21px; }
+
+/* ════════════════════════════════
+   가운데 영역: 탭 ↔ 검색창 전환
+═══════════════════════════════ */
+.navbar__center {
+  flex: 1;
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  min-width: 0;
 }
 
-/* ── 데스크톱 탭 네비게이션 ── */
+/* ── 탭 메뉴 ── */
 .navbar__tabs {
   display: flex;
-  gap: 4px;
-  flex: 1;
+  gap: 2px;
+  width: 100%;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+/* 검색창 열릴 때 탭 페이드 아웃 */
+.navbar__tabs--hidden {
+  opacity: 0;
+  transform: translateX(-14px);
+  pointer-events: none;
+  position: absolute;
 }
 
 .navbar__tab {
@@ -62,6 +78,7 @@
   padding: 6px 14px;
   border-radius: var(--radius-full);
   transition: color var(--transition-fast), background-color var(--transition-fast);
+  white-space: nowrap;
 }
 
 .navbar__tab:hover {
@@ -69,28 +86,110 @@
   background-color: var(--color-surface-alt);
 }
 
-/* 활성화된 탭 스타일 */
 .navbar__tab--active {
   color: var(--color-primary) !important;
   background-color: var(--color-accent-soft) !important;
   font-weight: 600;
 }
 
-/* ── 우측 액션 버튼 영역 ── */
+/* ════════════════════════════════
+   검색창
+═══════════════════════════════ */
+.navbar__search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 480px;
+
+  /* 닫힌 상태 */
+  opacity: 0;
+  transform: translateX(-16px);
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* 열린 상태 */
+.navbar__search-bar--open {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: all;
+  position: relative;
+}
+
+.navbar__search-bar-icon {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+}
+
+.navbar__search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--color-text-primary);
+  min-width: 0;
+}
+
+.navbar__search-input::placeholder {
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+/* 검색창 닫기 버튼 */
+.navbar__search-close {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--color-text-muted);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.navbar__search-close:hover {
+  background-color: var(--color-surface-alt);
+  color: var(--color-text-primary);
+}
+
+/* 검색창 열렸을 때 네브바 하단 구분선 */
+.navbar--scrolled .navbar__search-bar--open ~ .navbar__actions,
+.navbar__search-bar--open {
+  /* 검색창 영역 하단 밑줄 */
+}
+
+/* 가운데 영역이 검색 모드일 때 밑줄 표시 */
+.navbar__center:has(.navbar__search-bar--open) {
+  border-bottom: 2px solid var(--color-primary);
+  margin-bottom: -2px;
+}
+
+/* ════════════════════════════════
+   우측 액션 영역
+═══════════════════════════════ */
 .navbar__actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   margin-left: auto;
+  flex-shrink: 0;
 }
 
-/* 아이콘 버튼 (검색 등) */
+/* 아이콘 버튼 (검색) */
 .navbar__icon-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: var(--radius-sm);
   color: var(--color-text-secondary);
   transition: color var(--transition-fast), background-color var(--transition-fast);
@@ -101,28 +200,213 @@
   background-color: var(--color-surface-alt);
 }
 
-/* 리뷰 쓰기 버튼 - 모바일에서는 숨김 */
+/* 검색 버튼 활성화 상태 */
+.navbar__icon-btn--active {
+  color: var(--color-primary);
+  background-color: var(--color-accent-soft);
+}
+
+/* 리뷰 쓰기 버튼 */
 .navbar__review-btn {
+  white-space: nowrap;
+  font-size: 13px;
+  padding: 7px 16px;
+}
+
+/* ── 로그인 / 회원가입 버튼 ── */
+.navbar__auth-btns {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 로그인 — 텍스트 링크형 */
+.navbar__login-btn {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.navbar__login-btn:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-alt);
+}
+
+/* 회원가입 — 컴팩트 filled pill 버튼 */
+.navbar__signup-btn {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background-color: var(--color-primary);
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  transition: background-color var(--transition-fast), transform var(--transition-fast),
+    box-shadow var(--transition-fast);
   white-space: nowrap;
 }
 
-/* ── 모바일 햄버거 버튼 ── */
-/* 기본적으로 숨기고, 모바일에서만 표시 */
+.navbar__signup-btn:hover {
+  background-color: var(--color-primary-light);
+  box-shadow: 0 3px 10px rgba(232, 71, 10, 0.28);
+  transform: translateY(-1px);
+}
+
+.navbar__signup-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* ── 유저 드롭다운 ── */
+.navbar__user-menu {
+  position: relative;
+}
+
+.navbar__user-avatar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px 5px 5px;
+  border-radius: var(--radius-full);
+  transition: background-color var(--transition-fast);
+}
+
+.navbar__user-avatar:hover {
+  background-color: var(--color-surface-alt);
+}
+
+.navbar__avatar-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar__avatar-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.navbar__avatar-caret {
+  color: var(--color-text-muted);
+  transition: transform var(--transition-fast);
+}
+
+.navbar__avatar-caret--open {
+  transform: rotate(180deg);
+}
+
+/* 드롭다운 패널 */
+.navbar__dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 200px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  z-index: 200;
+  animation: dropdownIn 0.15s ease;
+}
+
+@keyframes dropdownIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.navbar__dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 14px 12px;
+  background-color: var(--color-surface-alt);
+}
+
+.navbar__dropdown-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.navbar__dropdown-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.navbar__dropdown-sub {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin-top: 1px;
+}
+
+.navbar__dropdown-divider {
+  height: 1px;
+  background-color: var(--color-border);
+}
+
+.navbar__dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  text-align: left;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.navbar__dropdown-item:hover {
+  background-color: var(--color-surface-alt);
+  color: var(--color-text-primary);
+}
+
+.navbar__dropdown-item--logout {
+  color: #e8470a;
+}
+
+.navbar__dropdown-item--logout:hover {
+  background-color: rgba(232, 71, 10, 0.06);
+  color: #e8470a;
+}
+
+/* ════════════════════════════════
+   모바일 햄버거 버튼
+═══════════════════════════════ */
 .navbar__hamburger {
   display: none;
   flex-direction: column;
   gap: 5px;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-sm);
 }
 
-/* 햄버거 버튼의 각 줄 (막대) */
 .navbar__hamburger span {
   display: block;
-  width: 22px;
+  width: 20px;
   height: 2px;
   background-color: var(--color-text-primary);
   border-radius: 2px;
@@ -130,18 +414,13 @@
   transform-origin: center;
 }
 
-/* 열린 상태: X 모양으로 변환 */
-.navbar__hamburger--open span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
-}
-.navbar__hamburger--open span:nth-child(2) {
-  opacity: 0;
-}
-.navbar__hamburger--open span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
-}
+.navbar__hamburger--open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.navbar__hamburger--open span:nth-child(2) { opacity: 0; }
+.navbar__hamburger--open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* ── 모바일 드롭다운 메뉴 ── */
+/* ════════════════════════════════
+   모바일 드롭다운 메뉴
+═══════════════════════════════ */
 .navbar__mobile-menu {
   display: none;
   flex-direction: column;
@@ -152,23 +431,19 @@
   transition: max-height var(--transition-base);
 }
 
-.navbar__mobile-menu--open {
-  max-height: 300px;
-}
+.navbar__mobile-menu--open { max-height: 340px; }
 
 .navbar__mobile-tab {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   text-align: left;
-  padding: 16px 20px;
+  padding: 15px 20px;
   color: var(--color-text-secondary);
   border-bottom: 1px solid var(--color-border);
   transition: color var(--transition-fast), background-color var(--transition-fast);
 }
 
-.navbar__mobile-tab:last-child {
-  border-bottom: none;
-}
+.navbar__mobile-tab:last-child { border-bottom: none; }
 
 .navbar__mobile-tab:hover {
   background-color: var(--color-surface-alt);
@@ -180,25 +455,54 @@
   font-weight: 600;
 }
 
-/* ── 반응형: 태블릿 이하 ── */
+/* 모바일 로그인/회원가입 */
+.navbar__mobile-auth {
+  display: flex;
+  gap: 10px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--color-border);
+}
+
+.navbar__mobile-login {
+  flex: 1;
+  padding: 9px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.navbar__mobile-login:hover { background-color: var(--color-surface-alt); }
+
+.navbar__mobile-signup {
+  flex: 1;
+  padding: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.navbar__mobile-signup:hover { background-color: var(--color-primary-light); }
+
+.navbar__mobile-logout {
+  color: #e8470a;
+}
+
+/* ════════════════════════════════
+   반응형
+═══════════════════════════════ */
 @media (max-width: 768px) {
-  /* 데스크톱 탭 숨김 */
-  .navbar__tabs {
-    display: none;
-  }
+  .navbar__tabs { display: none; }
+  .navbar__review-btn { display: none; }
+  .navbar__auth-btns { display: none; }
+  .navbar__hamburger { display: flex; }
+  .navbar__mobile-menu { display: flex; }
 
-  /* 리뷰 쓰기 버튼 숨김 */
-  .navbar__review-btn {
-    display: none;
-  }
-
-  /* 햄버거 버튼 표시 */
-  .navbar__hamburger {
-    display: flex;
-  }
-
-  /* 모바일 드롭다운 메뉴 표시 가능하게 */
-  .navbar__mobile-menu {
-    display: flex;
-  }
+  /* 모바일에서도 검색 아이콘 표시 */
+  .navbar__icon-btn { display: flex; }
 }

@@ -1,37 +1,56 @@
-/* Backoffice 영역 전용 토큰 및 기본 레이아웃 */
+/* 백오피스 전용 폰트 — Pretendard (한국 어드민 UI 표준 폰트) */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+
+/* ================================================================
+   Backoffice 영역 전용 디자인 토큰 & 레이아웃
+   ================================================================ */
 .bo-root {
-  --bo-bg-darkest: #0a0a0a;
-  --bo-bg-dark: #111111;
-  --bo-bg-mid: #1a1a1a;
-  --bo-bg-surface: #222222;
-  --bo-bg-hover: #2a2a2a;
-  --bo-bg-active: #333333;
-  --bo-border: #2e2e2e;
-  --bo-text-primary: #f0f0f0;
+  /* ── 색상 팔레트 ── */
+  --bo-bg-darkest:  #0a0a0a;
+  --bo-bg-dark:     #111111;
+  --bo-bg-mid:      #1a1a1a;
+  --bo-bg-surface:  #222222;
+  --bo-bg-hover:    #2a2a2a;
+  --bo-bg-active:   #333333;
+  --bo-border:      #2e2e2e;
+
+  --bo-text-primary:   #f0f0f0;
   --bo-text-secondary: #a0a0a0;
-  --bo-text-muted: #606060;
-  --bo-accent: #f59e0b;
-  --bo-accent-hover: #fbbf24;
-  --bo-accent-soft: rgba(245, 158, 11, 0.12);
+  --bo-text-muted:     #606060;
+
+  --bo-accent:        #f59e0b;
+  --bo-accent-hover:  #fbbf24;
+  --bo-accent-soft:   rgba(245, 158, 11, 0.12);
   --bo-accent-border: rgba(245, 158, 11, 0.3);
-  --bo-error: #ef4444;
+
+  --bo-error:   #ef4444;
   --bo-warning: #f59e0b;
   --bo-success: #22c55e;
-  --bo-info: #3b82f6;
+  --bo-info:    #3b82f6;
+
   --bo-transition: 0.18s ease;
   --bo-top-height: 56px;
   --bo-side-width: 220px;
 
+  /* ── 백오피스 전용 폰트 ── */
+  --bo-font: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+             'Noto Sans KR', sans-serif;
+
   min-height: 100vh;
   background-color: var(--bo-bg-darkest);
   color: var(--bo-text-primary);
+
+  /* 백오피스 영역 전체에 Pretendard 적용 (글로벌 폰트 덮어쓰기) */
+  font-family: var(--bo-font);
 }
 
+/* ── 최상위 레이아웃 ── */
 .bo-layout {
   display: flex;
   flex-direction: column;
 }
 
+/* ── 상단 헤더 ── */
 .bo-topbar {
   height: var(--bo-top-height);
   display: flex;
@@ -39,27 +58,39 @@
   padding: 0 20px;
   background-color: var(--bo-bg-mid);
   border-bottom: 1px solid var(--bo-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .bo-topbar__brand {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   color: var(--bo-accent);
 }
 
+/* ── 바디 (사이드바 + 콘텐츠) ── */
 .bo-layout__body {
   display: flex;
   min-height: calc(100vh - var(--bo-top-height));
 }
 
+/* ════════════════════════════════════════
+   사이드바
+═══════════════════════════════════════ */
 .bo-sidebar {
   width: var(--bo-side-width);
   background-color: var(--bo-bg-dark);
   border-right: 1px solid var(--bo-border);
-  padding: 14px 10px;
+  padding: 16px 10px 16px;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: var(--bo-top-height);
+  height: calc(100vh - var(--bo-top-height));
+  overflow-y: auto;
 }
 
 .bo-sidebar__bottom {
@@ -68,19 +99,25 @@
   border-top: 1px solid var(--bo-border);
 }
 
+/* ── 내비게이션 전체 래퍼 ── */
 .bo-nav {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 2px;
+  flex: 1;
 }
 
+/* ── 공통 nav 아이템 (대시보드, 로그인, 가입) ── */
 .bo-nav__item {
   display: block;
-  padding: 10px 12px;
-  border-radius: 8px;
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
   color: var(--bo-text-secondary);
-  font-size: 14px;
-  transition: background-color 0.18s ease, color 0.18s ease;
+  text-align: left;
+  transition: background-color var(--bo-transition), color var(--bo-transition);
 }
 
 .bo-nav__item:hover {
@@ -92,17 +129,157 @@
   background-color: var(--bo-accent-soft);
   border: 1px solid var(--bo-accent-border);
   color: var(--bo-accent);
+  font-weight: 600;
 }
 
-/* 로그아웃 버튼: nav item 스타일 기반 + 빨간색 */
-.bo-nav__logout {
+/* ── 구분선 ── */
+.bo-nav__divider {
+  height: 1px;
+  background-color: var(--bo-border);
+  margin: 8px 4px;
+}
+
+/* ════════════════════════════════════════
+   대분류 섹션 (토글 아코디언)
+═══════════════════════════════════════ */
+.bo-nav__section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 대분류 헤더 버튼 */
+.bo-nav__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
-  text-align: left;
+  padding: 8px 12px;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: var(--bo-text-muted);
+  text-transform: uppercase;
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--bo-error);
+  transition: background-color var(--bo-transition), color var(--bo-transition);
+}
+
+.bo-nav__section-header:hover {
+  background-color: var(--bo-bg-hover);
+  color: var(--bo-text-secondary);
+}
+
+.bo-nav__section-header.is-open {
+  color: var(--bo-text-secondary);
+}
+
+/* 화살표 (›) — is-open 시 90도 회전 */
+.bo-nav__chevron {
   font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  display: inline-block;
+  transform: rotate(0deg);
+  transition: transform 0.2s ease;
+}
+
+.bo-nav__section-header.is-open .bo-nav__chevron {
+  transform: rotate(90deg);
+}
+
+/* 서브 아이템 컨테이너 (슬라이드 애니메이션) */
+.bo-nav__section-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.22s ease;
+}
+
+.bo-nav__section-body.is-open {
+  grid-template-rows: 1fr;
+}
+
+/* grid 0fr→1fr 트릭: 단일 자식의 overflow를 hidden으로 지정해야 동작 */
+.bo-nav__section-body-inner {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-bottom: 4px;
+}
+
+/* ── 서브 아이템 ── */
+.bo-nav__sub-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 12px 7px 22px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--bo-text-secondary);
+  transition: background-color var(--bo-transition), color var(--bo-transition);
+  position: relative;
+}
+
+/* 왼쪽 세로 인디케이터 */
+.bo-nav__sub-item::before {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 12px;
+  background-color: var(--bo-border);
+  border-radius: 1px;
+}
+
+.bo-nav__sub-item:hover {
+  background-color: var(--bo-bg-hover);
+  color: var(--bo-text-primary);
+}
+
+.bo-nav__sub-item.is-active {
+  color: var(--bo-accent);
+  font-weight: 600;
+}
+
+.bo-nav__sub-item.is-active::before {
+  background-color: var(--bo-accent);
+}
+
+/* 비활성(준비중) 서브 아이템 */
+.bo-nav__sub-item--disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.bo-nav__sub-item--disabled:hover {
+  background-color: transparent;
+  color: var(--bo-text-secondary);
+}
+
+/* 준비중 뱃지 */
+.bo-nav__badge-soon {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--bo-text-muted);
+  background-color: var(--bo-bg-active);
+  border: 1px solid var(--bo-border);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+/* ── 로그아웃 버튼 ── */
+.bo-nav__logout {
+  width: 100%;
+  text-align: left;
+  color: var(--bo-error);
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .bo-nav__logout:hover {
@@ -110,7 +287,9 @@
   color: var(--bo-error);
 }
 
+/* ── 메인 콘텐츠 영역 ── */
 .bo-main-content {
   flex: 1;
   padding: 24px;
+  min-width: 0;
 }

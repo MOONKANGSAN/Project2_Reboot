@@ -10,6 +10,7 @@ export interface RestaurantRegisterFormData {
   phone: string;
   priceRange: PriceRange | '';
   description: string;
+  hashtags: string[];
 }
 
 export interface FormErrors {
@@ -25,4 +26,11 @@ export interface RestaurantRegisterApiResponse {
   message: string;
   idx?: number;
   name?: string;
+}
+
+// 이미지 업로드 API 응답 타입
+export interface RestaurantImgUploadApiResponse {
+  success: boolean;
+  message: string;
+  uploadedCount?: number;
 }

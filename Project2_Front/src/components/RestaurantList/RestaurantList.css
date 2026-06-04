@@ -233,6 +233,40 @@
   color: var(--color-text-muted);
 }
 
+/* 이미지 없을 때 플레이스홀더 */
+.restaurant-card__image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.restaurant-card__image-placeholder-text {
+  font-size: 42px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1;
+}
+
+/* 평가 없음 */
+.restaurant-card__no-rating {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* 로딩 / 에러 / 빈 상태 */
+.restaurant-list__status {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 15px;
+  color: var(--color-text-muted);
+}
+
+.restaurant-list__status--error {
+  color: #e8470a;
+}
+
 /* ── 더보기 버튼 래퍼 ── */
 .restaurant-list__more {
   margin-top: 36px;
