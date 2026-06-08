@@ -3,16 +3,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import type { NavTab } from "@/types";
 import "./Navbar.css";
 
-// ── 탭 메뉴 정의
 const NAV_TABS: NavTab[] = [
   { id: "home",        path: "/",            label: "홈" },
   { id: "restaurants", path: "/restaurants", label: "맛집 리스트" },
-  { id: "liked",       path: "/liked",       label: "리뷰 보기" },
+  { id: "reviews",     path: "/reviews",     label: "리뷰 보기" },
 ];
 
-const MOCK_USER = { nickname: "먹킹부산", avatar: "먹" };
-
-// ── SVG 아이콘 모음
+// ── SVG 아이콘
 function SearchIcon(): JSX.Element {
   return (
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none"
@@ -32,9 +29,13 @@ function CloseIcon(): JSX.Element {
 }
 
 // ── 유저 드롭다운
-interface UserMenuProps { onLogout: () => void; onMyProfile: () => void; }
+interface UserMenuProps {
+  nickname: string;
+  onLogout: () => void;
+  onMyProfile: () => void;
+}
 
-function UserMenu({ onLogout, onMyProfile }: UserMenuProps): JSX.Element {
+function UserMenu({ nickname, onLogout, onMyProfile }: UserMenuProps): JSX.Element {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -46,6 +47,8 @@ function UserMenu({ onLogout, onMyProfile }: UserMenuProps): JSX.Element {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  const avatarChar = nickname?.[0]?.toUpperCase() ?? 'U';
+
   return (
     <div className="navbar__user-menu" ref={menuRef}>
       <button
@@ -54,8 +57,8 @@ function UserMenu({ onLogout, onMyProfile }: UserMenuProps): JSX.Element {
         aria-label="유저 메뉴"
         aria-expanded={open}
       >
-        <span className="navbar__avatar-circle">{MOCK_USER.avatar}</span>
-        <span className="navbar__avatar-name">{MOCK_USER.nickname}</span>
+        <span className="navbar__avatar-circle">{avatarChar}</span>
+        <span className="navbar__avatar-name">{nickname}</span>
         <svg
           className={`navbar__avatar-caret ${open ? "navbar__avatar-caret--open" : ""}`}
           width="12" height="12" viewBox="0 0 24 24" fill="none"
@@ -68,9 +71,9 @@ function UserMenu({ onLogout, onMyProfile }: UserMenuProps): JSX.Element {
       {open && (
         <div className="navbar__dropdown">
           <div className="navbar__dropdown-header">
-            <span className="navbar__dropdown-avatar">{MOCK_USER.avatar}</span>
+            <span className="navbar__dropdown-avatar">{avatarChar}</span>
             <div>
-              <p className="navbar__dropdown-name">{MOCK_USER.nickname}</p>
+              <p className="navbar__dropdown-name">{nickname}</p>
               <p className="navbar__dropdown-sub">맛집 탐험가</p>
             </div>
           </div>
@@ -109,26 +112,31 @@ function UserMenu({ onLogout, onMyProfile }: UserMenuProps): JSX.Element {
   );
 }
 
+// ── Navbar Props
+interface NavbarProps {
+  isLoggedIn: boolean;
+  userNickname?: string;
+  onOpenLoginModal: () => void;
+  onLogout: () => void;
+}
+
 // ── 메인 컴포넌트
-function Navbar(): JSX.Element {
+function Navbar({ isLoggedIn, userNickname, onOpenLoginModal, onLogout }: NavbarProps): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [menuOpen, setMenuOpen]     = useState(false);
-  const [scrolled, setScrolled]     = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [menuOpen, setMenuOpen]       = useState(false);
+  const [scrolled, setScrolled]       = useState(false);
+  const [searchOpen, setSearchOpen]   = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // 스크롤 감지
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handler);
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
-  // ESC 키로 검색창 닫기
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape" && searchOpen) closeSearch();
@@ -151,7 +159,7 @@ function Navbar(): JSX.Element {
     const p = location.pathname;
     if (p === "/") return "home";
     if (p === "/restaurants") return "restaurants";
-    if (p === "/liked") return "liked";
+    if (p.startsWith("/reviews")) return "reviews";
     return "";
   };
 
@@ -172,9 +180,8 @@ function Navbar(): JSX.Element {
           <span className="navbar__logo-text">맛지도</span>
         </button>
 
-        {/* 가운데 영역: 탭 ↔ 검색창 전환 */}
+        {/* 가운데: 탭 ↔ 검색창 전환 */}
         <div className="navbar__center">
-          {/* 탭 메뉴 */}
           <nav className={`navbar__tabs ${searchOpen ? "navbar__tabs--hidden" : ""}`}>
             {NAV_TABS.map((tab: NavTab) => (
               <button
@@ -187,7 +194,6 @@ function Navbar(): JSX.Element {
             ))}
           </nav>
 
-          {/* 검색 입력창 */}
           <div className={`navbar__search-bar ${searchOpen ? "navbar__search-bar--open" : ""}`}>
             <span className="navbar__search-bar-icon"><SearchIcon /></span>
             <input
@@ -199,20 +205,15 @@ function Navbar(): JSX.Element {
               onChange={e => setSearchQuery(e.target.value)}
               onKeyDown={e => { if (e.key === "Enter") { /* 검색 실행 */ } }}
             />
-            <button
-              className="navbar__search-close"
-              onClick={closeSearch}
-              aria-label="검색 닫기"
-            >
+            <button className="navbar__search-close" onClick={closeSearch} aria-label="검색 닫기">
               <CloseIcon />
             </button>
           </div>
         </div>
 
-        {/* 우측 액션 영역 */}
+        {/* 우측 액션 */}
         <div className="navbar__actions">
 
-          {/* 검색 토글 버튼 */}
           <button
             className={`navbar__icon-btn ${searchOpen ? "navbar__icon-btn--active" : ""}`}
             onClick={searchOpen ? closeSearch : openSearch}
@@ -224,23 +225,29 @@ function Navbar(): JSX.Element {
           {/* 로그인 상태 분기 */}
           {isLoggedIn ? (
             <>
-              <button className="navbar__review-btn btn-primary">+ 리뷰 쓰기</button>
-              <UserMenu onLogout={() => setIsLoggedIn(false)} onMyProfile={() => alert("준비 중")} />
+              <button
+                className="navbar__review-btn btn-primary"
+                onClick={() => navigate('/reviews/write')}
+              >
+                + 리뷰 쓰기
+              </button>
+              <UserMenu
+                nickname={userNickname ?? ''}
+                onLogout={onLogout}
+                onMyProfile={() => alert("준비 중")}
+              />
             </>
           ) : (
             <div className="navbar__auth-btns">
-              {/* 로그인 - 텍스트 링크형 */}
-              <button className="navbar__login-btn" onClick={() => setIsLoggedIn(true)}>
+              <button className="navbar__login-btn" onClick={onOpenLoginModal}>
                 로그인
               </button>
-              {/* 회원가입 - 컴팩트 filled 버튼 */}
               <button className="navbar__signup-btn" onClick={() => navigate("/signup")}>
                 회원가입
               </button>
             </div>
           )}
 
-          {/* 모바일 햄버거 버튼 */}
           <button
             className={`navbar__hamburger ${menuOpen ? "navbar__hamburger--open" : ""}`}
             onClick={() => setMenuOpen(p => !p)}
@@ -264,13 +271,16 @@ function Navbar(): JSX.Element {
         ))}
         {!isLoggedIn && (
           <div className="navbar__mobile-auth">
-            <button className="navbar__mobile-login" onClick={() => setIsLoggedIn(true)}>로그인</button>
-            <button className="navbar__mobile-signup" onClick={() => navigate("/signup")}>회원가입</button>
+            <button className="navbar__mobile-login" onClick={() => { onOpenLoginModal(); setMenuOpen(false); }}>
+              로그인
+            </button>
+            <button className="navbar__mobile-signup" onClick={() => navigate("/signup")}>
+              회원가입
+            </button>
           </div>
         )}
         {isLoggedIn && (
-          <button className="navbar__mobile-tab navbar__mobile-logout"
-            onClick={() => setIsLoggedIn(false)}>
+          <button className="navbar__mobile-tab navbar__mobile-logout" onClick={onLogout}>
             로그아웃
           </button>
         )}

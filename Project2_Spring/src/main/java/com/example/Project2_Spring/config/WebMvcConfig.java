@@ -11,10 +11,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${app.upload.restaurant.dir}")
     private String restaurantUploadDir;
 
-    // /uploads/restaurant/** 요청을 로컬 파일 시스템 경로로 매핑
+    @Value("${app.upload.review.dir}")
+    private String reviewUploadDir;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/restaurant/**")
                 .addResourceLocations("file:" + restaurantUploadDir + "/");
+
+        registry.addResourceHandler("/uploads/review/**")
+                .addResourceLocations("file:" + reviewUploadDir + "/");
     }
 }

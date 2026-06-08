@@ -3,6 +3,8 @@ package com.example.Project2_Spring.repository;
 import com.example.Project2_Spring.entity.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 import java.util.Optional;
 
 // 데이터베이스 접근 계층
@@ -46,4 +48,11 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Integer> {
     // 휴대폰 번호 중복 확인
     // SELECT COUNT(*) FROM user_info WHERE phone_number = ? (0 또는 1)
     boolean existsByPhoneNumber(String phoneNumber);
+
+    // 전체 회원 목록 최신 가입순 조회 (백오피스용)
+    List<UserInfo> findAllByOrderByRegDateDesc();
+
+    // 아이디 또는 닉네임 검색 (LIKE, 대소문자 무시)
+    List<UserInfo> findByUserIdContainingIgnoreCaseOrNicknameContainingIgnoreCaseOrderByRegDateDesc(
+            String userId, String nickname);
 }

@@ -1,0 +1,252 @@
+/* ================================================================
+   BackofficeUserListPage.css
+   ================================================================ */
+
+.bo-user-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── 헤더 ── */
+.bo-user-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.bo-user-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--bo-text-primary);
+  margin: 0 0 4px 0;
+}
+
+.bo-user-subtitle {
+  font-size: 13px;
+  color: var(--bo-text-secondary);
+  margin: 0;
+}
+
+/* ── 툴바 ── */
+.bo-user-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* 검색 입력 */
+.bo-user-search-wrap {
+  position: relative;
+  flex: 1;
+  max-width: 300px;
+}
+
+.bo-user-search-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: var(--bo-text-muted);
+  pointer-events: none;
+}
+
+.bo-user-search {
+  width: 100%;
+  padding: 8px 12px 8px 32px;
+  font-size: 13px;
+  color: var(--bo-text-primary);
+  background-color: var(--bo-bg-surface);
+  border: 1px solid var(--bo-border);
+  border-radius: 7px;
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color var(--bo-transition), box-shadow var(--bo-transition);
+}
+
+.bo-user-search::placeholder {
+  color: var(--bo-text-muted);
+  font-size: 12px;
+}
+
+.bo-user-search:focus {
+  border-color: var(--bo-accent);
+  box-shadow: 0 0 0 3px var(--bo-accent-soft);
+}
+
+/* 상태 필터 */
+.bo-filter-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bo-text-muted);
+}
+
+.bo-filter-group {
+  display: flex;
+  gap: 6px;
+}
+
+.bo-filter-btn {
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--bo-text-secondary);
+  background-color: var(--bo-bg-surface);
+  border: 1px solid var(--bo-border);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all var(--bo-transition);
+  font-family: inherit;
+}
+
+.bo-filter-btn:hover {
+  border-color: var(--bo-accent);
+  color: var(--bo-accent);
+}
+
+.bo-filter-btn.is-active {
+  background-color: var(--bo-accent-soft);
+  border-color: var(--bo-accent);
+  color: var(--bo-accent);
+}
+
+.bo-user-count {
+  font-size: 12px;
+  color: var(--bo-text-muted);
+  margin-left: auto;
+}
+
+/* ── 테이블 카드 ── */
+.bo-user-card {
+  background-color: var(--bo-bg-surface);
+  border: 1px solid var(--bo-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.bo-user-table-wrap {
+  overflow-x: auto;
+}
+
+.bo-user-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.bo-user-table thead {
+  background-color: var(--bo-bg-mid);
+}
+
+.bo-user-table th {
+  padding: 11px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--bo-text-muted);
+  letter-spacing: 0.4px;
+  border-bottom: 1px solid var(--bo-border);
+  white-space: nowrap;
+}
+
+.bo-user-table td {
+  padding: 12px 16px;
+  color: var(--bo-text-primary);
+  border-bottom: 1px solid var(--bo-border);
+  vertical-align: middle;
+}
+
+.bo-user-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.bo-user-table tbody tr:hover {
+  background-color: var(--bo-bg-hover);
+}
+
+/* 번호 열 */
+.bo-user-table .col-no {
+  width: 52px;
+  color: var(--bo-text-muted);
+  font-size: 12px;
+}
+
+/* 아이디 셀 */
+.bo-user-cell-id {
+  font-weight: 600;
+  color: var(--bo-text-primary);
+}
+
+/* 이메일 */
+.bo-user-cell-email {
+  font-size: 12px;
+  color: var(--bo-text-secondary);
+}
+
+/* 전화번호 */
+.bo-user-cell-phone {
+  font-size: 12px;
+  color: var(--bo-text-muted);
+}
+
+/* 상태 뱃지 */
+.bo-user-state-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 20px;
+}
+
+.bo-user-state-badge--active {
+  background-color: rgba(34, 197, 94, 0.12);
+  color: var(--bo-success);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.bo-user-state-badge--inactive {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--bo-error);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.bo-user-state-badge__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+/* 가입일 */
+.bo-user-cell-date {
+  font-size: 12px;
+  color: var(--bo-text-muted);
+  white-space: nowrap;
+}
+
+/* ── 빈·로딩·에러 ── */
+.bo-user-empty,
+.bo-user-loading,
+.bo-user-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.bo-user-empty  { color: var(--bo-text-muted); }
+.bo-user-loading { color: var(--bo-text-muted); }
+.bo-user-error   { color: var(--bo-error); }
+
+.bo-user-empty__icon {
+  font-size: 32px;
+  opacity: 0.4;
+}

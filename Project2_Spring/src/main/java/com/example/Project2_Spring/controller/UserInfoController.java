@@ -66,9 +66,19 @@ public class UserInfoController {
     public ResponseEntity<?> login(@RequestBody UserDto userDto) {
         try {
             UserInfo user = userInfoService.login(userDto.getUserId(), userDto.getPassword());
-            return ResponseEntity.ok(user.getUserId() + "님 환영합니다!");
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "로그인 성공");
+            response.put("userId", user.getUserId());
+            response.put("nickname", user.getNickname());
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.status(401).body(e.getMessage());
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", e.getMessage());
+            return ResponseEntity.status(401).body(error);
         }
     }
 }

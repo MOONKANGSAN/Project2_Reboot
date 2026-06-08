@@ -1,0 +1,340 @@
+/* ================================================================
+   RestaurantDetailPage.css
+   ================================================================ */
+
+/* ── 로딩 / 에러 상태 ── */
+.rdp-status {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+.rdp-status--error { color: #ef4444; }
+
+.rdp-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #f97316;
+  border-radius: 50%;
+  animation: rdp-spin 0.7s linear infinite;
+}
+
+@keyframes rdp-spin { to { transform: rotate(360deg); } }
+
+.rdp-back-btn {
+  padding: 9px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #f97316;
+  border: 1.5px solid #f97316;
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.rdp-back-btn:hover { background: #fff7ed; }
+
+/* ── 히어로 ── */
+.rdp-hero {
+  position: relative;
+  height: 420px;
+  overflow: hidden;
+  background: #111;
+}
+
+.rdp-hero__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.rdp-hero__placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rdp-hero__placeholder-char {
+  font-size: 120px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.25);
+  line-height: 1;
+  user-select: none;
+}
+
+/* 이미지 위 그라디언트 오버레이 — 텍스트 가독성 확보 */
+.rdp-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.15) 0%,
+    rgba(0,0,0,0.6) 60%,
+    rgba(0,0,0,0.82) 100%
+  );
+}
+
+/* 히어로 텍스트 영역 */
+.rdp-hero__content {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  padding: 0 20px 32px;
+}
+
+.rdp-hero__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.rdp-hero__back:hover {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+.rdp-hero__category {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  border-radius: 4px;
+  padding: 3px 9px;
+  margin-bottom: 10px;
+}
+
+.rdp-hero__name {
+  font-size: 32px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 10px 0;
+  line-height: 1.2;
+}
+
+.rdp-hero__meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.rdp-hero__rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rdp-stars {
+  font-size: 16px;
+  color: #fbbf24;
+  letter-spacing: 1px;
+}
+
+.rdp-rating-num {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.rdp-hero__no-rating {
+  font-size: 13px;
+  color: rgba(255,255,255,0.55);
+}
+
+.rdp-hero__price {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+}
+
+.rdp-hero__location {
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+}
+
+.rdp-hero__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.rdp-hero__tag {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.8);
+  background: rgba(255,255,255,0.12);
+  border-radius: 20px;
+  padding: 4px 10px;
+}
+
+/* ── 본문 ── */
+.rdp-body {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 32px;
+  padding-top: 72px;
+  padding-bottom: 80px;
+  align-items: start;
+}
+
+/* ── 섹션 공통 ── */
+.rdp-section {
+  margin-bottom: 40px;
+}
+
+.rdp-section__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 16px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f3f4f6;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rdp-review-score {
+  font-size: 22px;
+  font-weight: 800;
+  color: #f97316;
+}
+
+/* ── 소개글 ── */
+.rdp-description {
+  font-size: 15px;
+  color: #374151;
+  line-height: 1.8;
+  margin: 0;
+  white-space: pre-line;
+}
+
+/* ── 리뷰 빈 상태 ── */
+.rdp-review-empty {
+  padding: 48px 24px;
+  background: #f9fafb;
+  border-radius: 12px;
+  text-align: center;
+  border: 1.5px dashed #e5e7eb;
+}
+
+.rdp-review-empty__text {
+  font-size: 14px;
+  color: #9ca3af;
+  margin: 0 0 16px 0;
+}
+
+.rdp-review-write-btn {
+  padding: 9px 22px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: #f97316;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.rdp-review-write-btn:hover { background: #ea6c0a; }
+
+/* ── 사이드바 기본 정보 카드 ── */
+.rdp-info-card {
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 24px;
+  position: sticky;
+  top: 88px;    /* Navbar 높이 + 여백 */
+}
+
+.rdp-info-card__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 20px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.rdp-info-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.rdp-info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.rdp-info-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.rdp-info-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  margin: 0 0 3px 0;
+}
+
+.rdp-info-value {
+  font-size: 14px;
+  color: #111827;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.rdp-info-value--link {
+  color: #f97316;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.rdp-info-value--link:hover { text-decoration: underline; }
+
+/* ── 반응형 ── */
+@media (max-width: 768px) {
+  .rdp-hero { height: 300px; }
+  .rdp-hero__name { font-size: 24px; }
+  .rdp-body {
+    grid-template-columns: 1fr;
+  }
+  .rdp-sidebar { order: -1; }
+  .rdp-info-card { position: static; }
+}

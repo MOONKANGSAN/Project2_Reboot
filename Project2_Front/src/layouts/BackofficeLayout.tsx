@@ -40,7 +40,7 @@ const NAV_SECTIONS: NavSection[] = [
     key: 'user',
     label: '유저 관리',
     items: [
-      { label: '회원 목록', to: '/backoffice/user/list', disabled: true },
+      { label: '회원 목록', to: '/backoffice/user/list' },
       { label: '탈퇴 관리', to: '/backoffice/user/leave', disabled: true },
     ],
   },

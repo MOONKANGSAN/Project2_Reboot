@@ -1,5 +1,6 @@
 package com.example.Project2_Spring.service; // ⚠️ 본인의 실제 패키지 경로로 수정하세요!
 
+import com.example.Project2_Spring.dto.UserListItemDto;
 import com.example.Project2_Spring.entity.UserInfo;
 import com.example.Project2_Spring.repository.UserInfoRepository;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +8,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 // 비즈니스 로직 처리 계층
 // Controller ← Service → Repository → Database
@@ -120,5 +123,31 @@ public class UserInfoService {
 
     public boolean checkEmailExists(String email) {
         return userInfoRepository.existsByEmail(email);
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    // 7. 백오피스 회원 목록 조회 (최신 가입순)
+    //    keyword가 있으면 아이디/닉네임 검색, 없으면 전체 조회
+    // ─────────────────────────────────────────────────────────────────
+    @Transactional(readOnly = true)
+    public List<UserListItemDto> getUserList(String keyword) {
+        List<UserInfo> users = (keyword != null && !keyword.isBlank())
+                ? userInfoRepository
+                        .findByUserIdContainingIgnoreCaseOrNicknameContainingIgnoreCaseOrderByRegDateDesc(
+                                keyword, keyword)
+                : userInfoRepository.findAllByOrderByRegDateDesc();
+
+        return users.stream()
+                .map(u -> new UserListItemDto(
+                        u.getIdx(),
+                        u.getUserId(),
+                        u.getNickname(),
+                        u.getEmail(),
+                        u.getPhoneNumber(),
+                        u.getState(),
+                        u.getRegDate(),
+                        u.getEditDate()
+                ))
+                .collect(Collectors.toList());
     }
 }
