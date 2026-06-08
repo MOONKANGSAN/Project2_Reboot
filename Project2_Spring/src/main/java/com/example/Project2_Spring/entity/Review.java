@@ -37,6 +37,14 @@ public class Review {
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
+    // 좋아요 수 (기본값 0)
+    @Column(name = "like_count", nullable = false)
+    private Integer likeCount;
+
+    // 리뷰 이미지 URL (1개, 선택)
+    @Column(name = "image_url", length = 300)
+    private String imageUrl;
+
     // 상태 (1=활성, 0=비활성/삭제)
     @Column(name = "state", columnDefinition = "TINYINT", nullable = false)
     private Integer state;
@@ -52,9 +60,8 @@ public class Review {
     @PrePersist
     public void prePersist() {
         this.regDate = LocalDateTime.now();
-        if (this.state == null) {
-            this.state = 1;
-        }
+        if (this.state == null)     this.state     = 1;
+        if (this.likeCount == null) this.likeCount = 0;
     }
 
     @PreUpdate

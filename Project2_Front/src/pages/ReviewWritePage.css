@@ -1,0 +1,340 @@
+/* ================================================================
+   ReviewWritePage.css
+   ================================================================ */
+
+.rw-page {
+  min-height: 100vh;
+  background: #f9fafb;
+  padding: 32px 0 80px;
+}
+
+.rw-container {
+  max-width: 640px;
+}
+
+/* ── 헤더 ── */
+.rw-header {
+  margin-bottom: 24px;
+}
+
+.rw-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 12px;
+  transition: color 0.14s;
+}
+
+.rw-back:hover { color: #111827; }
+
+.rw-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 4px 0;
+}
+
+.rw-subtitle {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ── 폼 카드 ── */
+.rw-card {
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── 필드 ── */
+.rw-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rw-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.rw-required {
+  color: #ef4444;
+  margin-left: 2px;
+}
+
+.rw-optional {
+  font-size: 11px;
+  font-weight: 400;
+  color: #9ca3af;
+  margin-left: 4px;
+}
+
+/* ── 셀렉트 ── */
+.rw-select {
+  width: 100%;
+  padding: 10px 36px 10px 14px;
+  font-size: 14px;
+  color: #111827;
+  background: #f9fafb;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+.rw-select:focus {
+  background-color: #fff;
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
+}
+
+/* ── 작성자 읽기전용 ── */
+.rw-readonly {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #f3f4f6;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.rw-readonly__avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #f97316;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rw-readonly__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* ── 별점 ── */
+.rw-stars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rw-star {
+  font-size: 32px;
+  color: #d1d5db;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.1s, transform 0.1s;
+}
+
+.rw-star--on { color: #f59e0b; }
+
+.rw-star:hover { transform: scale(1.15); }
+
+.rw-star-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-left: 8px;
+}
+
+/* ── 텍스트에어리어 ── */
+.rw-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #111827;
+  background: #f9fafb;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  outline: none;
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+  line-height: 1.6;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+.rw-textarea::placeholder { color: #9ca3af; font-size: 13px; }
+
+.rw-textarea:focus {
+  background: #fff;
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
+}
+
+.rw-char-count {
+  font-size: 11px;
+  color: #9ca3af;
+  text-align: right;
+  margin: 0;
+}
+
+/* ── 에러 공통 ── */
+.rw-input--error { border-color: #ef4444 !important; }
+
+/* ── 이미지 업로드 버튼 ── */
+.rw-upload-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 28px 20px;
+  background: #f9fafb;
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.rw-upload-btn:hover {
+  border-color: #f97316;
+  background: #fff7ed;
+  color: #f97316;
+}
+
+.rw-upload-hint {
+  font-size: 11px;
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+/* ── 이미지 미리보기 ── */
+.rw-preview {
+  position: relative;
+  display: inline-block;
+}
+
+.rw-preview__img {
+  width: 100%;
+  max-height: 280px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1.5px solid #e5e7eb;
+  display: block;
+}
+
+.rw-preview__remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+
+.rw-preview__remove:hover { background: rgba(0,0,0,0.75); }
+
+/* 숨김 파일 인풋 */
+.rw-file-hidden { display: none; }
+
+/* ── 에러 메시지 ── */
+.rw-error {
+  font-size: 13px;
+  color: #ef4444;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rw-error::before { content: '⚠'; }
+
+/* ── 버튼 행 ── */
+.rw-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding-top: 8px;
+  border-top: 1px solid #f3f4f6;
+  margin-top: 4px;
+}
+
+.rw-btn-cancel {
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+
+.rw-btn-cancel:hover { background: #e5e7eb; }
+
+.rw-btn-submit {
+  padding: 10px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: #f97316;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.14s, transform 0.12s, box-shadow 0.14s;
+}
+
+.rw-btn-submit:hover:not(:disabled) {
+  background: #ea6c0a;
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3);
+  transform: translateY(-1px);
+}
+
+.rw-btn-submit:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
+}
+
+/* ── 반응형 ── */
+@media (max-width: 680px) {
+  .rw-card { padding: 20px 16px; }
+  .rw-star { font-size: 28px; }
+}

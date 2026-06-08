@@ -1,5 +1,6 @@
 package com.example.Project2_Spring.service;
 
+import com.example.Project2_Spring.dto.PublicRestaurantDetailDto;
 import com.example.Project2_Spring.dto.PublicRestaurantDto;
 import com.example.Project2_Spring.dto.RestaurantListItemDto;
 import com.example.Project2_Spring.entity.RestaurantHashtag;
@@ -8,6 +9,7 @@ import com.example.Project2_Spring.entity.restaurant;
 import com.example.Project2_Spring.repository.RestaurantHashtagRepository;
 import com.example.Project2_Spring.repository.RestaurantImgRepository;
 import com.example.Project2_Spring.repository.RestaurantRepository;
+import com.example.Project2_Spring.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,7 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final RestaurantHashtagRepository restaurantHashtagRepository;
     private final RestaurantImgRepository restaurantImgRepository;
+    private final ReviewRepository reviewRepository;
 
     @Transactional
     public restaurant register(restaurant r) {
@@ -66,9 +69,13 @@ public class RestaurantService {
                     .forEach(img -> imgUrlMap.put(img.getIdx(), img.getImgUrl()));
         }
 
+        // 점포별 리뷰 수 일괄 조회
+        Map<Integer, Long> reviewCountMap = new HashMap<>();
+        reviewRepository.countActiveByRestaurantIdxIn(idxList)
+                .forEach(row -> reviewCountMap.put((Integer) row[0], (Long) row[1]));
+
         return restaurants.stream()
                 .map(r -> {
-                    // img_idx → restaurant_img.img_url 우선, 없으면 restaurant.image_url 사용
                     String imageUrl = (r.getImgIdx() != null && imgUrlMap.containsKey(r.getImgIdx()))
                             ? imgUrlMap.get(r.getImgIdx())
                             : r.getImageUrl();
@@ -77,6 +84,7 @@ public class RestaurantService {
                             r.getName(),
                             r.getCategory(),
                             r.getAvgRating(),
+                            reviewCountMap.getOrDefault(r.getIdx(), 0L),
                             r.getLocation(),
                             r.getPriceRange(),
                             imageUrl,
@@ -87,7 +95,37 @@ public class RestaurantService {
                 .collect(Collectors.toList());
     }
 
-    // 단일 점포 조회
+    // 공개 API — 점포 상세 조회 (활성 점포만, 해시태그 포함)
+    @Transactional(readOnly = true)
+    public PublicRestaurantDetailDto getPublicDetail(Integer idx) {
+        restaurant r = restaurantRepository.findById(idx)
+                .filter(res -> res.getState() == 1)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 점포입니다."));
+
+        List<String> hashtags = restaurantHashtagRepository
+                .findActiveHashtagsByRestaurantIdxIn(List.of(idx))
+                .stream()
+                .map(rh -> rh.getHashtag().getName())
+                .collect(Collectors.toList());
+
+        String imageUrl = null;
+        if (r.getImgIdx() != null) {
+            imageUrl = restaurantImgRepository.findById(r.getImgIdx())
+                    .map(img -> img.getImgUrl())
+                    .orElse(r.getImageUrl());
+        } else {
+            imageUrl = r.getImageUrl();
+        }
+
+        return new PublicRestaurantDetailDto(
+                r.getIdx(), r.getName(), r.getCategory(),
+                r.getAddress(), r.getLocation(), r.getPhone(),
+                r.getPriceRange(), r.getDescription(), imageUrl,
+                r.getAvgRating(), hashtags, r.getRegDate()
+        );
+    }
+
+    // 단일 점포 조회 (백오피스용)
     @Transactional(readOnly = true)
     public RestaurantListItemDto findById(Integer idx) {
         restaurant r = restaurantRepository.findById(idx)

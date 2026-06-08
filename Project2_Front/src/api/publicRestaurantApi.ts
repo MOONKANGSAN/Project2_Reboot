@@ -21,6 +21,7 @@ export interface PublicRestaurantItem {
   name: string;
   category: string;
   avgRating: number | null;
+  reviewCount: number;
   location: string;
   priceRange: string | null;
   imageUrl: string | null;
@@ -37,5 +38,32 @@ export interface PublicRestaurantListResponse {
 // GET /api/restaurants — 활성 점포 목록 (최신 등록순)
 export const fetchPublicRestaurants = async (): Promise<PublicRestaurantListResponse> => {
   const response = await apiClient.get<PublicRestaurantListResponse>('/restaurants');
+  return response.data;
+};
+
+// 점포 상세 응답 타입
+export interface PublicRestaurantDetail {
+  idx: number;
+  name: string;
+  category: string;
+  address: string;
+  location: string;
+  phone: string;
+  priceRange: string | null;
+  description: string | null;
+  imageUrl: string | null;
+  avgRating: number | null;
+  hashtags: string[];
+  regDate: string;
+}
+
+export interface PublicRestaurantDetailResponse {
+  success: boolean;
+  data: PublicRestaurantDetail;
+}
+
+// GET /api/restaurants/:idx — 점포 상세 조회
+export const fetchRestaurantDetail = async (idx: number): Promise<PublicRestaurantDetailResponse> => {
+  const response = await apiClient.get<PublicRestaurantDetailResponse>(`/restaurants/${idx}`);
   return response.data;
 };

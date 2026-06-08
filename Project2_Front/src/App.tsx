@@ -10,6 +10,9 @@ import { Routes, Route } from "react-router-dom";
 // 페이지 컴포넌트 임포트
 import HomePage from "@/pages/Home";
 import RestaurantsPage from "@/pages/RestaurantsPage";
+import RestaurantDetailPage from "@/pages/RestaurantDetailPage";
+import ReviewWritePage from "@/pages/ReviewWritePage";
+import ReviewListPage from "@/pages/ReviewListPage";
 import LikedPage from "@/pages/LikedPage";
 import SignupPage from "@/pages/SignupPage";
 import NotFoundPage from "@/pages/NotFoundPage";
@@ -20,6 +23,7 @@ import BackofficeRestaurantRegister from "@/pages/backoffice/restaurant/register
 import BackofficeRestaurantList from "@/pages/backoffice/restaurant/list/index";
 import BackofficeRestaurantEdit from "@/pages/backoffice/restaurant/edit/index";
 import BackofficeHashtagList from "@/pages/backoffice/restaurant/hashtag/index";
+import BackofficeUserList from "@/pages/backoffice/user/list/index";
 import PublicLayout from "@/layouts/PublicLayout";
 import BackofficeLayout from "@/layouts/BackofficeLayout";
 import BackofficeProtectedRoute from "@/layouts/BackofficeProtectedRoute";
@@ -38,6 +42,15 @@ function App(): JSX.Element {
 
         {/* 전체 맛집 탐색 페이지 */}
         <Route path="/restaurants" element={<RestaurantsPage />} />
+
+        {/* 점포 상세 뷰 페이지 */}
+        <Route path="/restaurants/:idx" element={<RestaurantDetailPage />} />
+
+        {/* 리뷰 목록 페이지 */}
+        <Route path="/reviews" element={<ReviewListPage />} />
+
+        {/* 리뷰 작성 페이지 */}
+        <Route path="/reviews/write" element={<ReviewWritePage />} />
 
         {/* 좋아요 기록 페이지 */}
         <Route path="/liked" element={<LikedPage />} />
@@ -63,6 +76,7 @@ function App(): JSX.Element {
           <Route path="restaurant/list" element={<BackofficeRestaurantList />} />
           <Route path="restaurant/edit/:idx" element={<BackofficeRestaurantEdit />} />
           <Route path="restaurant/hashtag" element={<BackofficeHashtagList />} />
+          <Route path="user/list" element={<BackofficeUserList />} />
         </Route>
       </Route>
     </Routes>

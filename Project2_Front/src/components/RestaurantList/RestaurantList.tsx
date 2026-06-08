@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   fetchPublicRestaurants,
   resolveImageUrl,
@@ -45,7 +46,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 // 개별 맛집 카드
-function RestaurantCard({ item }: { item: PublicRestaurantItem }): JSX.Element {
+function RestaurantCard({ item, onClick }: { item: PublicRestaurantItem; onClick: () => void }): JSX.Element {
   const isNew = isNewRestaurant(item.regDate);
   const isHot = item.avgRating !== null && item.avgRating >= 4.5;
   const hasRating = item.avgRating !== null;
@@ -54,7 +55,7 @@ function RestaurantCard({ item }: { item: PublicRestaurantItem }): JSX.Element {
   const resolvedImageUrl = resolveImageUrl(item.imageUrl);
 
   return (
-    <article className="restaurant-card">
+    <article className="restaurant-card restaurant-card--clickable" onClick={onClick}>
       {/* 이미지 영역 */}
       <div className="restaurant-card__image-wrap">
         {resolvedImageUrl ? (
@@ -135,6 +136,7 @@ function RestaurantCard({ item }: { item: PublicRestaurantItem }): JSX.Element {
 
 // 맛집 리스트 메인 컴포넌트
 function RestaurantList({ showAll = false }: { showAll?: boolean }): JSX.Element {
+  const navigate = useNavigate();
   const [items, setItems] = useState<PublicRestaurantItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -231,7 +233,11 @@ function RestaurantList({ showAll = false }: { showAll?: boolean }): JSX.Element
         ) : (
           <div className="restaurant-list__grid">
             {displayList.map((item) => (
-              <RestaurantCard key={item.idx} item={item} />
+              <RestaurantCard
+                key={item.idx}
+                item={item}
+                onClick={() => navigate(`/restaurants/${item.idx}`)}
+              />
             ))}
           </div>
         )}

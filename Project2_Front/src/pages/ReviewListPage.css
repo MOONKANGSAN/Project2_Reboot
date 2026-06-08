@@ -1,0 +1,377 @@
+/* ================================================================
+   ReviewListPage.css
+   ================================================================ */
+
+.rvl-page {
+  min-height: 100vh;
+  background: #f9fafb;
+  padding: 36px 0 80px;
+}
+
+/* ── 헤더 ── */
+.rvl-header {
+  margin-bottom: 20px;
+}
+
+.rvl-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 4px 0;
+}
+
+.rvl-count {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.rvl-count strong {
+  color: #f97316;
+  font-weight: 700;
+}
+
+/* ── 필터 바 ── */
+.rvl-filters {
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rvl-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rvl-filter-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #9ca3af;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  min-width: 28px;
+  flex-shrink: 0;
+}
+
+.rvl-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.rvl-chips--scroll {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.rvl-chips--scroll::-webkit-scrollbar { display: none; }
+
+.rvl-chip {
+  flex-shrink: 0;
+  padding: 5px 13px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  background: #f9fafb;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.14s ease;
+}
+
+.rvl-chip:hover {
+  border-color: #f97316;
+  color: #f97316;
+}
+
+.rvl-chip--active {
+  background: #f97316;
+  border-color: #f97316;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ── 카드 그리드 (2열 기본) ── */
+.rvl-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* ── 리뷰 카드 ── */
+.rv-card {
+  background: #fff;
+  border: 1.5px solid #f3f4f6;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: box-shadow 0.18s, transform 0.18s;
+}
+
+.rv-card:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+
+/* ── 점포 영역 ── */
+.rv-card__restaurant {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+
+.rv-card__restaurant:hover { background: #fafafa; }
+
+.rv-card__restaurant-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #f3f4f6;
+}
+
+.rv-card__restaurant-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.rv-card__restaurant-thumb-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #9ca3af;
+}
+
+.rv-card__restaurant-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.rv-card__restaurant-name {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 3px;
+}
+
+.rv-card__restaurant-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rv-card__category-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: #f97316;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+.rv-card__location {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.rv-card__arrow {
+  font-size: 18px;
+  color: #d1d5db;
+  flex-shrink: 0;
+}
+
+/* 구분선 */
+.rv-card__divider {
+  height: 1px;
+  background: #f3f4f6;
+  margin: 0 16px;
+}
+
+/* ── 리뷰 본문 ── */
+.rv-card__body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rv-card__meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.rv-card__author {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rv-card__avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #f97316;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rv-card__nickname {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.rv-card__stars {
+  font-size: 13px;
+  color: #f59e0b;
+  letter-spacing: 1px;
+  margin-left: auto;
+}
+
+.rv-card__rating-num {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.rv-card__date {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+/* 리뷰 텍스트 — 3줄 초과 시 말줄임 */
+.rv-card__content {
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.65;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 리뷰 이미지 */
+.rv-card__img-wrap {
+  border-radius: 8px;
+  overflow: hidden;
+  height: 160px;
+}
+
+.rv-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 좋아요 */
+.rv-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 4px;
+  border-top: 1px solid #f9fafb;
+}
+
+.rv-card__likes {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* ── 더보기 버튼 ── */
+.rvl-more {
+  margin-top: 36px;
+  display: flex;
+  justify-content: center;
+}
+
+.rvl-more-btn {
+  padding: 12px 40px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #f97316;
+  background: #fff;
+  border: 1.5px solid #f97316;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.rvl-more-btn:hover {
+  background: #f97316;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.25);
+}
+
+/* ── 상태 ── */
+.rvl-status {
+  text-align: center;
+  padding: 80px 20px;
+  font-size: 15px;
+  color: #9ca3af;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.rvl-status--error { color: #ef4444; }
+
+.rvl-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #f97316;
+  border-radius: 50%;
+  animation: rvl-spin 0.7s linear infinite;
+}
+
+@keyframes rvl-spin { to { transform: rotate(360deg); } }
+
+/* ── 반응형 ── */
+@media (max-width: 768px) {
+  .rvl-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 1200px) {
+  .rvl-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
