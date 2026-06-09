@@ -2,12 +2,14 @@ package com.example.Project2_Spring.controller;
 
 import com.example.Project2_Spring.dto.PublicRestaurantDetailDto;
 import com.example.Project2_Spring.dto.PublicRestaurantDto;
+import com.example.Project2_Spring.dto.RestaurantSearchItemDto;
 import com.example.Project2_Spring.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -36,6 +38,23 @@ public class PublicRestaurantController {
             Map<String, Object> error = new HashMap<>();
             error.put("success", false);
             error.put("message", "맛집 목록 조회 중 오류가 발생했습니다.");
+            return ResponseEntity.status(500).body(error);
+        }
+    }
+
+    // GET /api/restaurants/search?keyword=xxx — 점포 자동완성 검색 (최대 10건)
+    @GetMapping("/search")
+    public ResponseEntity<?> search(@RequestParam(defaultValue = "") String keyword) {
+        try {
+            List<RestaurantSearchItemDto> data = restaurantService.search(keyword);
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("data", data);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "점포 검색 중 오류가 발생했습니다.");
             return ResponseEntity.status(500).body(error);
         }
     }

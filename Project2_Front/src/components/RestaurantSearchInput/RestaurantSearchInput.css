@@ -1,0 +1,259 @@
+/* ================================================================
+   RestaurantSearchInput.css — 점포 검색 자동완성 컴포넌트
+   ================================================================ */
+
+/* ── 전체 래퍼 (드롭다운 position 기준점) ── */
+.rsi-wrap {
+  position: relative;
+  width: 100%;
+}
+
+/* ── 입력 박스 ── */
+.rsi-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  height: 44px;
+  background: #f9fafb;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  transition: border-color 0.15s, box-shadow 0.15s, border-radius 0.15s;
+}
+
+/* 포커스 상태 */
+.rsi-input-wrap:focus-within {
+  background: #fff;
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
+}
+
+/* 드롭다운 열렸을 때 하단 테두리 제거 (드롭다운과 이어지는 느낌) */
+.rsi-input-wrap--open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-color: #f3f4f6;
+}
+
+.rsi-input-wrap--error {
+  border-color: #ef4444;
+}
+
+.rsi-input-wrap--error:focus-within {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* 검색 아이콘 */
+.rsi-icon {
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+/* 실제 input */
+.rsi-input {
+  flex: 1;
+  height: 100%;
+  font-size: 14px;
+  color: #111827;
+  background: transparent;
+  border: none;
+  outline: none;
+  min-width: 0;
+}
+
+.rsi-input::placeholder {
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+/* 로딩 스피너 */
+.rsi-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e5e7eb;
+  border-top-color: #f97316;
+  border-radius: 50%;
+  animation: rsi-spin 0.65s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes rsi-spin { to { transform: rotate(360deg); } }
+
+/* 입력 지우기 버튼 */
+.rsi-clear-btn {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #9ca3af;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.12s, color 0.12s;
+}
+
+.rsi-clear-btn:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+/* ── 드롭다운 ── */
+.rsi-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 500;
+  background: #fff;
+  border: 1.5px solid #f97316;
+  border-top: 1px solid #f3f4f6;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.rsi-dropdown__empty {
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #9ca3af;
+  text-align: center;
+}
+
+/* ── 드롭다운 아이템 ── */
+.rsi-dropdown__item {
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.rsi-dropdown__item:hover,
+.rsi-dropdown__item--active {
+  background: #fff7ed;
+}
+
+.rsi-dropdown__name {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 3px;
+}
+
+.rsi-dropdown__meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.rsi-dropdown__category {
+  font-size: 11px;
+  font-weight: 700;
+  color: #f97316;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+.rsi-dropdown__dot {
+  font-size: 11px;
+  color: #d1d5db;
+}
+
+.rsi-dropdown__location {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+/* ── 검색어 강조 ── */
+.rsi-highlight {
+  background: transparent;
+  color: #f97316;
+  font-weight: 700;
+}
+
+/* ── 선택 완료 상태 ── */
+.rsi-selected {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #fff7ed;
+  border: 1.5px solid #fed7aa;
+  border-radius: 8px;
+}
+
+.rsi-selected--error {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.rsi-selected__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.rsi-selected__name {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rsi-selected__meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.rsi-selected__category {
+  font-size: 11px;
+  font-weight: 700;
+  color: #f97316;
+}
+
+.rsi-selected__dot {
+  font-size: 11px;
+  color: #d1d5db;
+}
+
+.rsi-selected__location {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+/* 선택 해제 버튼 */
+.rsi-selected__clear {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #9ca3af;
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.14s;
+}
+
+.rsi-selected__clear:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: #fef2f2;
+}

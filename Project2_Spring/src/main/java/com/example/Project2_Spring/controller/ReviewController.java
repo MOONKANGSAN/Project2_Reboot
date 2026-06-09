@@ -2,6 +2,7 @@ package com.example.Project2_Spring.controller;
 
 import com.example.Project2_Spring.dto.PublicReviewDto;
 import com.example.Project2_Spring.entity.Review;
+import com.example.Project2_Spring.service.ReviewLikeService;
 import com.example.Project2_Spring.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ReviewController {
 
-    private final ReviewService reviewService;
+    private final ReviewService     reviewService;
+    private final ReviewLikeService reviewLikeService;
 
     // GET /api/reviews — 공개 리뷰 목록 조회 (최신순)
     @GetMapping
@@ -33,6 +35,53 @@ public class ReviewController {
             Map<String, Object> error = new HashMap<>();
             error.put("success", false);
             error.put("message", "리뷰 목록 조회 중 오류가 발생했습니다.");
+            return ResponseEntity.status(500).body(error);
+        }
+    }
+
+    // GET /api/reviews/my-likes?userId=xxx — 내가 좋아요한 리뷰 idx 목록
+    @GetMapping("/my-likes")
+    public ResponseEntity<?> myLikes(@RequestParam String userId) {
+        try {
+            List<Integer> idxList = reviewLikeService.getMyLikedReviewIdxList(userId);
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("likedIdxList", idxList);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "좋아요 목록 조회 중 오류가 발생했습니다.");
+            return ResponseEntity.status(500).body(error);
+        }
+    }
+
+    // POST /api/reviews/{reviewIdx}/like — 좋아요 토글
+    @PostMapping("/{reviewIdx}/like")
+    public ResponseEntity<?> toggleLike(
+            @PathVariable Integer reviewIdx,
+            @RequestBody  Map<String, String> body
+    ) {
+        try {
+            String userId = body.get("userId");
+            int[] result  = reviewLikeService.toggle(reviewIdx, userId);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success",   true);
+            response.put("state",     result[0]);   // 0 or 1
+            response.put("likeCount", result[1]);
+            return ResponseEntity.ok(response);
+
+        } catch (IllegalArgumentException e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "좋아요 처리 중 오류가 발생했습니다.");
             return ResponseEntity.status(500).body(error);
         }
     }
