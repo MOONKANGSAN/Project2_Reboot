@@ -6,9 +6,8 @@ import path from "path";
 export default defineConfig({
   plugins: [react()],
   server: {
-    // 개발 서버 포트
+    host: '0.0.0.0',   // Docker 컨테이너 외부(호스트 브라우저)에서 접근 허용
     port: 5173,
-    // 프록시 설정으로 CORS 우회
     proxy: {
       '/api': {
         target: 'http://localhost:8080',
