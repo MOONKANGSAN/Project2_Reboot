@@ -1,37 +1,87 @@
 services:
-  # 데이터베이스 서비스
-  db:
-    image: mysql:8.0 
-    container_name: project2-db 
-    restart: always 
-    environment:
-      MYSQL_DATABASE: restaurant_db 
-      MYSQL_ROOT_PASSWORD: root_password 
-    ports:
-      - "3307:3306" 
-    volumes:
-      - ./mysql_data:/var/lib/mysql 
 
-  # 백엔드 서비스
-  backend:
-    build: ./Project2_Spring 
-    container_name: project2-backend 
-    ports:
-      - "8080:8080" 
-    depends_on:
-      - db 
+  # ──────────────────────────────────────────────────
+  # DB — MySQL 8.0
+  # watch 대상 없음 (볼륨으로 데이터 영속 유지)
+  # ──────────────────────────────────────────────────
+  db:
+    image: mysql:8.0
+    container_name: project2-db
+    restart: always
     environment:
-      # 주소값을 'localhost'가 아닌 docker-compose 서비스 이름인 'db'로 적어야 통신이 됩니다.
+      MYSQL_DATABASE: restaurant_db
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ──────────────────────────────────────────────────
+  # 백엔드 — Spring Boot (Gradle 내부 빌드)
+  #
+  # watch 액션
+  #   sync+restart  src/**        소스 동기화 → 컨테이너 재시작
+  #                               → bootRun 이 재컴파일 수행
+  #   rebuild       build.gradle  의존성 변경 → 이미지 전체 재빌드
+  # ──────────────────────────────────────────────────
+  backend:
+    build: ./Project2_Spring
+    container_name: project2-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/restaurant_db?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root_password
+    volumes:
+      - ./uploads:/app/uploads
+      - gradle-cache:/root/.gradle
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./Project2_Spring/src
+          target: /app/src
+          ignore:
+            - "**/*.class"
+        - action: rebuild
+          path: ./Project2_Spring/build.gradle
 
-  # 프론트엔드 서비스 추가
+  # ──────────────────────────────────────────────────
+  # 프론트엔드 — Vite 개발 서버 (HMR 활성)
+  #
+  # watch 액션
+  #   sync     src/**        소스 동기화 → Vite HMR 이 즉시 반영
+  #   sync     public/**     정적 파일 동기화
+  #   rebuild  package.json  패키지 변경 → 이미지 재빌드 (npm ci)
+  # ──────────────────────────────────────────────────
   frontend:
     build: ./Project2_Front
     container_name: project2-frontend
     ports:
-      - "5173:80" # 호스트의 5173 포트로 접속 시 컨테이너 Nginx(80)로 연결
+      - "5173:5173"
     depends_on:
       - backend
-    restart: always
+    develop:
+      watch:
+        - action: sync
+          path: ./Project2_Front/src
+          target: /app/src
+        - action: sync
+          path: ./Project2_Front/public
+          target: /app/public
+        - action: rebuild
+          path: ./Project2_Front/package.json
+
+# ──────────────────────────────────────────────────
+# Named Volumes
+# ──────────────────────────────────────────────────
+volumes:
+  gradle-cache:
