@@ -32,8 +32,8 @@ const NAV_SECTIONS: NavSection[] = [
     key: 'review',
     label: '리뷰 관리',
     items: [
-      { label: '리뷰 목록', to: '/backoffice/review/list', disabled: true },
-      { label: '신고 관리', to: '/backoffice/review/report', disabled: true },
+      { label: '리뷰 목록', to: '/backoffice/review/list' },
+      { label: '신고 관리', to: '/backoffice/review/report' },
     ],
   },
   {

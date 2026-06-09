@@ -1,5 +1,6 @@
 package com.example.Project2_Spring.controller;
 
+import com.example.Project2_Spring.dto.BackofficeReviewListItemDto;
 import com.example.Project2_Spring.dto.PublicReviewDto;
 import com.example.Project2_Spring.entity.Review;
 import com.example.Project2_Spring.service.ReviewLikeService;
@@ -35,6 +36,49 @@ public class ReviewController {
             Map<String, Object> error = new HashMap<>();
             error.put("success", false);
             error.put("message", "리뷰 목록 조회 중 오류가 발생했습니다.");
+            return ResponseEntity.status(500).body(error);
+        }
+    }
+
+    // ── 백오피스 전용 ──────────────────────────────────────────────
+
+    // GET /api/reviews/admin — 전체 리뷰 목록 (활성+비활성)
+    @GetMapping("/admin")
+    public ResponseEntity<?> adminList() {
+        try {
+            List<BackofficeReviewListItemDto> data = reviewService.getAdminList();
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("data", data);
+            response.put("total", data.size());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "리뷰 목록 조회 중 오류가 발생했습니다.");
+            return ResponseEntity.status(500).body(error);
+        }
+    }
+
+    // PATCH /api/reviews/{reviewIdx}/state — 상태 토글 (1↔0)
+    @PatchMapping("/{reviewIdx}/state")
+    public ResponseEntity<?> toggleState(@PathVariable Integer reviewIdx) {
+        try {
+            Review updated = reviewService.toggleState(reviewIdx);
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("idx",   updated.getIdx());
+            response.put("state", updated.getState());
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "상태 변경 중 오류가 발생했습니다.");
             return ResponseEntity.status(500).body(error);
         }
     }

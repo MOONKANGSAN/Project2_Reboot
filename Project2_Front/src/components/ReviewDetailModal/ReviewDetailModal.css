@@ -1,0 +1,318 @@
+/* ================================================================
+   ReviewDetailModal.css
+   ================================================================ */
+
+/* ── 백드롭 ── */
+.rdm-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+  animation: rdm-backdrop-in 0.18s ease forwards;
+}
+
+@keyframes rdm-backdrop-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── 카드 ── */
+.rdm-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18), 0 4px 16px rgba(0, 0, 0, 0.08);
+  animation: rdm-card-in 0.22s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+
+  /* 스크롤바 스타일 */
+  scrollbar-width: thin;
+  scrollbar-color: #e5e7eb transparent;
+}
+
+.rdm-card::-webkit-scrollbar { width: 4px; }
+.rdm-card::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
+
+@keyframes rdm-card-in {
+  from { opacity: 0; transform: scale(0.94) translateY(8px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);   }
+}
+
+/* ── 상단 버튼 행 (신고 + 닫기) ── */
+.rdm-top-bar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px 0;
+  background: #fff;
+  z-index: 10;
+}
+
+/* 신고 버튼 */
+.rdm-report-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #9ca3af;
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: color 0.14s, border-color 0.14s, background 0.14s;
+}
+
+.rdm-report-btn:hover {
+  color: #ef4444;
+  border-color: #fca5a5;
+  background: #fef2f2;
+}
+
+/* ── 닫기 버튼 ── */
+.rdm-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 50%;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background 0.14s, color 0.14s;
+}
+
+.rdm-close:hover {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+/* ── 점포 정보 ── */
+.rdm-restaurant {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px 14px;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+
+.rdm-restaurant:hover { background: #fafafa; }
+
+.rdm-restaurant__thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #f3f4f6;
+}
+
+.rdm-restaurant__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.rdm-restaurant__thumb-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: #9ca3af;
+}
+
+.rdm-restaurant__info { flex: 1; min-width: 0; }
+
+.rdm-restaurant__name {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rdm-restaurant__meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.rdm-category {
+  font-size: 11px;
+  font-weight: 700;
+  color: #f97316;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+.rdm-dot   { font-size: 11px; color: #d1d5db; }
+.rdm-location { font-size: 11px; color: #9ca3af; }
+
+.rdm-restaurant__arrow {
+  font-size: 18px;
+  color: #d1d5db;
+  flex-shrink: 0;
+}
+
+/* ── 구분선 ── */
+.rdm-divider {
+  height: 1px;
+  background: #f3f4f6;
+  margin: 0;
+}
+
+/* ── 리뷰 본문 ── */
+.rdm-body {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* 작성자 + 별점 + 날짜 */
+.rdm-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.rdm-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rdm-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f97316;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rdm-nickname {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.rdm-rating-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rdm-stars {
+  font-size: 14px;
+  color: #f59e0b;
+  letter-spacing: 1px;
+}
+
+.rdm-rating-num {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.rdm-date {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* 리뷰 이미지 */
+.rdm-img-wrap {
+  border-radius: 10px;
+  overflow: hidden;
+  max-height: 320px;
+}
+
+.rdm-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 리뷰 내용 전체 (말줄임 없음) */
+.rdm-content {
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.75;
+  margin: 0;
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+/* ── 하단 좋아요 ── */
+.rdm-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 12px 20px 18px;
+}
+
+.rdm-like-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #9ca3af;
+  background: none;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s, transform 0.12s;
+}
+
+.rdm-like-btn:hover {
+  color: #f43f5e;
+  border-color: #fda4af;
+  background: #fff1f2;
+}
+
+.rdm-like-btn--active {
+  color: #f43f5e;
+  border-color: #fda4af;
+  background: #fff1f2;
+  font-weight: 600;
+}
+
+.rdm-like-btn:active { transform: scale(0.93); }
+
+/* ── 반응형 ── */
+@media (max-width: 560px) {
+  .rdm-card { border-radius: 12px; }
+  .rdm-meta-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+}

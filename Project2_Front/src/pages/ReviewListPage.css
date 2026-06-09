@@ -117,6 +117,34 @@
   transition: box-shadow 0.18s, transform 0.18s;
 }
 
+.rv-card--clickable { cursor: pointer; }
+
+/* 카드 우측 상단 신고 버튼 */
+.rv-report-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e5e7eb;
+  border-radius: 50%;
+  color: #9ca3af;
+  cursor: pointer;
+  z-index: 1;
+  transition: color 0.14s, border-color 0.14s, background 0.14s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.rv-report-btn:hover {
+  color: #ef4444;
+  border-color: #fca5a5;
+  background: #fff;
+}
+
 .rv-card:hover {
   box-shadow: 0 6px 20px rgba(0,0,0,0.08);
   transform: translateY(-2px);

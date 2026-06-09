@@ -1,0 +1,194 @@
+/* ================================================================
+   BackofficeReviewListPage.css
+   기존 bo-* 토큰 재사용 + 리뷰 전용 스타일 추가
+   ================================================================ */
+
+/* ── 검색 인풋 ── */
+.bo-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  height: 32px;
+  background-color: var(--bo-bg-dark);
+  border: 1px solid var(--bo-border);
+  border-radius: 6px;
+  transition: border-color var(--bo-transition);
+}
+
+.bo-search-wrap:focus-within {
+  border-color: var(--bo-accent);
+}
+
+.bo-search-icon {
+  color: var(--bo-text-muted);
+  flex-shrink: 0;
+}
+
+.bo-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  color: var(--bo-text-primary);
+  min-width: 160px;
+}
+
+.bo-search-input::placeholder {
+  color: var(--bo-text-muted);
+}
+
+.bo-search-clear {
+  font-size: 11px;
+  color: var(--bo-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 2px;
+  transition: color var(--bo-transition);
+}
+
+.bo-search-clear:hover { color: var(--bo-error); }
+
+/* ── 테이블 컬럼 너비 ── */
+.col-idx    { width: 52px; text-align: center; }
+.col-rating { width: 90px; }
+.col-content { max-width: 260px; }
+.col-like   { width: 64px; text-align: center; }
+.col-image  { width: 64px; text-align: center; }
+.col-state  { width: 88px; }
+.col-date   { width: 96px; }
+
+/* ── 별점 셀 ── */
+.bo-cell-stars {
+  color: var(--bo-warning);
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.bo-cell-rating-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--bo-text-primary);
+  margin-left: 4px;
+}
+
+/* ── 내용 말줄임 ── */
+.bo-cell-content {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+  font-size: 12px;
+  color: var(--bo-text-secondary);
+}
+
+/* ── 작성자 ── */
+.bo-cell-author {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+}
+
+.bo-author-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: var(--bo-accent);
+  color: #000;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── 이미지 뱃지 ── */
+.bo-badge-yes {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--bo-success);
+}
+
+.bo-badge-no {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: var(--bo-bg-active);
+  color: var(--bo-text-muted);
+}
+
+/* ── 페이지네이션 ── */
+.bo-pagination-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 6px;
+  border-top: 1px solid var(--bo-border);
+}
+
+.bo-page-info {
+  font-size: 12px;
+  color: var(--bo-text-muted);
+}
+
+.bo-pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bo-page-btn {
+  min-width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--bo-text-secondary);
+  background: transparent;
+  border: 1px solid var(--bo-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--bo-transition);
+}
+
+.bo-page-btn:hover:not(:disabled) {
+  border-color: var(--bo-accent);
+  color: var(--bo-accent);
+  background-color: var(--bo-accent-soft);
+}
+
+.bo-page-btn--active {
+  background-color: var(--bo-accent);
+  border-color: var(--bo-accent);
+  color: #000;
+  font-weight: 700;
+}
+
+.bo-page-btn--nav {
+  font-size: 15px;
+  color: var(--bo-text-muted);
+}
+
+.bo-page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.bo-page-ellipsis {
+  font-size: 13px;
+  color: var(--bo-text-muted);
+  padding: 0 4px;
+  user-select: none;
+}
