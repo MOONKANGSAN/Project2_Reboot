@@ -35,4 +35,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
     // 공개 리뷰 목록 조회 — 활성 리뷰만, 최신 등록순
     List<Review> findByStateOrderByRegDateDesc(Integer state);
+
+    // 백오피스 리뷰 목록 — 전체(활성+비활성), 최신 등록순
+    List<Review> findAllByOrderByRegDateDesc();
 }

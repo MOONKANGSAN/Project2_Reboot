@@ -24,6 +24,8 @@ import BackofficeRestaurantList from "@/pages/backoffice/restaurant/list/index";
 import BackofficeRestaurantEdit from "@/pages/backoffice/restaurant/edit/index";
 import BackofficeHashtagList from "@/pages/backoffice/restaurant/hashtag/index";
 import BackofficeUserList from "@/pages/backoffice/user/list/index";
+import BackofficeReviewList from "@/pages/backoffice/review/list/index";
+import BackofficeReviewReport from "@/pages/backoffice/review/report/index";
 import PublicLayout from "@/layouts/PublicLayout";
 import BackofficeLayout from "@/layouts/BackofficeLayout";
 import BackofficeProtectedRoute from "@/layouts/BackofficeProtectedRoute";
@@ -77,6 +79,8 @@ function App(): JSX.Element {
           <Route path="restaurant/edit/:idx" element={<BackofficeRestaurantEdit />} />
           <Route path="restaurant/hashtag" element={<BackofficeHashtagList />} />
           <Route path="user/list" element={<BackofficeUserList />} />
+          <Route path="review/list" element={<BackofficeReviewList />} />
+          <Route path="review/report" element={<BackofficeReviewReport />} />
         </Route>
       </Route>
     </Routes>

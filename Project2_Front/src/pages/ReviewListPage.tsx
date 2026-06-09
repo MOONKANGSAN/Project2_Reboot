@@ -7,6 +7,8 @@ import {
   resolveImageUrl,
   type PublicReviewItem,
 } from '@/api/reviewApi';
+import ReviewDetailModal from '@/components/ReviewDetailModal/ReviewDetailModal';
+import ReportModal, { SirenIcon } from '@/components/ReportModal/ReportModal';
 import './ReviewListPage.css';
 
 // ── 상수
@@ -40,20 +42,33 @@ interface ReviewCardProps {
   item: PublicReviewItem;
   isLiked: boolean;
   onToggleLike: (reviewIdx: number) => void;
+  onOpenDetail: (item: PublicReviewItem) => void;
+  onOpenReport: (reviewIdx: number) => void;
 }
 
-function ReviewCard({ item, isLiked, onToggleLike }: ReviewCardProps): JSX.Element {
+function ReviewCard({ item, isLiked, onToggleLike, onOpenDetail, onOpenReport }: ReviewCardProps): JSX.Element {
   const navigate      = useNavigate();
   const reviewImg     = resolveImageUrl(item.imageUrl);
   const restaurantImg = resolveImageUrl(item.restaurantImageUrl);
 
   return (
-    <article className="rv-card">
+    <article className="rv-card rv-card--clickable" onClick={() => onOpenDetail(item)} style={{ position: 'relative' }}>
+
+      {/* 사이렌 신고 버튼 (우측 상단) */}
+      <button
+        type="button"
+        className="rv-report-btn"
+        onClick={e => { e.stopPropagation(); onOpenReport(item.idx); }}
+        aria-label="리뷰 신고"
+        title="리뷰 신고"
+      >
+        <SirenIcon size={15} />
+      </button>
 
       {/* 점포 정보 (클릭 → 점포 뷰) */}
       <div
         className="rv-card__restaurant"
-        onClick={() => navigate(`/restaurants/${item.restaurantIdx}`)}
+        onClick={e => { e.stopPropagation(); navigate(`/restaurants/${item.restaurantIdx}`); }}
         role="button"
         tabIndex={0}
       >
@@ -107,7 +122,7 @@ function ReviewCard({ item, isLiked, onToggleLike }: ReviewCardProps): JSX.Eleme
           <button
             type="button"
             className={`rv-like-btn ${isLiked ? 'rv-like-btn--active' : ''}`}
-            onClick={() => onToggleLike(item.idx)}
+            onClick={e => { e.stopPropagation(); onToggleLike(item.idx); }}
             aria-label={isLiked ? '좋아요 취소' : '좋아요'}
           >
             <HeartIcon filled={isLiked} />
@@ -127,7 +142,9 @@ function ReviewListPage(): JSX.Element {
   const [error, setError]               = useState<string | null>(null);
   const [category, setCategory]         = useState<CategoryKey>('전체');
   const [location, setLocation]         = useState<string>('전체');
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [visibleCount, setVisibleCount]       = useState(PAGE_SIZE);
+  const [modalItem, setModalItem]             = useState<PublicReviewItem | null>(null);
+  const [reportTargetIdx, setReportTargetIdx] = useState<number | null>(null);
 
   // 로그인 세션
   const [userId, setUserId] = useState<string | null>(null);
@@ -267,6 +284,8 @@ function ReviewListPage(): JSX.Element {
                   item={item}
                   isLiked={likedSet.has(item.idx)}
                   onToggleLike={handleToggleLike}
+                  onOpenDetail={setModalItem}
+                  onOpenReport={setReportTargetIdx}
                 />
               ))}
             </div>
@@ -285,6 +304,20 @@ function ReviewListPage(): JSX.Element {
         )}
 
       </div>
+
+      {/* 리뷰 상세 모달 */}
+      <ReviewDetailModal
+        item={modalItem}
+        isLiked={modalItem ? likedSet.has(modalItem.idx) : false}
+        onClose={() => setModalItem(null)}
+        onToggleLike={handleToggleLike}
+      />
+
+      {/* 신고 모달 */}
+      <ReportModal
+        reviewIdx={reportTargetIdx}
+        onClose={() => setReportTargetIdx(null)}
+      />
     </div>
   );
 }

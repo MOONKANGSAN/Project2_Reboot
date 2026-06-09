@@ -1,5 +1,6 @@
 package com.example.Project2_Spring.service;
 
+import com.example.Project2_Spring.dto.BackofficeReviewListItemDto;
 import com.example.Project2_Spring.dto.PublicReviewDto;
 import com.example.Project2_Spring.entity.Review;
 import com.example.Project2_Spring.entity.UserInfo;
@@ -109,6 +110,37 @@ public class ReviewService {
         review.setContent(content);
         review.setImageUrl(imageUrl);
 
+        return reviewRepository.save(review);
+    }
+
+    // ── 백오피스 전용 ──────────────────────────────────────
+
+    // 전체 리뷰 목록 (활성+비활성, 최신순)
+    @Transactional(readOnly = true)
+    public List<BackofficeReviewListItemDto> getAdminList() {
+        return reviewRepository.findAllByOrderByRegDateDesc()
+                .stream()
+                .map(rv -> new BackofficeReviewListItemDto(
+                        rv.getIdx(),
+                        rv.getRestaurantEntity().getIdx(),
+                        rv.getRestaurantEntity().getName(),
+                        rv.getUserEntity().getNickname(),
+                        rv.getRating(),
+                        rv.getContent(),
+                        rv.getLikeCount(),
+                        rv.getImageUrl() != null,
+                        rv.getState(),
+                        rv.getRegDate()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    // 리뷰 상태 토글 (1→0, 0→1)
+    @Transactional
+    public Review toggleState(Integer reviewIdx) {
+        Review review = reviewRepository.findById(reviewIdx)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 리뷰입니다."));
+        review.setState(review.getState() == 1 ? 0 : 1);
         return reviewRepository.save(review);
     }
 
