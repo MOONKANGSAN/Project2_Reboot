@@ -3,6 +3,7 @@ package com.example.Project2_Spring.service;
 import com.example.Project2_Spring.dto.PublicRestaurantDetailDto;
 import com.example.Project2_Spring.dto.PublicRestaurantDto;
 import com.example.Project2_Spring.dto.RestaurantListItemDto;
+import com.example.Project2_Spring.dto.RestaurantSearchItemDto;
 import com.example.Project2_Spring.entity.RestaurantHashtag;
 import com.example.Project2_Spring.entity.RestaurantImg;
 import com.example.Project2_Spring.entity.restaurant;
@@ -152,6 +153,18 @@ public class RestaurantService {
         r.setDescription(dto.getDescription());
         r.setImageUrl(dto.getImageUrl());
         return restaurantRepository.save(r);
+    }
+
+    // 점포명/지역명 키워드 검색 — 자동완성 드롭다운용 (최대 10건)
+    @Transactional(readOnly = true)
+    public List<RestaurantSearchItemDto> search(String keyword) {
+        if (keyword == null || keyword.isBlank()) return List.of();
+        return restaurantRepository.searchByKeyword(keyword.trim())
+                .stream()
+                .limit(10)
+                .map(r -> new RestaurantSearchItemDto(
+                        r.getIdx(), r.getName(), r.getCategory(), r.getLocation()))
+                .collect(Collectors.toList());
     }
 
     // 점포 상태 토글 (1→0, 0→1)

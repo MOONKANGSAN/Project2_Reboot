@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
-import { fetchPublicRestaurants, type PublicRestaurantItem } from '@/api/publicRestaurantApi';
+import RestaurantSearchInput, {
+  type RestaurantSearchItem,
+} from '@/components/RestaurantSearchInput/RestaurantSearchInput';
 import './ReviewWritePage.css';
 
 const BACKEND = 'http://localhost:8080';
@@ -40,22 +42,21 @@ function StarPicker({ value, onChange }: { value: number; onChange: (v: number) 
 
 // ── 메인 페이지
 function ReviewWritePage(): JSX.Element {
-  const navigate       = useNavigate();
-  const [params]       = useSearchParams();
-  const presetIdx      = params.get('restaurantIdx');
+  const navigate  = useNavigate();
+  const [params]  = useSearchParams();
+  const presetIdx = params.get('restaurantIdx');
 
-  const [session, setSession]             = useState<UserSession | null>(null);
-  const [restaurants, setRestaurants]     = useState<PublicRestaurantItem[]>([]);
-  const [restaurantIdx, setRestaurantIdx] = useState<string>(presetIdx ?? '');
-  const [rating, setRating]               = useState(0);
-  const [content, setContent]             = useState('');
-  const [imageFile, setImageFile]         = useState<File | null>(null);
-  const [imagePreview, setImagePreview]   = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting]   = useState(false);
-  const [error, setError]                 = useState<string>('');
+  const [session, setSession]                       = useState<UserSession | null>(null);
+  const [selectedRestaurant, setSelectedRestaurant] = useState<RestaurantSearchItem | null>(null);
+  const [rating, setRating]                         = useState(0);
+  const [content, setContent]                       = useState('');
+  const [imageFile, setImageFile]                   = useState<File | null>(null);
+  const [imagePreview, setImagePreview]             = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting]             = useState(false);
+  const [error, setError]                           = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // 세션 확인 — 비로그인이면 홈으로
+  // 세션 확인
   useEffect(() => {
     const raw = sessionStorage.getItem('userSession');
     if (!raw) {
@@ -66,14 +67,6 @@ function ReviewWritePage(): JSX.Element {
     setSession(JSON.parse(raw));
   }, [navigate]);
 
-  // 점포 목록 로드
-  useEffect(() => {
-    fetchPublicRestaurants()
-      .then(res => { if (res.success) setRestaurants(res.data); })
-      .catch(() => {});
-  }, []);
-
-  // 이미지 선택 → 미리보기
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -91,14 +84,14 @@ function ReviewWritePage(): JSX.Element {
     e.preventDefault();
     setError('');
 
-    if (!restaurantIdx) { setError('점포를 선택해주세요.'); return; }
-    if (rating === 0)   { setError('별점을 선택해주세요.'); return; }
-    if (!content.trim()) { setError('리뷰 내용을 입력해주세요.'); return; }
+    if (!selectedRestaurant) { setError('점포를 선택해주세요.'); return; }
+    if (rating === 0)        { setError('별점을 선택해주세요.'); return; }
+    if (!content.trim())     { setError('리뷰 내용을 입력해주세요.'); return; }
 
     setIsSubmitting(true);
     try {
       const form = new FormData();
-      form.append('restaurantIdx', restaurantIdx);
+      form.append('restaurantIdx', String(selectedRestaurant.idx));
       form.append('userId',        session!.userId);
       form.append('rating',        String(rating));
       form.append('content',       content.trim());
@@ -110,9 +103,8 @@ function ReviewWritePage(): JSX.Element {
 
       if (data.success) {
         alert('리뷰가 등록되었습니다!');
-        // 점포 상세에서 왔으면 다시 돌아가고, 아니면 홈으로
         if (presetIdx) navigate(`/restaurants/${presetIdx}`);
-        else navigate('/');
+        else navigate('/reviews');
       } else {
         setError(data.message);
       }
@@ -136,26 +128,19 @@ function ReviewWritePage(): JSX.Element {
           <p className="rw-subtitle">방문한 맛집의 솔직한 후기를 남겨보세요</p>
         </div>
 
-        {/* 폼 카드 */}
         <form className="rw-card" onSubmit={handleSubmit} noValidate>
 
-          {/* 점포 선택 */}
+          {/* 점포 검색 선택 */}
           <div className="rw-field">
             <label className="rw-label">
               점포 선택 <span className="rw-required">*</span>
             </label>
-            <select
-              className={`rw-select ${!restaurantIdx && error ? 'rw-input--error' : ''}`}
-              value={restaurantIdx}
-              onChange={e => setRestaurantIdx(e.target.value)}
-            >
-              <option value="">점포를 선택하세요</option>
-              {restaurants.map(r => (
-                <option key={r.idx} value={String(r.idx)}>
-                  {r.name} · {r.location}
-                </option>
-              ))}
-            </select>
+            <RestaurantSearchInput
+              selected={selectedRestaurant}
+              onSelect={setSelectedRestaurant}
+              hasError={!selectedRestaurant && !!error}
+              presetIdx={presetIdx ? Number(presetIdx) : null}
+            />
           </div>
 
           {/* 작성자 (읽기 전용) */}
@@ -194,7 +179,6 @@ function ReviewWritePage(): JSX.Element {
           {/* 이미지 첨부 */}
           <div className="rw-field">
             <label className="rw-label">사진 첨부 <span className="rw-optional">(선택, 1장)</span></label>
-
             {imagePreview ? (
               <div className="rw-preview">
                 <img src={imagePreview} alt="미리보기" className="rw-preview__img" />
@@ -203,11 +187,7 @@ function ReviewWritePage(): JSX.Element {
                 </button>
               </div>
             ) : (
-              <button
-                type="button"
-                className="rw-upload-btn"
-                onClick={() => fileInputRef.current?.click()}
-              >
+              <button type="button" className="rw-upload-btn" onClick={() => fileInputRef.current?.click()}>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
                   <rect x="3" y="3" width="18" height="18" rx="3" />
@@ -227,14 +207,10 @@ function ReviewWritePage(): JSX.Element {
             />
           </div>
 
-          {/* 에러 메시지 */}
           {error && <p className="rw-error">{error}</p>}
 
-          {/* 제출 버튼 */}
           <div className="rw-actions">
-            <button type="button" className="rw-btn-cancel" onClick={() => navigate(-1)}>
-              취소
-            </button>
+            <button type="button" className="rw-btn-cancel" onClick={() => navigate(-1)}>취소</button>
             <button type="submit" className="rw-btn-submit" disabled={isSubmitting}>
               {isSubmitting ? '등록 중...' : '리뷰 등록'}
             </button>

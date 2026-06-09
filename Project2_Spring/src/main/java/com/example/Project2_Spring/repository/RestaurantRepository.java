@@ -2,6 +2,8 @@ package com.example.Project2_Spring.repository;
 
 import com.example.Project2_Spring.entity.restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,9 +13,15 @@ public interface RestaurantRepository extends JpaRepository<restaurant, Integer>
 
     boolean existsByNameAndAddress(String name, String address);
 
-    // 등록일 내림차순 전체 조회 (백오피스용)
     List<restaurant> findAllByOrderByRegDateDesc();
 
-    // 활성(state=1) 점포 최신순 조회 (공개 API용)
     List<restaurant> findByStateOrderByRegDateDesc(Integer state);
+
+    // 점포명 또는 지역명으로 활성 점포 검색 (대소문자 무시, 최대 10건)
+    @Query("SELECT r FROM restaurant r " +
+           "WHERE r.state = 1 " +
+           "AND (LOWER(r.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+           "  OR LOWER(r.location) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+           "ORDER BY r.name ASC")
+    List<restaurant> searchByKeyword(@Param("keyword") String keyword);
 }
