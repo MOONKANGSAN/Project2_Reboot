@@ -2,8 +2,10 @@ package com.example.Project2_Spring.controller;
 
 import com.example.Project2_Spring.dto.PublicRestaurantDetailDto;
 import com.example.Project2_Spring.dto.PublicRestaurantDto;
+import com.example.Project2_Spring.dto.PublicReviewDto;
 import com.example.Project2_Spring.dto.RestaurantSearchItemDto;
 import com.example.Project2_Spring.service.RestaurantService;
+import com.example.Project2_Spring.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,7 @@ import java.util.Map;
 public class PublicRestaurantController {
 
     private final RestaurantService restaurantService;
+    private final ReviewService     reviewService;
 
     // GET /api/restaurants — 활성 점포 목록 (최신 등록순, 해시태그 포함)
     @GetMapping
@@ -55,6 +58,26 @@ public class PublicRestaurantController {
             Map<String, Object> error = new HashMap<>();
             error.put("success", false);
             error.put("message", "점포 검색 중 오류가 발생했습니다.");
+            return ResponseEntity.status(500).body(error);
+        }
+    }
+
+    // GET /api/restaurants/{idx}/reviews?limit=3 — 점포 리뷰 조회 (좋아요 많은순)
+    @GetMapping("/{idx}/reviews")
+    public ResponseEntity<?> reviews(
+            @PathVariable Integer idx,
+            @RequestParam(defaultValue = "3") int limit
+    ) {
+        try {
+            List<PublicReviewDto> data = reviewService.getTopReviewsByRestaurant(idx, limit);
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("data", data);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "리뷰 조회 중 오류가 발생했습니다.");
             return ResponseEntity.status(500).body(error);
         }
     }

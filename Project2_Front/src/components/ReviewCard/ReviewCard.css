@@ -1,0 +1,261 @@
+/* ================================================================
+   ReviewCard.css — 공유 리뷰 카드 스타일
+   ReviewListPage, RestaurantDetailPage 모두에서 사용
+   ================================================================ */
+
+/* ── 카드 기본 ── */
+.rv-card {
+  background: #fff;
+  border: 1.5px solid #f3f4f6;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: box-shadow 0.18s, transform 0.18s;
+}
+
+.rv-card--clickable { cursor: pointer; }
+
+/* 카드 우측 상단 신고 버튼 */
+.rv-report-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e5e7eb;
+  border-radius: 50%;
+  color: #9ca3af;
+  cursor: pointer;
+  z-index: 1;
+  transition: color 0.14s, border-color 0.14s, background 0.14s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.rv-report-btn:hover {
+  color: #ef4444;
+  border-color: #fca5a5;
+  background: #fff;
+}
+
+.rv-card:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+
+/* ── 점포 영역 ── */
+.rv-card__restaurant {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+
+.rv-card__restaurant:hover { background: #fafafa; }
+
+.rv-card__restaurant-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #f3f4f6;
+}
+
+.rv-card__restaurant-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.rv-card__restaurant-thumb-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #9ca3af;
+}
+
+.rv-card__restaurant-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.rv-card__restaurant-name {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 3px;
+}
+
+.rv-card__restaurant-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rv-card__category-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: #f97316;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+.rv-card__location {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.rv-card__arrow {
+  font-size: 18px;
+  color: #d1d5db;
+  flex-shrink: 0;
+}
+
+/* 구분선 */
+.rv-card__divider {
+  height: 1px;
+  background: #f3f4f6;
+  margin: 0 16px;
+}
+
+/* ── 리뷰 본문 ── */
+.rv-card__body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rv-card__meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.rv-card__author {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rv-card__avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #f97316;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rv-card__nickname {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.rv-card__stars {
+  font-size: 13px;
+  color: #f59e0b;
+  letter-spacing: 1px;
+  margin-left: auto;
+}
+
+.rv-card__rating-num {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.rv-card__date {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+/* 리뷰 텍스트 — 3줄 초과 시 말줄임 */
+.rv-card__content {
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.65;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 리뷰 이미지 */
+.rv-card__img-wrap {
+  border-radius: 8px;
+  overflow: hidden;
+  height: 160px;
+}
+
+.rv-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 좋아요 영역 */
+.rv-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 8px;
+  border-top: 1px solid #f9fafb;
+}
+
+/* 좋아요 버튼 */
+.rv-like-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #9ca3af;
+  background: none;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s, transform 0.12s;
+}
+
+.rv-like-btn:hover {
+  color: #f43f5e;
+  border-color: #fda4af;
+  background: #fff1f2;
+}
+
+/* 좋아요 활성 상태 */
+.rv-like-btn--active {
+  color: #f43f5e;
+  border-color: #fda4af;
+  background: #fff1f2;
+  font-weight: 600;
+}
+
+.rv-like-btn:active { transform: scale(0.93); }

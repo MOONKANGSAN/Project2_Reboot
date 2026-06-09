@@ -113,6 +113,28 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
+    // 특정 점포의 활성 리뷰 (좋아요 많은순, 최대 limit건)
+    @Transactional(readOnly = true)
+    public List<PublicReviewDto> getTopReviewsByRestaurant(Integer restaurantIdx, int limit) {
+        return reviewRepository
+                .findByRestaurantEntityIdxAndStateOrderByLikeCountDesc(restaurantIdx, 1)
+                .stream()
+                .limit(limit)
+                .map(rv -> {
+                    restaurant r = rv.getRestaurantEntity();
+                    return new PublicReviewDto(
+                            rv.getIdx(), r.getIdx(), r.getName(),
+                            r.getCategory(), r.getLocation(),
+                            null,
+                            rv.getUserEntity().getNickname(),
+                            rv.getRating(), rv.getContent(),
+                            rv.getLikeCount(), rv.getImageUrl(),
+                            rv.getRegDate()
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
     // ── 백오피스 전용 ──────────────────────────────────────
 
     // 전체 리뷰 목록 (활성+비활성, 최신순)

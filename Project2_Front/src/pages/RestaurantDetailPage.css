@@ -85,6 +85,8 @@
 }
 
 /* 히어로 텍스트 영역 */
+#rdp_herow { margin-bottom: 25px; }
+
 .rdp-hero__content {
   position: absolute;
   bottom: 0;
@@ -92,6 +94,7 @@
   transform: translateX(-50%);
   width: 100%;
   padding: 0 20px 32px;
+  margin-bottom: 25px;
 }
 
 .rdp-hero__back {
@@ -194,11 +197,13 @@
 }
 
 /* ── 본문 ── */
+#rdp_bodyw { margin-top: 25px; }
+
 .rdp-body {
   display: grid;
   grid-template-columns: 1fr 320px;
   gap: 32px;
-  padding-top: 72px;
+  margin: 0 auto;
   padding-bottom: 80px;
   align-items: start;
 }
@@ -263,6 +268,38 @@
 }
 
 .rdp-review-write-btn:hover { background: #ea6c0a; }
+
+/* ── 리뷰 그리드 — 항상 3열 고정, 카드가 적으면 나머지는 공백 ── */
+.rdp-review-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* 리뷰 카드 스타일은 ReviewCard.css 에서 관리 */
+
+/* ── 리뷰 섹션 하단 버튼 영역 ── */
+.rdp-review-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rdp-review-more-btn {
+  padding: 9px 22px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #f97316;
+  background: none;
+  border: 1.5px solid #f97316;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.rdp-review-more-btn:hover { background: #fff7ed; }
 
 /* ── 사이드바 기본 정보 카드 ── */
 .rdp-info-card {
@@ -334,7 +371,10 @@
   .rdp-hero__name { font-size: 24px; }
   .rdp-body {
     grid-template-columns: 1fr;
+    margin-top: 25px;
   }
   .rdp-sidebar { order: -1; }
   .rdp-info-card { position: static; }
+  /* 모바일에서는 리뷰 카드 1열 */
+  .rdp-review-grid { grid-template-columns: 1fr; }
 }

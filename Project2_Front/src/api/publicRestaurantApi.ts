@@ -67,3 +67,23 @@ export const fetchRestaurantDetail = async (idx: number): Promise<PublicRestaura
   const response = await apiClient.get<PublicRestaurantDetailResponse>(`/restaurants/${idx}`);
   return response.data;
 };
+
+// 점포 리뷰 아이템 타입
+export interface RestaurantReviewItem {
+  idx: number;
+  nickname: string;
+  rating: number;
+  content: string;
+  likeCount: number;
+  imageUrl: string | null;
+  regDate: string;
+}
+
+// GET /api/restaurants/:idx/reviews?limit=3 — 점포 리뷰 (좋아요 많은순, 최대 3건)
+export const fetchRestaurantReviews = async (
+  idx: number,
+  limit = 3
+): Promise<{ success: boolean; data: RestaurantReviewItem[] }> => {
+  const response = await apiClient.get(`/restaurants/${idx}/reviews`, { params: { limit } });
+  return response.data;
+};

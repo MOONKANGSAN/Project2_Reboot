@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   fetchPublicRestaurants,
@@ -106,12 +106,10 @@ function RestaurantsPage(): JSX.Element {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError]         = useState<string | null>(null);
 
-  const [sortBy, setSortBy]           = useState<SortKey>('reviewCount');
-  const [category, setCategory]       = useState<CategoryKey>('전체');
-  const [location, setLocation]       = useState<string>('전체');
-  const [filterVisible, setFilterVisible] = useState(false);
-
-  const sentinelRef = useRef<HTMLDivElement>(null);
+  const [sortBy, setSortBy]       = useState<SortKey>('reviewCount');
+  const [category, setCategory]   = useState<CategoryKey>('전체');
+  const [location, setLocation]   = useState<string>('전체');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   // 데이터 로드
   useEffect(() => {
@@ -129,17 +127,8 @@ function RestaurantsPage(): JSX.Element {
     load();
   }, []);
 
-  // 필터바 표시: sentinel이 뷰포트 밖으로 나가면 나타남
-  useEffect(() => {
-    const el = sentinelRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setFilterVisible(!entry.isIntersecting),
-      { threshold: 0, rootMargin: '-64px 0px 0px 0px' }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  // 필터 바뀌면 검색어 초기화
+  useEffect(() => { setSearchQuery(''); }, [category, location]);
 
   // 지역 목록 동적 추출
   const locationOptions = useMemo(() => {
@@ -147,23 +136,24 @@ function RestaurantsPage(): JSX.Element {
     return ['전체', ...locs];
   }, [items]);
 
-  // 필터 + 정렬 적용
+  // 검색 + 필터 + 정렬 적용
   const displayList = useMemo(() => {
     let list = [...items];
+    if (searchQuery.trim())
+      list = list.filter(r => r.name.toLowerCase().includes(searchQuery.trim().toLowerCase()));
     if (category !== '전체') list = list.filter(r => r.category === category);
     if (location !== '전체') list = list.filter(r => r.location === location);
     if (sortBy === 'reviewCount') list.sort((a, b) => b.reviewCount - a.reviewCount);
     else if (sortBy === 'rating')  list.sort((a, b) => (b.avgRating ?? -1) - (a.avgRating ?? -1));
-    // 'newest': API가 최신순으로 반환하므로 유지
     return list;
-  }, [items, category, location, sortBy]);
+  }, [items, category, location, sortBy, searchQuery]);
 
   return (
     <div className="rl-page">
+      <div className="container">
 
-      {/* 페이지 헤더 */}
-      <div className="rl-header">
-        <div className="container">
+        {/* 페이지 헤더 */}
+        <div className="rl-header">
           <h1 className="rl-header__title">맛집 탐색</h1>
           {!isLoading && !error && (
             <p className="rl-header__count">
@@ -171,14 +161,28 @@ function RestaurantsPage(): JSX.Element {
             </p>
           )}
         </div>
-      </div>
 
-      {/* 센티넬: 이 요소가 뷰포트를 벗어나면 필터바 표시 */}
-      <div ref={sentinelRef} className="rl-sentinel" />
+        {/* 검색 + 필터 패널 */}
+        <div className="rl-filters">
 
-      {/* 스티키 필터바 */}
-      <div className={`rl-filterbar ${filterVisible ? 'rl-filterbar--visible' : ''}`}>
-        <div className="rl-filterbar__inner container">
+          {/* 점포명 검색 */}
+          <div className="rl-search-wrap">
+            <svg className="rl-search-icon" width="16" height="16" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input
+              type="text"
+              className="rl-search-input"
+              placeholder="점포명으로 검색"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+            />
+            {searchQuery && (
+              <button className="rl-search-clear" onClick={() => setSearchQuery('')}>✕</button>
+            )}
+          </div>
 
           {/* 정렬 */}
           <div className="rl-filter-row">
@@ -231,30 +235,30 @@ function RestaurantsPage(): JSX.Element {
           )}
 
         </div>
-      </div>
 
-      {/* 리스트 */}
-      <div className="rl-body container">
-        {isLoading ? (
-          <div className="rl-status">
-            <div className="rl-spinner" />
-            <p>불러오는 중...</p>
-          </div>
-        ) : error ? (
-          <div className="rl-status rl-status--error">{error}</div>
-        ) : displayList.length === 0 ? (
-          <div className="rl-status">조건에 맞는 맛집이 없습니다.</div>
-        ) : (
-          <ul className="rl-list">
-            {displayList.map(item => (
-              <li key={item.idx}>
-                <RestaurantRowCard item={item} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+        {/* 리스트 */}
+        <div className="rl-body">
+          {isLoading ? (
+            <div className="rl-status">
+              <div className="rl-spinner" />
+              <p>불러오는 중...</p>
+            </div>
+          ) : error ? (
+            <div className="rl-status rl-status--error">{error}</div>
+          ) : displayList.length === 0 ? (
+            <div className="rl-status">조건에 맞는 맛집이 없습니다.</div>
+          ) : (
+            <ul className="rl-list">
+              {displayList.map(item => (
+                <li key={item.idx}>
+                  <RestaurantRowCard item={item} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
+      </div>
     </div>
   );
 }
