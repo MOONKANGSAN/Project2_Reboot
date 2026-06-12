@@ -365,6 +365,25 @@
 
 .rdp-info-value--link:hover { text-decoration: underline; }
 
+.rdp-info-address-wrap { display: flex; flex-direction: column; gap: 6px; }
+
+.rdp-map-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #f97316;
+  background: #fff7ed;
+  border: 1.5px solid #fed7aa;
+  border-radius: 6px;
+  cursor: pointer;
+  width: fit-content;
+  transition: background 0.14s, border-color 0.14s;
+}
+.rdp-map-btn:hover { background: #ffedd5; border-color: #f97316; }
+
 /* ── 반응형 ── */
 @media (max-width: 768px) {
   .rdp-hero { height: 300px; }

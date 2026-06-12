@@ -45,6 +45,8 @@ public class PublicRestaurantController {
             r.setPhone(dto.getPhone());
             r.setPriceRange(dto.getPriceRange());
             r.setDescription(dto.getDescription());
+            r.setLatitude(dto.getLatitude());
+            r.setLongitude(dto.getLongitude());
 
             restaurant saved = restaurantService.requestRegister(r);
 

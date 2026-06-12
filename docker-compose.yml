@@ -42,7 +42,7 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root_password
     volumes:
-      - ./uploads:/app/uploads
+      - ./uploads:/app/uploads   # bind mount: HOST의 C:\project2\uploads\ 를 컨테이너에 직접 연결
       - gradle-cache:/root/.gradle
     develop:
       watch:

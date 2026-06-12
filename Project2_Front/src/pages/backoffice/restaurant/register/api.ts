@@ -24,6 +24,8 @@ export const registerRestaurant = async (
       priceRange: data.priceRange || null,
       description: data.description || null,
       imageUrl: null,
+      latitude:  data.lat,
+      longitude: data.lng,
       hashtags: data.hashtags.length > 0 ? data.hashtags : null,
     }
   );

@@ -6,6 +6,7 @@ import HashtagInput from '@/pages/backoffice/restaurant/HashtagInput';
 import { validateRestaurantForm, hasErrors } from '@/pages/backoffice/restaurant/register/validators';
 import type { RestaurantRegisterFormData, FormErrors } from '@/pages/backoffice/restaurant/register/types';
 import type { PriceRange } from '@/types/index';
+import KakaoAddressSearch from '@/components/KakaoAddressSearch/KakaoAddressSearch';
 import './CustomerServicePage.css';
 
 const BACKEND = 'http://localhost:8080';
@@ -26,6 +27,7 @@ const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 const INITIAL_FORM: RestaurantRegisterFormData = {
   name: '', category: '', address: '', location: '',
   phone: '', priceRange: '', description: '', hashtags: [],
+  lat: null, lng: null,
 };
 
 function formatDate(iso: string): string {
@@ -160,6 +162,8 @@ function RegisterTab(): JSX.Element {
         phone:       formData.phone,
         priceRange:  formData.priceRange || null,
         description: formData.description || null,
+        latitude:    formData.lat,
+        longitude:   formData.lng,
         hashtags:    formData.hashtags.length > 0 ? formData.hashtags : null,
       });
 
@@ -230,22 +234,30 @@ function RegisterTab(): JSX.Element {
           </div>
         </div>
 
-        {/* 주소 */}
+        {/* 주소 검색 (카카오 지도) */}
         <div className="cs-form-group">
           <label className="cs-label">주소 <span className="cs-required">*</span></label>
-          <input name="address" value={formData.address} onChange={handleChange}
-            className={`cs-input ${errors.address ? 'cs-input--error' : ''}`}
-            placeholder="상세 주소 (예: 부산 해운대구 해운대로 123)" />
+          <KakaoAddressSearch
+            value={formData.address}
+            inputClassName={`cs-input${errors.address ? ' cs-input--error' : ''}`}
+            onSelect={({ address, location, lat, lng }) => {
+              setFormData(prev => ({ ...prev, address, location, lat, lng }));
+              setErrors(prev => ({ ...prev, address: undefined, location: undefined }));
+            }}
+          />
           {errors.address && <p className="cs-error">{errors.address}</p>}
         </div>
 
         {/* 지역명 + 전화번호 */}
         <div className="cs-form-row">
           <div className="cs-form-group">
-            <label className="cs-label">지역명 <span className="cs-required">*</span></label>
+            <label className="cs-label">
+              지역명 <span className="cs-required">*</span>
+              <span className="cs-label-hint"> 주소 검색 시 자동 입력</span>
+            </label>
             <input name="location" value={formData.location} onChange={handleChange}
               className={`cs-input ${errors.location ? 'cs-input--error' : ''}`}
-              placeholder="예: 해운대, 광안리" />
+              placeholder="예: 해운대구" />
             {errors.location && <p className="cs-error">{errors.location}</p>}
           </div>
 

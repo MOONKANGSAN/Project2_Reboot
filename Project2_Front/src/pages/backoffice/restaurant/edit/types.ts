@@ -11,6 +11,8 @@ export interface RestaurantEditFormData {
   priceRange: PriceRange | '';
   description: string;
   hashtags: string[];
+  lat: number | null;
+  lng: number | null;
 }
 
 export interface FormErrors {
@@ -32,17 +34,19 @@ export interface RestaurantDetailApiResponse {
   success: boolean;
   message?: string;
   data?: {
-    idx: number;
-    name: string;
-    category: string;
-    address: string;
-    location: string;
-    phone: string;
-    priceRange: string | null;
+    idx:         number;
+    name:        string;
+    category:    string;
+    address:     string;
+    location:    string;
+    phone:       string;
+    priceRange:  string | null;
     description: string | null;
-    imageUrl: string | null;
-    imgIdx: number | null;
-    state: number;
-    regDate: string;
+    imageUrl:    string | null;
+    imgIdx:      number | null;
+    latitude:    number | null;
+    longitude:   number | null;
+    state:       number;
+    regDate:     string;
   };
 }

@@ -55,6 +55,14 @@ public class restaurant {
     @Column(name = "img_idx")
     private Integer imgIdx;
 
+    // 위도 (Kakao Maps Geocoder 결과, nullable — 주소 입력 시 자동 저장)
+    @Column(name = "latitude", columnDefinition = "DECIMAL(10, 8)")
+    private Double latitude;
+
+    // 경도
+    @Column(name = "longitude", columnDefinition = "DECIMAL(11, 8)")
+    private Double longitude;
+
     // 평균 별점 (스케줄러가 매일 00:00 review 테이블로부터 갱신)
     @Column(name = "avg_rating")
     private Double avgRating;

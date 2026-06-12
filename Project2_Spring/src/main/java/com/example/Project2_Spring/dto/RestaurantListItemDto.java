@@ -23,8 +23,9 @@ public class RestaurantListItemDto {
     private String priceRange;
     private String description;
     private String imageUrl;
-    // 대표 이미지 restaurant_img.idx
     private Integer imgIdx;
+    private Double latitude;
+    private Double longitude;
     private Integer state;
     private LocalDateTime regDate;
 }

@@ -5,6 +5,7 @@ import type { PriceRange } from '@/types/index';
 import { validateRestaurantForm, hasErrors } from './validators';
 import { registerRestaurant, uploadRestaurantImages } from './api';
 import HashtagInput from '../HashtagInput';
+import KakaoAddressSearch from '@/components/KakaoAddressSearch/KakaoAddressSearch';
 import './BackofficeRestaurantRegisterPage.css';
 
 const CATEGORIES: RestaurantCategory[] = ['한식', '일식', '중식', '양식', '카페', '분식'];
@@ -21,6 +22,8 @@ const INITIAL_FORM: RestaurantRegisterFormData = {
   priceRange: '',
   description: '',
   hashtags: [],
+  lat: null,
+  lng: null,
 };
 
 function BackofficeRestaurantRegisterPage(): JSX.Element {
@@ -195,13 +198,13 @@ function BackofficeRestaurantRegisterPage(): JSX.Element {
             <label className="bo-form-label">
               주소 <span className="bo-required">*</span>
             </label>
-            <input
-              type="text"
-              name="address"
+            <KakaoAddressSearch
               value={formData.address}
-              onChange={handleChange}
-              className={`bo-form-input ${errors.address ? 'bo-form-input--error' : ''}`}
-              placeholder="상세 주소를 입력하세요 (예: 서울 강남구 테헤란로 123)"
+              inputClassName={`bo-form-input${errors.address ? ' bo-form-input--error' : ''}`}
+              onSelect={({ address, location, lat, lng }) => {
+                setFormData(prev => ({ ...prev, address, location, lat, lng }));
+                setErrors(prev => ({ ...prev, address: undefined, location: undefined }));
+              }}
             />
             {errors.address && <p className="bo-error-message">{errors.address}</p>}
           </div>
@@ -211,6 +214,7 @@ function BackofficeRestaurantRegisterPage(): JSX.Element {
             <div className="bo-form-group">
               <label className="bo-form-label">
                 지역명 <span className="bo-required">*</span>
+                <span style={{ fontSize: '11px', fontWeight: 400, color: 'var(--bo-text-muted)', marginLeft: '6px' }}>주소 검색 시 자동 입력</span>
               </label>
               <input
                 type="text"
@@ -218,7 +222,7 @@ function BackofficeRestaurantRegisterPage(): JSX.Element {
                 value={formData.location}
                 onChange={handleChange}
                 className={`bo-form-input ${errors.location ? 'bo-form-input--error' : ''}`}
-                placeholder="지역명 (예: 강남, 홍대, 신촌)"
+                placeholder="예: 강남구, 해운대구"
               />
               {errors.location && <p className="bo-error-message">{errors.location}</p>}
             </div>

@@ -129,7 +129,8 @@ public class RestaurantService {
                 r.getIdx(), r.getName(), r.getCategory(),
                 r.getAddress(), r.getLocation(), r.getPhone(),
                 r.getPriceRange(), r.getDescription(), imageUrl,
-                r.getAvgRating(), hashtags, r.getRegDate()
+                r.getAvgRating(), r.getLatitude(), r.getLongitude(),
+                hashtags, r.getRegDate()
         );
     }
 
@@ -142,6 +143,7 @@ public class RestaurantService {
                 r.getIdx(), r.getName(), r.getCategory(), r.getAddress(),
                 r.getLocation(), r.getPhone(), r.getPriceRange(),
                 r.getDescription(), r.getImageUrl(), r.getImgIdx(),
+                r.getLatitude(), r.getLongitude(),
                 r.getState(), r.getRegDate()
         );
     }
@@ -159,6 +161,8 @@ public class RestaurantService {
         r.setPriceRange(dto.getPriceRange());
         r.setDescription(dto.getDescription());
         r.setImageUrl(dto.getImageUrl());
+        if (dto.getLatitude()  != null) r.setLatitude(dto.getLatitude());
+        if (dto.getLongitude() != null) r.setLongitude(dto.getLongitude());
         return restaurantRepository.save(r);
     }
 
@@ -200,6 +204,8 @@ public class RestaurantService {
                         r.getDescription(),
                         r.getImageUrl(),
                         r.getImgIdx(),
+                        r.getLatitude(),
+                        r.getLongitude(),
                         r.getState(),
                         r.getRegDate()
                 ))

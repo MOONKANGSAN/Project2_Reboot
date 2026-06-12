@@ -53,6 +53,8 @@ export interface PublicRestaurantDetail {
   description: string | null;
   imageUrl: string | null;
   avgRating: number | null;
+  latitude:  number | null;
+  longitude: number | null;
   hashtags: string[];
   regDate: string;
 }

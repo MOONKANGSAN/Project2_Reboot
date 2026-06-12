@@ -34,6 +34,8 @@ public class RestaurantController {
             r.setPriceRange(dto.getPriceRange());
             r.setDescription(dto.getDescription());
             r.setImageUrl(dto.getImageUrl());
+            r.setLatitude(dto.getLatitude());
+            r.setLongitude(dto.getLongitude());
 
             restaurant saved = restaurantService.register(r);
 
@@ -93,7 +95,8 @@ public class RestaurantController {
             RestaurantListItemDto payload = new RestaurantListItemDto(
                     null, dto.getName(), dto.getCategory(), dto.getAddress(),
                     dto.getLocation(), dto.getPhone(), dto.getPriceRange(),
-                    dto.getDescription(), dto.getImageUrl(), null, null, null
+                    dto.getDescription(), dto.getImageUrl(), null,
+                    dto.getLatitude(), dto.getLongitude(), null, null
             );
             restaurant updated = restaurantService.update(idx, payload);
 
