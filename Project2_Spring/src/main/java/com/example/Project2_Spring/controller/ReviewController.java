@@ -22,6 +22,24 @@ public class ReviewController {
     private final ReviewService     reviewService;
     private final ReviewLikeService reviewLikeService;
 
+    // GET /api/reviews/latest?limit=4 — 메인 페이지 최신 리뷰 (건수 제한)
+    @GetMapping("/latest")
+    public ResponseEntity<?> latest(@RequestParam(defaultValue = "4") int limit) {
+        try {
+            List<PublicReviewDto> data = reviewService.getLatestReviews(limit);
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("data", data);
+            response.put("total", data.size());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "최신 리뷰 조회 중 오류가 발생했습니다.");
+            return ResponseEntity.status(500).body(error);
+        }
+    }
+
     // GET /api/reviews — 공개 리뷰 목록 조회 (최신순)
     @GetMapping
     public ResponseEntity<?> list() {

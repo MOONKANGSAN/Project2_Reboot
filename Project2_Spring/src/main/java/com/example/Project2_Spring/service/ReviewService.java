@@ -41,6 +41,50 @@ public class ReviewService {
 
     private static final List<String> ALLOWED_EXTENSIONS = List.of(".jpg", ".jpeg", ".png", ".webp", ".gif");
 
+    // 메인 페이지용 최신 리뷰 조회 (최신순, 활성 리뷰만, 건수 제한)
+    @Transactional(readOnly = true)
+    public List<PublicReviewDto> getLatestReviews(int limit) {
+        List<Review> reviews = reviewRepository.findByStateOrderByRegDateDesc(1)
+                .stream()
+                .limit(limit)
+                .collect(Collectors.toList());
+        if (reviews.isEmpty()) return List.of();
+
+        List<Integer> imgIdxList = reviews.stream()
+                .map(rv -> rv.getRestaurantEntity().getImgIdx())
+                .filter(imgIdx -> imgIdx != null)
+                .distinct()
+                .collect(Collectors.toList());
+
+        Map<Integer, String> imgUrlMap = new HashMap<>();
+        if (!imgIdxList.isEmpty()) {
+            restaurantImgRepository.findAllById(imgIdxList)
+                    .forEach(img -> imgUrlMap.put(img.getIdx(), img.getImgUrl()));
+        }
+
+        return reviews.stream().map(rv -> {
+            restaurant r = rv.getRestaurantEntity();
+            String restaurantImageUrl = (r.getImgIdx() != null && imgUrlMap.containsKey(r.getImgIdx()))
+                    ? imgUrlMap.get(r.getImgIdx())
+                    : r.getImageUrl();
+
+            return new PublicReviewDto(
+                    rv.getIdx(),
+                    r.getIdx(),
+                    r.getName(),
+                    r.getCategory(),
+                    r.getLocation(),
+                    restaurantImageUrl,
+                    rv.getUserEntity().getNickname(),
+                    rv.getRating(),
+                    rv.getContent(),
+                    rv.getLikeCount(),
+                    rv.getImageUrl(),
+                    rv.getRegDate()
+            );
+        }).collect(Collectors.toList());
+    }
+
     // 공개 리뷰 목록 조회 (최신순, 활성 리뷰만)
     @Transactional(readOnly = true)
     public List<PublicReviewDto> getPublicList() {

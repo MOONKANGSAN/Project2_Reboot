@@ -14,10 +14,11 @@ export const fetchRestaurantList = async (): Promise<RestaurantListApiResponse> 
   return response.data;
 };
 
-// 점포 상태 토글 (1→0, 0→1)
-export const toggleRestaurantState = async (idx: number): Promise<StateToggleApiResponse> => {
+// 점포 상태 직접 지정 (0=비활성, 1=활성, 2=검토대기)
+export const setRestaurantState = async (idx: number, state: number): Promise<StateToggleApiResponse> => {
   const response = await apiClient.patch<StateToggleApiResponse>(
-    `/backoffice/restaurant/${idx}/state`
+    `/backoffice/restaurant/${idx}/state`,
+    { state }
   );
   return response.data;
 };

@@ -35,6 +35,12 @@ export const fetchPublicReviews = async (): Promise<PublicReviewListResponse> =>
   return response.data;
 };
 
+// GET /api/reviews/latest?limit=N — 메인 페이지용 최신 리뷰 (건수 제한)
+export const fetchLatestReviews = async (limit = 4): Promise<PublicReviewListResponse> => {
+  const response = await apiClient.get<PublicReviewListResponse>('/reviews/latest', { params: { limit } });
+  return response.data;
+};
+
 // GET /api/reviews/my-likes?userId=xxx — 내가 좋아요(state=1)한 리뷰 idx 목록
 export const fetchMyLikes = async (userId: string): Promise<number[]> => {
   const response = await apiClient.get<{ success: boolean; likedIdxList: number[] }>(

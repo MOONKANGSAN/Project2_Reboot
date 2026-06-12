@@ -1,12 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { RestaurantListItem, CategoryFilter, StateFilter } from './types';
-import { fetchRestaurantList, toggleRestaurantState } from './api';
+import { fetchRestaurantList, setRestaurantState } from './api';
 import HashtagModal from './HashtagModal';
 import './BackofficeRestaurantListPage.css';
 
 const CATEGORIES: CategoryFilter[] = ['전체', '한식', '일식', '중식', '양식', '카페', '분식'];
-const STATES: StateFilter[] = ['전체', '활성', '비활성'];
+const STATES: StateFilter[] = ['전체', '검토대기', '활성', '비활성'];
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
@@ -57,9 +57,10 @@ function BackofficeRestaurantListPage(): JSX.Element {
     return items.filter((item) => {
       const categoryMatch = categoryFilter === '전체' || item.category === categoryFilter;
       const stateMatch =
-        stateFilter === '전체' ||
-        (stateFilter === '활성' && item.state === 1) ||
-        (stateFilter === '비활성' && item.state === 0);
+        stateFilter === '전체'   ||
+        (stateFilter === '활성'    && item.state === 1) ||
+        (stateFilter === '비활성'  && item.state === 0) ||
+        (stateFilter === '검토대기' && item.state === 2);
       return categoryMatch && stateMatch;
     });
   }, [items, categoryFilter, stateFilter]);
@@ -68,15 +69,16 @@ function BackofficeRestaurantListPage(): JSX.Element {
     navigate(`/backoffice/restaurant/edit/${idx}`);
   };
 
-  const handleStateToggle = async (
+  const handleStateChange = async (
     e: React.MouseEvent,
-    idx: number
+    idx: number,
+    newState: number
   ): Promise<void> => {
     e.stopPropagation();
     if (togglingIds.has(idx)) return;
     setTogglingIds((prev) => new Set([...prev, idx]));
     try {
-      const res = await toggleRestaurantState(idx);
+      const res = await setRestaurantState(idx, newState);
       if (res.success && res.state !== undefined) {
         setItems((prev) =>
           prev.map((item) =>
@@ -196,10 +198,35 @@ function BackofficeRestaurantListPage(): JSX.Element {
                     <td>{item.phone}</td>
                     <td className="bo-cell-price">{item.priceRange ?? '-'}</td>
                     <td>
-                      {item.state === 1 ? (
+                      {item.state === 2 ? (
+                        // 검토대기: 승인 / 거절 두 버튼
+                        <div className="bo-state-actions">
+                          <button
+                            className="bo-state-btn bo-state-btn--pending"
+                            disabled={togglingIds.has(item.idx)}
+                            onClick={(e) => handleStateChange(e, item.idx, 1)}
+                            title="승인 — 활성으로 전환"
+                          >
+                            <span className="bo-state-btn__dot" />
+                            {togglingIds.has(item.idx) ? '처리중...' : '검토대기'}
+                          </button>
+                          <button
+                            className="bo-state-btn bo-state-btn--approve"
+                            disabled={togglingIds.has(item.idx)}
+                            onClick={(e) => handleStateChange(e, item.idx, 1)}
+                            title="승인"
+                          >승인</button>
+                          <button
+                            className="bo-state-btn bo-state-btn--reject"
+                            disabled={togglingIds.has(item.idx)}
+                            onClick={(e) => handleStateChange(e, item.idx, 0)}
+                            title="거절"
+                          >거절</button>
+                        </div>
+                      ) : item.state === 1 ? (
                         <button
                           className="bo-state-btn bo-state-btn--active"
-                          onClick={(e) => handleStateToggle(e, item.idx)}
+                          onClick={(e) => handleStateChange(e, item.idx, 0)}
                           disabled={togglingIds.has(item.idx)}
                           title="클릭하면 비활성으로 변경"
                         >
@@ -209,7 +236,7 @@ function BackofficeRestaurantListPage(): JSX.Element {
                       ) : (
                         <button
                           className="bo-state-btn bo-state-btn--inactive"
-                          onClick={(e) => handleStateToggle(e, item.idx)}
+                          onClick={(e) => handleStateChange(e, item.idx, 1)}
                           disabled={togglingIds.has(item.idx)}
                           title="클릭하면 활성으로 변경"
                         >

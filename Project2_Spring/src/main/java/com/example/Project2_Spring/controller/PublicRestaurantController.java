@@ -3,13 +3,18 @@ package com.example.Project2_Spring.controller;
 import com.example.Project2_Spring.dto.PublicRestaurantDetailDto;
 import com.example.Project2_Spring.dto.PublicRestaurantDto;
 import com.example.Project2_Spring.dto.PublicReviewDto;
+import com.example.Project2_Spring.dto.RestaurantDto;
 import com.example.Project2_Spring.dto.RestaurantSearchItemDto;
+import com.example.Project2_Spring.entity.restaurant;
+import com.example.Project2_Spring.service.RestaurantHashtagService;
 import com.example.Project2_Spring.service.RestaurantService;
 import com.example.Project2_Spring.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,8 +29,47 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PublicRestaurantController {
 
-    private final RestaurantService restaurantService;
-    private final ReviewService     reviewService;
+    private final RestaurantService      restaurantService;
+    private final ReviewService          reviewService;
+    private final RestaurantHashtagService restaurantHashtagService;
+
+    // POST /api/restaurants/request — 고객 점포 등록 신청 (state=0 검토대기)
+    @PostMapping("/request")
+    public ResponseEntity<?> request(@RequestBody RestaurantDto dto) {
+        try {
+            restaurant r = new restaurant();
+            r.setName(dto.getName());
+            r.setCategory(dto.getCategory());
+            r.setAddress(dto.getAddress());
+            r.setLocation(dto.getLocation());
+            r.setPhone(dto.getPhone());
+            r.setPriceRange(dto.getPriceRange());
+            r.setDescription(dto.getDescription());
+
+            restaurant saved = restaurantService.requestRegister(r);
+
+            if (dto.getHashtags() != null && !dto.getHashtags().isEmpty()) {
+                restaurantHashtagService.syncHashtags(saved.getIdx(), dto.getHashtags());
+            }
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "점포 등록 신청이 접수되었습니다. 검토 후 등록됩니다.");
+            response.put("idx", saved.getIdx());
+            return ResponseEntity.ok(response);
+
+        } catch (IllegalStateException e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "점포 신청 중 오류가 발생했습니다.");
+            return ResponseEntity.status(500).body(error);
+        }
+    }
 
     // GET /api/restaurants — 활성 점포 목록 (최신 등록순, 해시태그 포함)
     @GetMapping

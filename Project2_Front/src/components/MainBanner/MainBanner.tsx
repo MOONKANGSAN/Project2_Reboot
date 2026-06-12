@@ -5,7 +5,8 @@
 //       추후 Spring API에서 인기 검색어, 배너 이미지 URL 등을 받아 동적으로 변경 예정
 
 import React, { useState } from "react";
-import type { CategoryItem } from "../../types";
+import { useNavigate } from "react-router-dom";
+import type { CategoryItem, FoodCategory } from "../../types";
 import "./MainBanner.css";
 
 // 카테고리 바로가기 데이터 - CategoryItem[] 타입으로 구조 보장
@@ -20,27 +21,25 @@ const CATEGORIES: CategoryItem[] = [
 ];
 
 function MainBanner(): JSX.Element {
-  // 검색어 입력 상태 - string 타입 명시
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  // 검색 폼 제출 핸들러
-  // React.FormEvent<HTMLFormElement> 타입으로 이벤트 객체를 명확히 지정
+  // 검색 제출 → 점포리스트로 이동하며 keyword 쿼리파라미터 전달
   const handleSearch = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      console.log("검색어:", searchQuery); // 추후 API 호출로 교체
+    const keyword = searchQuery.trim();
+    if (keyword) {
+      navigate(`/restaurants?keyword=${encodeURIComponent(keyword)}`);
     }
   };
 
-  // 검색 입력 변경 핸들러
-  // React.ChangeEvent<HTMLInputElement> 타입으로 input 이벤트 전용임을 명시
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchQuery(e.target.value);
   };
 
-  // 카테고리 버튼 클릭 핸들러 - 카테고리 id를 string으로 받음
-  const handleCategoryClick = (categoryId: string): void => {
-    console.log("카테고리 선택:", categoryId); // 추후 카테고리별 필터 적용 기능 연결 예정
+  // 카테고리 클릭 → 점포리스트로 이동하며 category 쿼리파라미터 전달
+  const handleCategoryClick = (label: FoodCategory): void => {
+    navigate(`/restaurants?category=${encodeURIComponent(label)}`);
   };
 
   return (
@@ -93,7 +92,7 @@ function MainBanner(): JSX.Element {
             <button
               key={cat.id}
               className="main-banner__category-btn"
-              onClick={() => handleCategoryClick(cat.id)}
+              onClick={() => handleCategoryClick(cat.label)}
             >
               <span className="main-banner__category-emoji">{cat.emoji}</span>
               <span>{cat.label}</span>
