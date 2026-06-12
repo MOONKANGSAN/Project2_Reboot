@@ -14,6 +14,8 @@ import RestaurantDetailPage from "@/pages/RestaurantDetailPage";
 import ReviewWritePage from "@/pages/ReviewWritePage";
 import ReviewListPage from "@/pages/ReviewListPage";
 import LikedPage from "@/pages/LikedPage";
+import CustomerServicePage from "@/pages/CustomerServicePage";
+import InquiryWritePage from "@/pages/InquiryWritePage";
 import SignupPage from "@/pages/SignupPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import BackofficeSignup from "@/pages/backoffice/signup/index";
@@ -56,6 +58,10 @@ function App(): JSX.Element {
 
         {/* 좋아요 기록 페이지 */}
         <Route path="/liked" element={<LikedPage />} />
+
+        {/* 고객센터 */}
+        <Route path="/inquiry"       element={<CustomerServicePage />} />
+        <Route path="/inquiry/write" element={<InquiryWritePage />} />
 
         {/* 회원가입 페이지 */}
         <Route path="/signup" element={<SignupPage />} />

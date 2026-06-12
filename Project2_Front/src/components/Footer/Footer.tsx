@@ -1,26 +1,26 @@
 // 📁 src/components/Footer/Footer.tsx
 // 역할: 페이지 하단 푸터 컴포넌트
 //       서비스 소개 링크, 저작권 정보 표시
-//       props 없는 순수 표시 컴포넌트이므로 반환 타입만 JSX.Element로 명시
-//       추후 약관, 개인정보처리방침 링크 연결 예정
 
+import { useNavigate } from "react-router-dom";
 import "./Footer.css";
 
-// 푸터 링크 데이터 타입 - 추후 href 필드 추가 예정
 interface FooterLink {
-  id: string;
+  id:   string;
   label: string;
+  path?: string; // 내부 라우터 경로 (없으면 비활성)
 }
 
-// 푸터 링크 목록 - FooterLink[] 타입으로 구조 보장
 const FOOTER_LINKS: FooterLink[] = [
   { id: "about",   label: "서비스 소개" },
   { id: "terms",   label: "이용약관" },
   { id: "privacy", label: "개인정보처리방침" },
-  { id: "support", label: "고객센터" },
+  { id: "support", label: "고객센터", path: "/inquiry" },
 ];
 
 function Footer(): JSX.Element {
+  const navigate = useNavigate();
+
   return (
     <footer className="footer">
       <div className="container footer__inner">
@@ -30,10 +30,16 @@ function Footer(): JSX.Element {
           <p className="footer__tagline">진짜 맛집을 찾는 가장 솔직한 방법</p>
         </div>
 
-        {/* 링크 그룹 - 추후 실제 페이지 연결 예정 */}
+        {/* 링크 그룹 */}
         <div className="footer__links">
           {FOOTER_LINKS.map((link: FooterLink) => (
-            <span key={link.id}>{link.label}</span>
+            <span
+              key={link.id}
+              onClick={() => link.path && navigate(link.path)}
+              className={link.path ? "footer__link--active" : ""}
+            >
+              {link.label}
+            </span>
           ))}
         </div>
 

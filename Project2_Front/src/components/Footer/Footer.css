@@ -38,8 +38,11 @@
 }
 
 .footer__links span {
-  cursor: pointer;
   transition: color var(--transition-fast);
+}
+
+.footer__links .footer__link--active {
+  cursor: pointer;
 }
 
 .footer__links span:hover {

@@ -31,4 +31,4 @@ export interface StateToggleApiResponse {
 
 // 필터 상태 타입
 export type CategoryFilter = '전체' | '한식' | '일식' | '중식' | '양식' | '카페' | '분식';
-export type StateFilter = '전체' | '활성' | '비활성';
+export type StateFilter = '전체' | '활성' | '비활성' | '검토대기';

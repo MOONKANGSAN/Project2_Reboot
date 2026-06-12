@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   fetchPublicRestaurants,
   resolveImageUrl,
@@ -102,6 +102,8 @@ function RestaurantRowCard({ item }: { item: PublicRestaurantItem }): JSX.Elemen
 
 // ── 메인 페이지
 function RestaurantsPage(): JSX.Element {
+  const [searchParams] = useSearchParams();
+
   const [items, setItems]         = useState<PublicRestaurantItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError]         = useState<string | null>(null);
@@ -110,6 +112,14 @@ function RestaurantsPage(): JSX.Element {
   const [category, setCategory]   = useState<CategoryKey>('전체');
   const [location, setLocation]   = useState<string>('전체');
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+  // 배너에서 넘어온 keyword / category 쿼리파라미터를 초기 상태에 반영
+  useEffect(() => {
+    const keyword = searchParams.get('keyword') ?? '';
+    const cat = searchParams.get('category') as CategoryKey | null;
+    if (keyword) setSearchQuery(keyword);
+    if (cat && CATEGORIES.includes(cat)) setCategory(cat);
+  }, []);
 
   // 데이터 로드
   useEffect(() => {
@@ -126,9 +136,6 @@ function RestaurantsPage(): JSX.Element {
     };
     load();
   }, []);
-
-  // 필터 바뀌면 검색어 초기화
-  useEffect(() => { setSearchQuery(''); }, [category, location]);
 
   // 지역 목록 동적 추출
   const locationOptions = useMemo(() => {

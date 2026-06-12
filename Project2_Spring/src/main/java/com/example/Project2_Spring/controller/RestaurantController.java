@@ -119,14 +119,19 @@ public class RestaurantController {
         }
     }
 
-    // PATCH /api/backoffice/restaurant/{idx}/state - 상태 토글
+    // PATCH /api/backoffice/restaurant/{idx}/state — 상태 직접 지정 (body: {"state": 0|1|2})
     @PatchMapping("/{idx}/state")
-    public ResponseEntity<?> toggleState(@PathVariable Integer idx) {
+    public ResponseEntity<?> setState(
+            @PathVariable Integer idx,
+            @RequestBody Map<String, Integer> body
+    ) {
         try {
-            restaurant updated = restaurantService.toggleState(idx);
+            Integer newState = body.get("state");
+            if (newState == null) throw new IllegalArgumentException("state 값이 필요합니다.");
+            restaurant updated = restaurantService.setState(idx, newState);
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
-            response.put("idx", updated.getIdx());
+            response.put("idx",   updated.getIdx());
             response.put("state", updated.getState());
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {

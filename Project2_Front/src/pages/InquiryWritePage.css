@@ -1,0 +1,197 @@
+/* ================================================================
+   InquiryWritePage.css — ReviewWritePage 스타일 체계 기준
+   ================================================================ */
+
+.iq-page {
+  min-height: 100vh;
+  background: #f9fafb;
+  padding: 32px 0 80px;
+}
+
+.iq-container {
+  max-width: 640px;
+}
+
+/* ── 헤더 ── */
+.iq-header { margin-bottom: 24px; }
+
+.iq-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 12px;
+  transition: color 0.14s;
+}
+.iq-back:hover { color: #111827; }
+
+.iq-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 4px 0;
+}
+
+.iq-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ── 카드 ── */
+.iq-card {
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── 공통 필드 ── */
+.iq-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.iq-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.iq-required { color: #f97316; margin-left: 2px; }
+.iq-hint     { font-size: 12px; font-weight: 400; color: #9ca3af; }
+
+.iq-input,
+.iq-select,
+.iq-textarea {
+  width: 100%;
+  padding: 11px 14px;
+  font-size: 14px;
+  color: #111827;
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+.iq-input:focus,
+.iq-select:focus,
+.iq-textarea:focus { border-color: #f97316; }
+
+.iq-textarea { resize: vertical; min-height: 140px; line-height: 1.7; }
+
+.iq-char-count {
+  font-size: 12px;
+  color: #9ca3af;
+  text-align: right;
+  margin: 0;
+}
+
+/* ── 작성자 읽기 전용 ── */
+.iq-readonly {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #f9fafb;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.iq-readonly__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f97316;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iq-readonly__name { font-size: 14px; font-weight: 600; color: #374151; }
+
+/* ── 공개 여부 라디오 ── */
+.iq-radio-group {
+  display: flex;
+  gap: 20px;
+}
+
+.iq-radio {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+}
+
+.iq-radio input[type="radio"] { accent-color: #f97316; width: 16px; height: 16px; }
+
+/* ── 에러 메시지 ── */
+.iq-error {
+  font-size: 13px;
+  color: #ef4444;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 0;
+}
+
+/* ── 하단 버튼 ── */
+.iq-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 4px;
+}
+
+.iq-btn-cancel {
+  padding: 11px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.iq-btn-cancel:hover { background: #e5e7eb; }
+
+.iq-btn-submit {
+  padding: 11px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: #f97316;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+.iq-btn-submit:hover    { background: #ea6c0a; }
+.iq-btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── 반응형 ── */
+@media (max-width: 480px) {
+  .iq-card    { padding: 20px 16px; }
+  .iq-actions { flex-direction: column-reverse; }
+  .iq-btn-cancel,
+  .iq-btn-submit { width: 100%; text-align: center; }
+}

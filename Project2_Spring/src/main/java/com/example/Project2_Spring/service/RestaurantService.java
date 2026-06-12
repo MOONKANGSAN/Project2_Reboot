@@ -37,6 +37,13 @@ public class RestaurantService {
         return restaurantRepository.save(r);
     }
 
+    // 고객 점포 등록 신청 — state=2(검토대기)로 저장, 백오피스 승인 후 state=1로 변경
+    @Transactional
+    public restaurant requestRegister(restaurant r) {
+        r.setState(2);
+        return restaurantRepository.save(r);
+    }
+
     // 공개 API — 활성 점포 최신순 목록 (해시태그 포함, N+1 없음)
     @Transactional(readOnly = true)
     public List<PublicRestaurantDto> getPublicList() {
@@ -167,12 +174,13 @@ public class RestaurantService {
                 .collect(Collectors.toList());
     }
 
-    // 점포 상태 토글 (1→0, 0→1)
+    // 점포 상태 직접 지정 (0=비활성, 1=활성, 2=검토대기)
     @Transactional
-    public restaurant toggleState(Integer idx) {
+    public restaurant setState(Integer idx, Integer newState) {
+        if (newState < 0 || newState > 2) throw new IllegalArgumentException("유효하지 않은 상태 값입니다.");
         restaurant r = restaurantRepository.findById(idx)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 점포입니다."));
-        r.setState(r.getState() == 1 ? 0 : 1);
+        r.setState(newState);
         return restaurantRepository.save(r);
     }
 
