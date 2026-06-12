@@ -21,6 +21,8 @@ public class RestaurantDto {
     private String priceRange;
     private String description;
     private String imageUrl;
+    private Double latitude;
+    private Double longitude;
     // 점포 등록/수정 시 함께 저장할 해시태그 이름 목록
     private List<String> hashtags;
 }

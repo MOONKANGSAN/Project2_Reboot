@@ -19,6 +19,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +31,41 @@ public class RestaurantImgService {
     @Value("${app.upload.restaurant.dir}")
     private String uploadDir;
 
-    // 허용된 이미지 확장자
     private static final List<String> ALLOWED_EXTENSIONS = List.of(".jpg", ".jpeg", ".png", ".webp", ".gif");
+    private static final Logger log = Logger.getLogger(RestaurantImgService.class.getName());
+
+    // 점포 이미지 목록 조회
+    @Transactional(readOnly = true)
+    public List<RestaurantImg> getImages(Integer restaurantIdx) {
+        return restaurantImgRepository.findByRestaurantEntityIdxOrderByImgOrderAsc(restaurantIdx);
+    }
+
+    // 이미지 삭제 — 파일 + DB 동시 제거, 대표 이미지였으면 다음 이미지로 자동 재지정
+    @Transactional
+    public void deleteImage(Integer imgIdx) {
+        RestaurantImg img = restaurantImgRepository.findById(imgIdx)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이미지입니다."));
+
+        restaurant r = img.getRestaurantEntity();
+
+        // 파일 삭제 (실패해도 DB 삭제는 진행)
+        try {
+            String filename = img.getImgUrl().substring(img.getImgUrl().lastIndexOf('/') + 1);
+            Files.deleteIfExists(Paths.get(uploadDir).resolve(filename));
+        } catch (IOException e) {
+            log.warning("이미지 파일 삭제 실패: " + e.getMessage());
+        }
+
+        restaurantImgRepository.delete(img);
+
+        // 삭제한 이미지가 대표였으면 남은 이미지 중 첫 번째로 재지정
+        if (r.getImgIdx() != null && r.getImgIdx().equals(imgIdx)) {
+            List<RestaurantImg> remaining =
+                    restaurantImgRepository.findByRestaurantEntityIdxOrderByImgOrderAsc(r.getIdx());
+            r.setImgIdx(remaining.isEmpty() ? null : remaining.get(0).getIdx());
+            restaurantRepository.save(r);
+        }
+    }
 
     @Transactional
     public List<RestaurantImg> uploadImages(Integer restaurantIdx, List<MultipartFile> files) throws IOException {

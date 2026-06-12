@@ -25,6 +25,8 @@ public class PublicRestaurantDetailDto {
     private String description;
     private String imageUrl;
     private Double avgRating;
+    private Double latitude;
+    private Double longitude;
     private List<String> hashtags;
     private LocalDateTime regDate;
 }

@@ -17,6 +17,14 @@ import ReviewDetailModal from '@/components/ReviewDetailModal/ReviewDetailModal'
 import ReportModal from '@/components/ReportModal/ReportModal';
 import './RestaurantDetailPage.css';
 
+// 카카오맵 웹사이트 URL 생성 — 좌표 있으면 핀 직접 지정, 없으면 주소 검색
+function buildKakaoMapUrl(name: string, address: string, lat?: number | null, lng?: number | null): string {
+  if (lat != null && lng != null) {
+    return `https://map.kakao.com/link/map/${encodeURIComponent(name)},${lat},${lng}`;
+  }
+  return `https://map.kakao.com/?q=${encodeURIComponent(address)}`;
+}
+
 // 히어로 별점 렌더링 (소수점 반별 지원)
 function renderStars(rating: number): string {
   const full = Math.floor(rating);
@@ -267,9 +275,18 @@ function RestaurantDetailPage(): JSX.Element {
             <ul className="rdp-info-list">
               <li className="rdp-info-item">
                 <span className="rdp-info-icon">📍</span>
-                <div>
+                <div className="rdp-info-address-wrap">
                   <p className="rdp-info-label">주소</p>
                   <p className="rdp-info-value">{data.address}</p>
+                  <button
+                    className="rdp-map-btn"
+                    onClick={() => window.open(buildKakaoMapUrl(data.name, data.address, data.latitude, data.longitude), '_blank')}
+                  >
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                    </svg>
+                    지도 보기
+                  </button>
                 </div>
               </li>
               <li className="rdp-info-item">
@@ -316,6 +333,7 @@ function RestaurantDetailPage(): JSX.Element {
         reviewIdx={reportTargetIdx}
         onClose={() => setReportTargetIdx(null)}
       />
+
     </div>
   );
 }

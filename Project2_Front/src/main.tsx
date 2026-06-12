@@ -7,8 +7,8 @@ import "./styles/fonts/font.css";
 // React 18 createRoot API로 앱을 #root DOM에 마운트
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    {/* BrowserRouter: 클라이언트 사이드 라우팅 제공 */}
-    <BrowserRouter>
+    {/* future 플래그: React Router v7 호환성 경고 억제 */}
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <App />
     </BrowserRouter>
   </React.StrictMode>

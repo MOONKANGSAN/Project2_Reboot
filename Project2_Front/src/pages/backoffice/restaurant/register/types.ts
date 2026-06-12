@@ -11,6 +11,8 @@ export interface RestaurantRegisterFormData {
   priceRange: PriceRange | '';
   description: string;
   hashtags: string[];
+  lat: number | null;
+  lng: number | null;
 }
 
 export interface FormErrors {
