@@ -1,0 +1,347 @@
+/* ================================================================
+   BackofficeInquiryPage.css — 고객문의사항 페이지 전용 스타일
+   ================================================================ */
+
+/* ── 검색 인풋 ── */
+.bo-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  height: 32px;
+  background-color: var(--bo-bg-dark);
+  border: 1px solid var(--bo-border);
+  border-radius: 6px;
+  transition: border-color var(--bo-transition);
+}
+
+.bo-search-wrap:focus-within { border-color: var(--bo-accent); }
+.bo-search-icon { color: var(--bo-text-muted); flex-shrink: 0; }
+
+.bo-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  color: var(--bo-text-primary);
+  min-width: 160px;
+}
+
+.bo-search-input::placeholder { color: var(--bo-text-muted); }
+
+.bo-search-clear {
+  font-size: 11px;
+  color: var(--bo-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color var(--bo-transition);
+}
+
+.bo-search-clear:hover { color: var(--bo-error); }
+
+/* ── 툴바 — 긴 필터 때문에 줄바꿈 허용 ── */
+.bo-list-toolbar--wrap {
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
+
+/* ── 유형 필터 가로 스크롤 ── */
+.bo-filter-group--scroll {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  flex-shrink: 1;
+  max-width: 500px;
+  scrollbar-width: none;
+}
+
+.bo-filter-group--scroll::-webkit-scrollbar { display: none; }
+
+/* ── 대기중 카운트 뱃지 ── */
+.bo-inq-pending-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--bo-error);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  vertical-align: middle;
+}
+
+/* ── 테이블 컬럼 너비 ── */
+.col-inq-type  { width: 110px; }
+.col-inq-user  { width: 90px; }
+.col-inq-pub   { width: 64px; text-align: center; }
+.col-inq-ans   { width: 72px; text-align: center; }
+.col-inq-state { width: 72px; text-align: center; }
+
+/* ── 상태 텍스트 ── */
+.bo-inq-state {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ── 카테고리/유형 뱃지 ── */
+.bo-badge-category {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background-color: var(--bo-accent-soft);
+  color: var(--bo-accent);
+  border: 1px solid var(--bo-accent-border);
+  white-space: nowrap;
+}
+
+/* ── 공개/답변 뱃지 ── */
+.bo-badge-yes {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--bo-success);
+}
+
+.bo-badge-no {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: var(--bo-bg-active);
+  color: var(--bo-text-muted);
+}
+
+/* ── 내용 말줄임 ── */
+.bo-cell-content {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+  font-size: 12px;
+  color: var(--bo-text-secondary);
+}
+
+/* ── 페이지네이션 ── */
+.bo-pagination-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 6px;
+  border-top: 1px solid var(--bo-border);
+}
+
+.bo-page-info { font-size: 12px; color: var(--bo-text-muted); }
+.bo-pagination { display: flex; align-items: center; gap: 4px; }
+
+.bo-page-btn {
+  min-width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 6px; font-size: 13px; font-weight: 500;
+  color: var(--bo-text-secondary);
+  background: transparent;
+  border: 1px solid var(--bo-border);
+  border-radius: 6px; cursor: pointer;
+  transition: all var(--bo-transition);
+}
+
+.bo-page-btn:hover:not(:disabled) { border-color: var(--bo-accent); color: var(--bo-accent); background-color: var(--bo-accent-soft); }
+.bo-page-btn--active { background-color: var(--bo-accent); border-color: var(--bo-accent); color: #000; font-weight: 700; }
+.bo-page-btn--nav { font-size: 15px; color: var(--bo-text-muted); }
+.bo-page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.bo-page-ellipsis { font-size: 13px; color: var(--bo-text-muted); padding: 0 4px; user-select: none; }
+
+/* ── 모달 공통 ── */
+.bo-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.bo-modal {
+  background-color: var(--bo-bg-surface);
+  border: 1px solid var(--bo-border);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.bo-modal--lg { max-width: 680px; }
+
+.bo-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--bo-border);
+  gap: 12px;
+}
+
+.bo-modal__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--bo-text-primary);
+  line-height: 1.4;
+}
+
+.bo-modal__close {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 6px; border: none;
+  background: transparent;
+  color: var(--bo-text-muted);
+  font-size: 14px; cursor: pointer;
+  transition: all var(--bo-transition);
+  flex-shrink: 0;
+}
+
+.bo-modal__close:hover { background-color: var(--bo-bg-hover); color: var(--bo-error); }
+
+.bo-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 24px;
+}
+
+.bo-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--bo-border);
+}
+
+/* ── 문의 상세 — 메타 정보 ── */
+.bo-inq-meta {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  background-color: var(--bo-bg-dark);
+  border-radius: 8px;
+  border: 1px solid var(--bo-border);
+}
+
+.bo-inq-meta__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--bo-text-secondary);
+}
+
+.bo-inq-meta__label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--bo-text-muted);
+  letter-spacing: 0.3px;
+}
+
+/* ── 문의 내용 박스 ── */
+.bo-inq-content-box {
+  background-color: var(--bo-bg-dark);
+  border: 1px solid var(--bo-border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.bo-inq-content {
+  font-size: 14px;
+  color: var(--bo-text-primary);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+/* ── 유형 뱃지 (모달 헤더) ── */
+.bo-inq-type-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 5px;
+  background-color: var(--bo-accent-soft);
+  color: var(--bo-accent);
+  border: 1px solid var(--bo-accent-border);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── 답변 섹션 ── */
+.bo-inq-answer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bo-inq-answer-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--bo-text-secondary);
+  letter-spacing: 0.3px;
+  margin: 0;
+}
+
+.bo-form-textarea {
+  width: 100%;
+  background-color: var(--bo-bg-dark);
+  border: 1px solid var(--bo-border);
+  border-radius: 7px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--bo-text-primary);
+  font-family: var(--bo-font);
+  resize: vertical;
+  transition: border-color var(--bo-transition);
+  box-sizing: border-box;
+}
+
+.bo-form-textarea:focus { outline: none; border-color: var(--bo-accent); }
+.bo-form-textarea::placeholder { color: var(--bo-text-muted); }
+.bo-form-textarea:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── 버튼 ── */
+.bo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 14px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all var(--bo-transition);
+  white-space: nowrap;
+}
+
+.bo-btn--primary { background-color: var(--bo-accent); color: #000; }
+.bo-btn--primary:hover { background-color: var(--bo-accent-hover); }
+.bo-btn--primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.bo-btn--ghost { background: transparent; border-color: var(--bo-border); color: var(--bo-text-secondary); }
+.bo-btn--ghost:hover { border-color: var(--bo-accent); color: var(--bo-accent); background-color: var(--bo-accent-soft); }
+
+.bo-btn--danger { background: transparent; border-color: var(--bo-border); color: var(--bo-error); }
+.bo-btn--danger:hover { background-color: rgba(239,68,68,0.1); border-color: var(--bo-error); }
+.bo-btn--danger:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.bo-btn--sm { padding: 6px 12px; font-size: 12px; }

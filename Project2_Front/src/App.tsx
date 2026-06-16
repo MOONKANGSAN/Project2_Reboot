@@ -28,6 +28,9 @@ import BackofficeHashtagList from "@/pages/backoffice/restaurant/hashtag/index";
 import BackofficeUserList from "@/pages/backoffice/user/list/index";
 import BackofficeReviewList from "@/pages/backoffice/review/list/index";
 import BackofficeReviewReport from "@/pages/backoffice/review/report/index";
+import BackofficeNotice from "@/pages/backoffice/support/notice/index";
+import BackofficeErrorLog from "@/pages/backoffice/support/error-log/index";
+import BackofficeInquiry from "@/pages/backoffice/support/inquiry/index";
 import PublicLayout from "@/layouts/PublicLayout";
 import BackofficeLayout from "@/layouts/BackofficeLayout";
 import BackofficeProtectedRoute from "@/layouts/BackofficeProtectedRoute";
@@ -87,6 +90,9 @@ function App(): JSX.Element {
           <Route path="user/list" element={<BackofficeUserList />} />
           <Route path="review/list" element={<BackofficeReviewList />} />
           <Route path="review/report" element={<BackofficeReviewReport />} />
+          <Route path="support/notice" element={<BackofficeNotice />} />
+          <Route path="support/error-log" element={<BackofficeErrorLog />} />
+          <Route path="support/inquiry" element={<BackofficeInquiry />} />
         </Route>
       </Route>
     </Routes>
