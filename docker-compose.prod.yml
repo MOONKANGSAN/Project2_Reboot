@@ -1,8 +1,12 @@
+# =====================================================
+# 프로덕션 전용 Docker Compose
+# 실행: docker compose -f docker-compose.prod.yml up -d --build
+# =====================================================
+
 services:
 
   # ──────────────────────────────────────────────────
   # DB — MySQL 8.0
-  # watch 대상 없음 (볼륨으로 데이터 영속 유지)
   # ──────────────────────────────────────────────────
   db:
     image: mysql:8.0
@@ -11,29 +15,23 @@ services:
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    ports:
-      - "3307:3306"
     volumes:
       - ./mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot_password"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
       timeout: 5s
       retries: 5
 
   # ──────────────────────────────────────────────────
-  # 백엔드 — Spring Boot (Gradle 내부 빌드)
-  #
-  # watch 액션
-  #   sync+restart  src/**        소스 동기화 → 컨테이너 재시작
-  #                               → bootRun 이 재컴파일 수행
-  #   rebuild       build.gradle  의존성 변경 → 이미지 전체 재빌드
+  # 백엔드 — Spring Boot (JAR 실행, 포트 외부 미노출)
   # ──────────────────────────────────────────────────
   backend:
-    build: ./Project2_Spring
+    build:
+      context: ./Project2_Spring
+      dockerfile: Dockerfile.prod
     container_name: project2-backend
-    ports:
-      - "8080:8080"
+    restart: always
     depends_on:
       db:
         condition: service_healthy
@@ -42,64 +40,49 @@ services:
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
     volumes:
-      - ./uploads:/app/uploads   # bind mount: HOST의 C:\project2\uploads\ 를 컨테이너에 직접 연결
-      - gradle-cache:/root/.gradle
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./Project2_Spring/src
-          target: /app/src
-          ignore:
-            - "**/*.class"
-        - action: rebuild
-          path: ./Project2_Spring/build.gradle
+      - ./uploads:/app/uploads
 
   # ──────────────────────────────────────────────────
-  # 프론트엔드 — Vite 개발 서버 (HMR 활성)
-  #
-  # watch 액션
-  #   sync     src/**        소스 동기화 → Vite HMR 이 즉시 반영
-  #   sync     public/**     정적 파일 동기화
-  #   rebuild  package.json  패키지 변경 → 이미지 재빌드 (npm ci)
+  # 프론트엔드 — Nginx 정적 서빙 (포트 외부 미노출)
   # ──────────────────────────────────────────────────
   frontend:
-    build: ./Project2_Front
+    build:
+      context: ./Project2_Front
+      dockerfile: Dockerfile.prod
     container_name: project2-frontend
-    ports:
-      - "5173:5173"
+    restart: always
     depends_on:
       - backend
-    develop:
-      watch:
-        - action: sync
-          path: ./Project2_Front/src
-          target: /app/src
-        - action: sync
-          path: ./Project2_Front/public
-          target: /app/public
-        - action: rebuild
-          path: ./Project2_Front/package.json
 
   # ──────────────────────────────────────────────────
-  # 리버스 프록시 — Nginx
-  # 포트 80 단일 진입점으로 경로에 따라 백엔드/프론트엔드 분기
-  # /api/  → backend:8080
-  # /      → frontend:5173
+  # 리버스 프록시 — Nginx (유일한 외부 노출 포트)
+  # HTTP(80) → HTTPS(443) 리다이렉트
+  # HTTPS(443) → /api/* backend / /* frontend
   # ──────────────────────────────────────────────────
   nginx:
     image: nginx:alpine
     container_name: project2-nginx
+    restart: always
     ports:
       - "80:80"
+      - "443:443"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      - ./certbot/conf:/etc/letsencrypt:ro
+      - ./certbot/www:/var/www/certbot:ro
     depends_on:
       - backend
       - frontend
-    restart: always
 
-# ──────────────────────────────────────────────────
-# Named Volumes
-# ──────────────────────────────────────────────────
-volumes:
-  gradle-cache:
+  # ──────────────────────────────────────────────────
+  # SSL 인증서 — Certbot (Let's Encrypt)
+  # 최초 발급: docker compose run --rm certbot certonly ...
+  # 자동 갱신: 컨테이너가 12시간마다 갱신 시도
+  # ──────────────────────────────────────────────────
+  certbot:
+    image: certbot/certbot
+    container_name: project2-certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
