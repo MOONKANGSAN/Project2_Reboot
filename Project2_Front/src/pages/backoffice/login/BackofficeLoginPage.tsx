@@ -45,7 +45,8 @@ function BackofficeLoginPage(): JSX.Element {
           loginTime: new Date().toISOString(),
         };
         sessionStorage.setItem('backofficeSession', JSON.stringify(session));
-        navigate('/backoffice');
+        // 로그인 성공 시 대시보드로 바로 이동
+        navigate('/backoffice/main');
       } else {
         alert('로그인 실패: ' + data.message);
       }

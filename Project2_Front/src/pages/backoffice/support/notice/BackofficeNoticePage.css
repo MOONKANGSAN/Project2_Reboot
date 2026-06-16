@@ -1,0 +1,341 @@
+/* ================================================================
+   BackofficeNoticePage.css — 공지관리 / FAQ 페이지 전용 스타일
+   bo-* 토큰(backoffice-tokens.css)을 재사용하고 페이지 고유 스타일 추가
+   ================================================================ */
+
+/* ── 탭 ──────────────────────────────────────────────────────── */
+.bo-notice-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--bo-border);
+  padding-bottom: 0;
+}
+
+.bo-notice-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--bo-text-muted);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+  transition: color var(--bo-transition), border-color var(--bo-transition);
+}
+
+.bo-notice-tab:hover {
+  color: var(--bo-text-secondary);
+}
+
+.bo-notice-tab.is-active {
+  color: var(--bo-accent);
+  border-bottom-color: var(--bo-accent);
+  font-weight: 600;
+}
+
+.bo-notice-tab__count {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  font-size: 10px;
+  font-weight: 700;
+  background-color: var(--bo-bg-active);
+  color: var(--bo-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bo-notice-tab.is-active .bo-notice-tab__count {
+  background-color: var(--bo-accent);
+  color: #000;
+}
+
+/* ── 검색 인풋 (공유 스타일 — BackofficeReviewListPage.css 와 동일) ── */
+.bo-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  height: 32px;
+  background-color: var(--bo-bg-dark);
+  border: 1px solid var(--bo-border);
+  border-radius: 6px;
+  transition: border-color var(--bo-transition);
+}
+
+.bo-search-wrap:focus-within { border-color: var(--bo-accent); }
+
+.bo-search-icon { color: var(--bo-text-muted); flex-shrink: 0; }
+
+.bo-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  color: var(--bo-text-primary);
+  min-width: 140px;
+}
+
+.bo-search-input::placeholder { color: var(--bo-text-muted); }
+
+.bo-search-clear {
+  font-size: 11px;
+  color: var(--bo-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 2px;
+  transition: color var(--bo-transition);
+}
+
+.bo-search-clear:hover { color: var(--bo-error); }
+
+/* ── 필터 그룹 (가로 스크롤 가능) ── */
+.bo-filter-group--scroll {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  flex-shrink: 1;
+  scrollbar-width: none;
+}
+
+.bo-filter-group--scroll::-webkit-scrollbar { display: none; }
+
+/* ── 테이블 컬럼 너비 ── */
+.col-pin      { width: 60px; text-align: center; }
+.col-actions  { width: 110px; text-align: center; }
+.col-faq-cat  { width: 100px; }
+.col-faq-ans  { max-width: 220px; }
+
+/* ── 제목 셀 ── */
+.bo-cell-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--bo-text-primary);
+}
+
+.bo-badge-pin { font-size: 12px; }
+
+/* ── 카테고리 뱃지 ── */
+.bo-badge-category {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background-color: var(--bo-accent-soft);
+  color: var(--bo-accent);
+  border: 1px solid var(--bo-accent-border);
+  white-space: nowrap;
+}
+
+/* ── 관리 버튼 묶음 ── */
+.bo-action-btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* ── 버튼 컴포넌트 ── */
+.bo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 14px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all var(--bo-transition);
+  white-space: nowrap;
+}
+
+.bo-btn--primary {
+  background-color: var(--bo-accent);
+  color: #000;
+}
+
+.bo-btn--primary:hover {
+  background-color: var(--bo-accent-hover);
+}
+
+.bo-btn--ghost {
+  background: transparent;
+  border-color: var(--bo-border);
+  color: var(--bo-text-secondary);
+}
+
+.bo-btn--ghost:hover {
+  border-color: var(--bo-accent);
+  color: var(--bo-accent);
+  background-color: var(--bo-accent-soft);
+}
+
+.bo-btn--danger {
+  background: transparent;
+  border-color: var(--bo-border);
+  color: var(--bo-error);
+}
+
+.bo-btn--danger:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: var(--bo-error);
+}
+
+.bo-btn--sm  { padding: 6px 12px; font-size: 12px; }
+.bo-btn--xs  { padding: 4px 9px;  font-size: 11px; border-radius: 5px; }
+
+/* ── 페이지네이션 ── */
+.bo-pagination-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 6px;
+  border-top: 1px solid var(--bo-border);
+}
+
+.bo-page-info { font-size: 12px; color: var(--bo-text-muted); }
+
+.bo-pagination { display: flex; align-items: center; gap: 4px; }
+
+.bo-page-btn {
+  min-width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 6px; font-size: 13px; font-weight: 500;
+  color: var(--bo-text-secondary);
+  background: transparent;
+  border: 1px solid var(--bo-border);
+  border-radius: 6px; cursor: pointer;
+  transition: all var(--bo-transition);
+}
+
+.bo-page-btn:hover:not(:disabled) { border-color: var(--bo-accent); color: var(--bo-accent); background-color: var(--bo-accent-soft); }
+.bo-page-btn--active { background-color: var(--bo-accent); border-color: var(--bo-accent); color: #000; font-weight: 700; }
+.bo-page-btn--nav { font-size: 15px; color: var(--bo-text-muted); }
+.bo-page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.bo-page-ellipsis { font-size: 13px; color: var(--bo-text-muted); padding: 0 4px; user-select: none; }
+
+/* ── 모달 오버레이 ── */
+.bo-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+/* ── 모달 카드 ── */
+.bo-modal {
+  background-color: var(--bo-bg-surface);
+  border: 1px solid var(--bo-border);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.bo-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--bo-border);
+}
+
+.bo-modal__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--bo-text-primary);
+}
+
+.bo-modal__close {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 6px; border: none;
+  background: transparent;
+  color: var(--bo-text-muted);
+  font-size: 14px; cursor: pointer;
+  transition: all var(--bo-transition);
+}
+
+.bo-modal__close:hover { background-color: var(--bo-bg-hover); color: var(--bo-error); }
+
+.bo-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 24px;
+}
+
+.bo-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--bo-border);
+}
+
+/* ── 폼 요소 ── */
+.bo-form-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bo-text-secondary);
+  letter-spacing: 0.3px;
+}
+
+.bo-form-input, .bo-form-textarea, .bo-form-select {
+  width: 100%;
+  background-color: var(--bo-bg-dark);
+  border: 1px solid var(--bo-border);
+  border-radius: 7px;
+  padding: 9px 12px;
+  font-size: 13px;
+  color: var(--bo-text-primary);
+  font-family: var(--bo-font);
+  transition: border-color var(--bo-transition);
+  box-sizing: border-box;
+}
+
+.bo-form-input:focus, .bo-form-textarea:focus, .bo-form-select:focus {
+  outline: none;
+  border-color: var(--bo-accent);
+}
+
+.bo-form-input::placeholder, .bo-form-textarea::placeholder { color: var(--bo-text-muted); }
+
+.bo-form-textarea { resize: vertical; min-height: 100px; }
+
+.bo-form-select {
+  cursor: pointer;
+  appearance: auto;
+  width: auto;
+  min-width: 100px;
+}
+
+.bo-form-input--sm { width: 70px; }
+
+.bo-form-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}

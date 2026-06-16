@@ -48,8 +48,9 @@ const NAV_SECTIONS: NavSection[] = [
     key: 'support',
     label: '서비스 지원',
     items: [
-      { label: '에러 로그', to: '/backoffice/support/error-log', disabled: true },
-      { label: '공지 관리', to: '/backoffice/support/notice', disabled: true },
+      { label: '공지 관리', to: '/backoffice/support/notice' },
+      { label: '에러 로그', to: '/backoffice/support/error-log' },
+      { label: '고객 문의', to: '/backoffice/support/inquiry' },
     ],
   },
 ];
