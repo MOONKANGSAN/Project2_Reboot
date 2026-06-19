@@ -22,8 +22,8 @@ COPY src/ src/
 RUN ./gradlew bootJar --no-daemon -x test
 
 # ── Stage 2: 실행 ────────────────────────────────────
-# JDK 대신 JRE만 포함된 경량 이미지 사용
-FROM amazoncorretto:17-al2
+# JDK 대신 경량 이미지 사용
+FROM amazoncorretto:17
 
 WORKDIR /app
 
