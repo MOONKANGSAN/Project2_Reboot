@@ -17,10 +17,11 @@ public class CorsConfig {
         // 자격증명(쿠키, 인증 헤더) 허용
         config.setAllowCredentials(true);
 
-        // 허용할 Origin 설정 (프론트엔드 주소)
+        // 허용할 Origin 설정 (개발 + 운영 도메인)
         config.addAllowedOrigin("http://localhost:5173");
         config.addAllowedOrigin("http://127.0.0.1:5173");
-        config.addAllowedOrigin("http://localhost:3000"); // 필요시 추가
+        config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("https://worldkang.duckdns.org");
 
         // 모든 HTTP 메서드 허용
         config.addAllowedMethod("*");
