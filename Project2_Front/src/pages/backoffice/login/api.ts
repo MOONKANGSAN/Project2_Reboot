@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { BackofficeLoginApiResponse } from '@/pages/backoffice/login/types';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: '/api',
   headers: { 'Content-Type': 'application/json' },
 });
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ReportModal.css';
 
-const BACKEND = 'http://localhost:8080';
+const BACKEND = '/api';
 
 export const REPORT_TYPES = [
   { value: 'ABUSE',      label: '지나친 욕설 혹은 일방적인 비난' },

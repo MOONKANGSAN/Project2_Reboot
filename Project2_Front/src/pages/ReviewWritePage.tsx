@@ -6,7 +6,7 @@ import RestaurantSearchInput, {
 } from '@/components/RestaurantSearchInput/RestaurantSearchInput';
 import './ReviewWritePage.css';
 
-const BACKEND = 'http://localhost:8080';
+const BACKEND = '/api';
 
 interface UserSession {
   userId: string;

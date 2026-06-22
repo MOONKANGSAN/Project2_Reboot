@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // 백엔드 베이스 URL (이미지 등 정적 리소스 경로에도 사용)
-export const BACKEND_BASE_URL = 'http://localhost:8080';
+export const BACKEND_BASE_URL = '/api';
 
 const apiClient = axios.create({
   baseURL: `${BACKEND_BASE_URL}/api`,

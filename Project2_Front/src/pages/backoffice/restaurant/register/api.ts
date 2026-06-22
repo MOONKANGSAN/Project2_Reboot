@@ -6,7 +6,7 @@ import type {
 } from './types';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: '/api',
   headers: { 'Content-Type': 'application/json' },
 });
 
@@ -42,7 +42,7 @@ export const uploadRestaurantImages = async (
   files.forEach((file) => formData.append('images', file));
 
   const response = await axios.post<RestaurantImgUploadApiResponse>(
-    'http://localhost:8080/api/backoffice/restaurant/img/upload',
+    '/api/backoffice/restaurant/img/upload',
     formData,
     { headers: { 'Content-Type': 'multipart/form-data' } }
   );

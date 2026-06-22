@@ -9,7 +9,7 @@ import type { PriceRange } from '@/types/index';
 import KakaoAddressSearch from '@/components/KakaoAddressSearch/KakaoAddressSearch';
 import './CustomerServicePage.css';
 
-const BACKEND = 'http://localhost:8080';
+const BACKEND = '/api';
 
 type TabKey = 'inquiries' | 'register' | 'faqs';
 
