@@ -52,7 +52,7 @@ interface ApiErrorResponseBody {
 // ─────────────────────────────────────────
 
 // Spring 백엔드 기본 URL
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = '/api';
 
 // 에러 로깅 전용 axios 인스턴스
 const errorLogClient = axios.create({

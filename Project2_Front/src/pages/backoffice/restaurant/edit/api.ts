@@ -5,7 +5,7 @@ import type {
   RestaurantDetailApiResponse,
 } from './types';
 
-const BACKEND = 'http://localhost:8080';
+const BACKEND = '/api';
 
 const apiClient = axios.create({
   baseURL: `${BACKEND}/api`,

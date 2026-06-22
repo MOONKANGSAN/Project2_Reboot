@@ -16,7 +16,7 @@ import HashtagInput from '../HashtagInput';
 import KakaoAddressSearch from '@/components/KakaoAddressSearch/KakaoAddressSearch';
 import '../register/BackofficeRestaurantRegisterPage.css';
 
-const BACKEND        = 'http://localhost:8080';
+const BACKEND        = '/api';
 const CATEGORIES: RestaurantCategory[] = ['한식', '일식', '중식', '양식', '카페', '분식'];
 const PRICE_RANGES: PriceRange[]       = ['₩', '₩₩', '₩₩₩', '₩₩₩₩'];
 const MAX_IMAGES     = 5;

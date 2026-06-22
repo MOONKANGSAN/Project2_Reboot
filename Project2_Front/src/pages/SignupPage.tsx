@@ -46,7 +46,7 @@ interface ApiResponse {
 // ─────────────────────────────────────────
 
 // Spring 백엔드 주소
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = '/api';
 
 // axios 인스턴스 생성
 const apiClient = axios.create({

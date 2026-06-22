@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // 백엔드 주소 설정 (Spring Boot 기본 포트 8080)
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: '/api',
   headers: {
     'Content-Type': 'application/json',
   },

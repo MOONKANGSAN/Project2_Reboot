@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import axios from 'axios';
 import './RestaurantSearchInput.css';
 
-const BACKEND = 'http://localhost:8080';
+const BACKEND = '/api';
 const DEBOUNCE_MS = 300;
 
 export interface RestaurantSearchItem {
