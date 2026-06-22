@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BACKEND_BASE_URL, resolveImageUrl } from './publicRestaurantApi';
+import { resolveImageUrl } from './publicRestaurantApi';
 
 export { resolveImageUrl };
 
