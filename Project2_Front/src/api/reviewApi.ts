@@ -4,7 +4,7 @@ import { BACKEND_BASE_URL, resolveImageUrl } from './publicRestaurantApi';
 export { resolveImageUrl };
 
 const apiClient = axios.create({
-  baseURL: `${BACKEND_BASE_URL}/api`,
+  baseURL: '/api',
   headers: { 'Content-Type': 'application/json' },
 });
 
