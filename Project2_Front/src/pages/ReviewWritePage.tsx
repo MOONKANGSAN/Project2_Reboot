@@ -6,8 +6,6 @@ import RestaurantSearchInput, {
 } from '@/components/RestaurantSearchInput/RestaurantSearchInput';
 import './ReviewWritePage.css';
 
-const BACKEND = '/api';
-
 interface UserSession {
   userId: string;
   nickname: string;
@@ -97,7 +95,7 @@ function ReviewWritePage(): JSX.Element {
       form.append('content',       content.trim());
       if (imageFile) form.append('image', imageFile);
 
-      const { data } = await axios.post(`${BACKEND}/api/reviews`, form, {
+      const { data } = await axios.post(`/api/reviews`, form, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 

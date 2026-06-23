@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import axios from 'axios';
 import './RestaurantSearchInput.css';
 
-const BACKEND = '/api';
 const DEBOUNCE_MS = 300;
 
 export interface RestaurantSearchItem {
@@ -46,10 +45,10 @@ function RestaurantSearchInput({ selected, onSelect, hasError, presetIdx }: Prop
   useEffect(() => {
     if (!presetIdx || selected) return;
     axios
-      .get(`${BACKEND}/api/restaurants/search?keyword=`)
+      .get(`/api/restaurants/search?keyword=`)
       .then(() => {
         // idx로 직접 상세 조회
-        axios.get(`${BACKEND}/api/restaurants/${presetIdx}`)
+        axios.get(`/api/restaurants/${presetIdx}`)
           .then(res => {
             if (res.data.success) {
               const d = res.data.data;
@@ -75,7 +74,7 @@ function RestaurantSearchInput({ selected, onSelect, hasError, presetIdx }: Prop
       setIsLoading(true);
       try {
         const res = await axios.get<{ success: boolean; data: RestaurantSearchItem[] }>(
-          `${BACKEND}/api/restaurants/search`,
+          `/api/restaurants/search`,
           { params: { keyword: query.trim() } }
         );
         if (res.data.success) {
