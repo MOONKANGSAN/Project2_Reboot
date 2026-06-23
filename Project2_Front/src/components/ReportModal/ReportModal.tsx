@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ReportModal.css';
 
-const BACKEND = '/api';
-
 export const REPORT_TYPES = [
   { value: 'ABUSE',      label: '지나친 욕설 혹은 일방적인 비난' },
   { value: 'IRRELEVANT', label: '리뷰 내용과 점포의 특성이 무관함' },
@@ -65,7 +63,7 @@ function ReportModal({ reviewIdx, onClose }: ReportModalProps): JSX.Element | nu
     setIsSubmitting(true);
     setErrorMsg('');
     try {
-      const { data } = await axios.post(`${BACKEND}/api/reviews/${reviewIdx}/report`, {
+      const { data } = await axios.post(`/api/reviews/${reviewIdx}/report`, {
         userId,
         reportType: selectedType,
         customContent: customContent.trim() || null,
