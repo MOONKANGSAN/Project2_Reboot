@@ -5,10 +5,8 @@ import type {
   RestaurantDetailApiResponse,
 } from './types';
 
-const BACKEND = '/api';
-
 const apiClient = axios.create({
-  baseURL: `${BACKEND}/api`,
+  baseURL: '/api',
   headers: { 'Content-Type': 'application/json' },
 });
 
@@ -43,8 +41,8 @@ export const uploadRestaurantImages = async (
   const form = new FormData();
   form.append('restaurantIdx', String(restaurantIdx));
   files.forEach(f => form.append('images', f));
-  const res = await axios.post(
-    `${BACKEND}/api/backoffice/restaurant/img/upload`,
+  const res = await apiClient.post(
+    '/backoffice/restaurant/img/upload',
     form,
     { headers: { 'Content-Type': 'multipart/form-data' } }
   );
