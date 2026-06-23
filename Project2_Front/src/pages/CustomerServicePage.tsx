@@ -9,8 +9,6 @@ import type { PriceRange } from '@/types/index';
 import KakaoAddressSearch from '@/components/KakaoAddressSearch/KakaoAddressSearch';
 import './CustomerServicePage.css';
 
-const BACKEND = '/api';
-
 type TabKey = 'inquiries' | 'register' | 'faqs';
 
 const TABS: { key: TabKey; label: string }[] = [
@@ -154,7 +152,7 @@ function RegisterTab(): JSX.Element {
     setIsSubmitting(true);
     try {
       // 1단계: 점포 신청 정보 전송
-      const { data } = await axios.post(`${BACKEND}/api/restaurants/request`, {
+      const { data } = await axios.post(`/api/restaurants/request`, {
         name:        formData.name,
         category:    formData.category,
         address:     formData.address,
@@ -174,7 +172,7 @@ function RegisterTab(): JSX.Element {
         const form = new FormData();
         form.append('restaurantIdx', String(data.idx));
         imageFiles.forEach(f => form.append('images', f));
-        await axios.post(`${BACKEND}/api/backoffice/restaurant/img/upload`, form, {
+        await axios.post(`/api/backoffice/restaurant/img/upload`, form, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }

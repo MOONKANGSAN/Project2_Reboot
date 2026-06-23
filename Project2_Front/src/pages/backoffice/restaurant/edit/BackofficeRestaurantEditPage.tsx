@@ -16,7 +16,6 @@ import HashtagInput from '../HashtagInput';
 import KakaoAddressSearch from '@/components/KakaoAddressSearch/KakaoAddressSearch';
 import '../register/BackofficeRestaurantRegisterPage.css';
 
-const BACKEND        = '/api';
 const CATEGORIES: RestaurantCategory[] = ['한식', '일식', '중식', '양식', '카페', '분식'];
 const PRICE_RANGES: PriceRange[]       = ['₩', '₩₩', '₩₩₩', '₩₩₩₩'];
 const MAX_IMAGES     = 5;
@@ -331,7 +330,7 @@ function BackofficeRestaurantEditPage(): JSX.Element {
                 {existingImages.map(img => (
                   <div key={img.idx} className="bo-img-preview-item">
                     <img
-                      src={`${BACKEND}${img.imgUrl}`}
+                      src={img.imgUrl}
                       alt="점포 이미지"
                       className="bo-img-preview-thumb"
                     />
