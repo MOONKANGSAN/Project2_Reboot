@@ -10,7 +10,8 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
+        // Docker 환경: 컨테이너 서비스 이름으로 접근 (localhost:8080은 컨테이너 내부 자신을 가리킴)
+        target: 'http://backend:8080',
         changeOrigin: true,
         secure: false
       }
