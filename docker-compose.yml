@@ -32,8 +32,8 @@ services:
   backend:
     build: ./Project2_Spring
     container_name: project2-backend
-    ports:
-      - "8080:8080"
+    restart: on-failure
+    # 외부 포트 노출 불필요 — nginx와 vite proxy가 내부 서비스명(backend:8080)으로 접근
     depends_on:
       db:
         condition: service_healthy
@@ -79,6 +79,8 @@ services:
           target: /app/public
         - action: rebuild
           path: ./Project2_Front/package.json
+        - action: rebuild
+          path: ./Project2_Front/vite.config.ts
 
   # ──────────────────────────────────────────────────
   # 리버스 프록시 — Nginx
