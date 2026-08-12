@@ -1,7 +1,7 @@
-/* 커스텀 폰트 정의 — woff2 파일 손상으로 ttf만 사용 */
+/* 커스텀 폰트 정의 — kangwon_Regular.otf 사용 */
 @font-face {
     font-family: 'MyCustomFont';
-    src: url('Mapo_Regular.ttf') format('truetype');
+    src: url('kangwon_Regular.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
     font-display: swap; /* 폰트 로딩 중 fallback 폰트 표시 */
