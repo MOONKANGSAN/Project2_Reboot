@@ -21,7 +21,8 @@ public class CorsConfig {
         config.addAllowedOrigin("http://localhost:5173");
         config.addAllowedOrigin("http://127.0.0.1:5173");
         config.addAllowedOrigin("http://localhost:3000");
-        config.addAllowedOrigin("https://worldkang.duckdns.org");
+        config.addAllowedOrigin("https://matjido.duckdns.org");
+        config.addAllowedOrigin("http://matjido.duckdns.org");
 
         // 모든 HTTP 메서드 허용
         config.addAllowedMethod("*");
