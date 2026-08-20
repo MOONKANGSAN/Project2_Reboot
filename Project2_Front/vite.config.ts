@@ -14,6 +14,12 @@ export default defineConfig({
         target: 'http://backend:8080',
         changeOrigin: true,
         secure: false
+      },
+      '/uploads': {
+        // 업로드 이미지 정적 리소스도 백엔드로 프록시 (WebMvcConfig에서 파일 서빙)
+        target: 'http://backend:8080',
+        changeOrigin: true,
+        secure: false
       }
     }
   },

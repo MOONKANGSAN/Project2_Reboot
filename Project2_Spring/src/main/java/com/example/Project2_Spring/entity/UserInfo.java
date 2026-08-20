@@ -44,6 +44,10 @@ public class UserInfo {
     @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
 
+    // 프로필 이미지 URL (/uploads/user/UUID.ext 형태로 저장)
+    @Column(name = "profile_image_url", length = 300)
+    private String profileImageUrl;
+
     // 데이터 저장 전 자동으로 실행되는 메소드
     @PrePersist
     public void prePersist() {

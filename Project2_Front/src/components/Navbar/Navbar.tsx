@@ -31,11 +31,12 @@ function CloseIcon(): JSX.Element {
 // ── 유저 드롭다운
 interface UserMenuProps {
   nickname: string;
+  profileImageUrl?: string;
   onLogout: () => void;
   onMyProfile: () => void;
 }
 
-function UserMenu({ nickname, onLogout, onMyProfile }: UserMenuProps): JSX.Element {
+function UserMenu({ nickname, profileImageUrl, onLogout, onMyProfile }: UserMenuProps): JSX.Element {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -57,7 +58,11 @@ function UserMenu({ nickname, onLogout, onMyProfile }: UserMenuProps): JSX.Eleme
         aria-label="유저 메뉴"
         aria-expanded={open}
       >
-        <span className="navbar__avatar-circle">{avatarChar}</span>
+        <span className="navbar__avatar-circle">
+          {profileImageUrl
+            ? <img src={profileImageUrl} alt={nickname} className="navbar__avatar-circle__img" />
+            : avatarChar}
+        </span>
         <span className="navbar__avatar-name">{nickname}</span>
         <svg
           className={`navbar__avatar-caret ${open ? "navbar__avatar-caret--open" : ""}`}
@@ -71,7 +76,11 @@ function UserMenu({ nickname, onLogout, onMyProfile }: UserMenuProps): JSX.Eleme
       {open && (
         <div className="navbar__dropdown">
           <div className="navbar__dropdown-header">
-            <span className="navbar__dropdown-avatar">{avatarChar}</span>
+            <span className="navbar__dropdown-avatar">
+              {profileImageUrl
+                ? <img src={profileImageUrl} alt={nickname} className="navbar__avatar-circle__img" />
+                : avatarChar}
+            </span>
             <div>
               <p className="navbar__dropdown-name">{nickname}</p>
               <p className="navbar__dropdown-sub">맛집 탐험가</p>
@@ -116,12 +125,13 @@ function UserMenu({ nickname, onLogout, onMyProfile }: UserMenuProps): JSX.Eleme
 interface NavbarProps {
   isLoggedIn: boolean;
   userNickname?: string;
+  userProfileImageUrl?: string;
   onOpenLoginModal: () => void;
   onLogout: () => void;
 }
 
 // ── 메인 컴포넌트
-function Navbar({ isLoggedIn, userNickname, onOpenLoginModal, onLogout }: NavbarProps): JSX.Element {
+function Navbar({ isLoggedIn, userNickname, userProfileImageUrl, onOpenLoginModal, onLogout }: NavbarProps): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -233,8 +243,9 @@ function Navbar({ isLoggedIn, userNickname, onOpenLoginModal, onLogout }: Navbar
               </button>
               <UserMenu
                 nickname={userNickname ?? ''}
+                profileImageUrl={userProfileImageUrl}
                 onLogout={onLogout}
-                onMyProfile={() => alert("준비 중")}
+                onMyProfile={() => navigate('/profile')}
               />
             </>
           ) : (

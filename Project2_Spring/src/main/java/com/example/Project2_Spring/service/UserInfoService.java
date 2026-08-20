@@ -4,12 +4,21 @@ import com.example.Project2_Spring.dto.UserListItemDto;
 import com.example.Project2_Spring.entity.UserInfo;
 import com.example.Project2_Spring.repository.UserInfoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 // 비즈니스 로직 처리 계층
@@ -20,6 +29,11 @@ public class UserInfoService {
 
     private final UserInfoRepository userInfoRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+
+    @Value("${app.upload.user.dir}")
+    private String userUploadDir;
+
+    private static final List<String> ALLOWED_IMG_EXT = List.of(".jpg", ".jpeg", ".png", ".webp", ".gif");
 
     // ─────────────────────────────────────────────────────────────────
     // 1. 회원가입 로직
@@ -126,7 +140,71 @@ public class UserInfoService {
     }
 
     // ─────────────────────────────────────────────────────────────────
-    // 7. 백오피스 회원 목록 조회 (최신 가입순)
+    // 7. 프로필 수정 (닉네임, 전화번호, 이메일)
+    // ─────────────────────────────────────────────────────────────────
+
+    @Transactional
+    public void updateProfile(String userId, String nickname, String phoneNumber, String email) {
+        UserInfo user = userInfoRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        // 이메일이 변경됐고 다른 사용자가 이미 사용 중이면 거부
+        if (!user.getEmail().equals(email) && userInfoRepository.existsByEmail(email)) {
+            throw new IllegalStateException("이미 사용 중인 이메일입니다.");
+        }
+
+        // 전화번호가 변경됐고 다른 사용자가 이미 사용 중이면 거부
+        if (phoneNumber != null && !phoneNumber.equals(user.getPhoneNumber())
+                && userInfoRepository.existsByPhoneNumber(phoneNumber)) {
+            throw new IllegalStateException("이미 사용 중인 전화번호입니다.");
+        }
+
+        user.setNickname(nickname);
+        user.setPhoneNumber(phoneNumber);
+        user.setEmail(email);
+        // @Transactional + Dirty Checking으로 자동 UPDATE
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    // 8. 프로필 이미지 업로드 — UUID 파일명으로 저장 후 URL 반환
+    // ─────────────────────────────────────────────────────────────────
+
+    @Transactional
+    public String uploadProfileImage(String userId, MultipartFile file) throws IOException {
+        UserInfo user = userInfoRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        String originalFilename = StringUtils.cleanPath(
+                file.getOriginalFilename() != null ? file.getOriginalFilename() : "image");
+        int dotIdx = originalFilename.lastIndexOf('.');
+        String ext = (dotIdx >= 0) ? originalFilename.substring(dotIdx).toLowerCase() : "";
+        if (!ALLOWED_IMG_EXT.contains(ext)) {
+            throw new IllegalArgumentException("허용되지 않는 파일 형식입니다: " + ext);
+        }
+
+        Path uploadPath = Paths.get(userUploadDir);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        // 기존 이미지 파일 삭제
+        if (user.getProfileImageUrl() != null) {
+            String oldFilename = user.getProfileImageUrl().substring(
+                    user.getProfileImageUrl().lastIndexOf('/') + 1);
+            Files.deleteIfExists(uploadPath.resolve(oldFilename));
+        }
+
+        String savedFilename = UUID.randomUUID() + ext;
+        Files.copy(file.getInputStream(), uploadPath.resolve(savedFilename),
+                StandardCopyOption.REPLACE_EXISTING);
+
+        String imageUrl = "/uploads/user/" + savedFilename;
+        user.setProfileImageUrl(imageUrl);
+        return imageUrl;
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    // 9. 백오피스 회원 목록 조회 (최신 가입순)
     //    keyword가 있으면 아이디/닉네임 검색, 없으면 전체 조회
     // ─────────────────────────────────────────────────────────────────
     @Transactional(readOnly = true)

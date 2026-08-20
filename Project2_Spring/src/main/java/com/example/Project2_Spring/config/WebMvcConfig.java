@@ -14,6 +14,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${app.upload.review.dir}")
     private String reviewUploadDir;
 
+    @Value("${app.upload.user.dir}")
+    private String userUploadDir;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/restaurant/**")
@@ -21,5 +24,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler("/uploads/review/**")
                 .addResourceLocations("file:" + reviewUploadDir + "/");
+
+        registry.addResourceHandler("/uploads/user/**")
+                .addResourceLocations("file:" + userUploadDir + "/");
     }
 }

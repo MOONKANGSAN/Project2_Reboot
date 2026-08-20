@@ -6,6 +6,7 @@ import com.example.Project2_Spring.service.UserInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,7 +60,109 @@ public class UserInfoController {
     }
 
     /**
-     * 2. 로그인 API
+     * 2. 프로필 조회 API
+     * GET /api/user/profile/{userId}
+     */
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<?> getProfile(@PathVariable String userId) {
+        try {
+            UserInfo user = userInfoService.getUserInfo(userId);
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("userId",          user.getUserId());
+            data.put("nickname",         user.getNickname());
+            data.put("phoneNumber",      user.getPhoneNumber());
+            data.put("email",            user.getEmail());
+            data.put("profileImageUrl",  user.getProfileImageUrl());
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("data",    data);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", e.getMessage());
+            return ResponseEntity.status(404).body(error);
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "프로필 조회 중 오류가 발생했습니다.");
+            return ResponseEntity.status(500).body(error);
+        }
+    }
+
+    /**
+     * 3. 프로필 수정 API (닉네임, 전화번호, 이메일)
+     * PUT /api/user/profile
+     */
+    @PutMapping("/profile")
+    public ResponseEntity<?> updateProfile(@RequestBody UserDto userDto) {
+        try {
+            userInfoService.updateProfile(
+                    userDto.getUserId(),
+                    userDto.getNickname(),
+                    userDto.getPhoneNumber(),
+                    userDto.getEmail()
+            );
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "프로필이 수정되었습니다.");
+            return ResponseEntity.ok(response);
+        } catch (IllegalStateException e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        } catch (IllegalArgumentException e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", e.getMessage());
+            return ResponseEntity.status(404).body(error);
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "프로필 수정 중 오류가 발생했습니다.");
+            return ResponseEntity.status(500).body(error);
+        }
+    }
+
+    /**
+     * 4. 프로필 이미지 업로드 API
+     * POST /api/user/profile/image
+     */
+    @PostMapping("/profile/image")
+    public ResponseEntity<?> uploadProfileImage(
+            @RequestParam("userId") String userId,
+            @RequestParam("profileImage") MultipartFile file
+    ) {
+        try {
+            String imageUrl = userInfoService.uploadProfileImage(userId, file);
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("imageUrl", imageUrl);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "프로필 이미지가 업로드되었습니다.");
+            response.put("data",    data);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "이미지 업로드 중 오류가 발생했습니다.");
+            return ResponseEntity.status(500).body(error);
+        }
+    }
+
+    /**
+     * 5. 로그인 API
      * POST http://localhost:8080/api/user/login
      */
     @PostMapping("/login")
@@ -72,6 +175,7 @@ public class UserInfoController {
             response.put("message", "로그인 성공");
             response.put("userId", user.getUserId());
             response.put("nickname", user.getNickname());
+            response.put("profileImageUrl", user.getProfileImageUrl());
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
