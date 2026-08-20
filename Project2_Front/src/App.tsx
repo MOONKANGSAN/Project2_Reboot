@@ -15,6 +15,8 @@ import ReviewWritePage from "@/pages/ReviewWritePage";
 import ReviewListPage from "@/pages/ReviewListPage";
 import LikedPage from "@/pages/LikedPage";
 import ProfilePage from "@/pages/ProfilePage";
+import MyReviewPage from "@/pages/MyReviewPage";
+import MyLikedPage from "@/pages/MyLikedPage";
 import CustomerServicePage from "@/pages/CustomerServicePage";
 import InquiryWritePage from "@/pages/InquiryWritePage";
 import SignupPage from "@/pages/SignupPage";
@@ -67,6 +69,8 @@ function App(): JSX.Element {
         {/* 로그인이 필요한 페이지 — 비로그인 시 홈으로 리다이렉트 */}
         <Route element={<PublicProtectedRoute />}>
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/my/reviews" element={<MyReviewPage />} />
+          <Route path="/my/liked" element={<MyLikedPage />} />
         </Route>
 
         {/* 고객센터 */}

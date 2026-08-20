@@ -50,6 +50,18 @@ export const fetchMyLikes = async (userId: string): Promise<number[]> => {
   return response.data.likedIdxList ?? [];
 };
 
+// GET /api/reviews/liked?userId=xxx — 내가 좋아요한 리뷰 목록
+export const fetchMyLikedReviews = async (userId: string): Promise<PublicReviewListResponse> => {
+  const response = await apiClient.get<PublicReviewListResponse>('/reviews/liked', { params: { userId } });
+  return response.data;
+};
+
+// GET /api/reviews/my?userId=xxx — 내가 작성한 리뷰 목록
+export const fetchMyReviews = async (userId: string): Promise<PublicReviewListResponse> => {
+  const response = await apiClient.get<PublicReviewListResponse>('/reviews/my', { params: { userId } });
+  return response.data;
+};
+
 // POST /api/reviews/{reviewIdx}/like — 좋아요 토글 (state: 0↔1)
 export const toggleReviewLike = async (
   reviewIdx: number,

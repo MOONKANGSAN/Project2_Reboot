@@ -42,4 +42,12 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     // 특정 점포의 활성 리뷰 — 좋아요 많은순
     List<Review> findByRestaurantEntityIdxAndStateOrderByLikeCountDesc(
             Integer restaurantIdx, Integer state);
+
+    // 내가 작성한 활성 리뷰 — 최신순
+    List<Review> findByUserEntityUserIdAndStateOrderByRegDateDesc(
+            String userId, Integer state);
+
+    // 좋아요한 리뷰 idx 목록에 해당하는 활성 리뷰 — 최신순
+    List<Review> findByIdxInAndStateOrderByRegDateDesc(
+            List<Integer> idxList, Integer state);
 }
