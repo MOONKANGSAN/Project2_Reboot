@@ -245,7 +245,12 @@ function RestaurantList({ showAll = false }: { showAll?: boolean }): JSX.Element
         {/* 더보기 버튼 */}
         {!showAll && !isLoading && !errorMsg && displayList.length > 0 && (
           <div className="restaurant-list__more">
-            <button className="btn-outline">맛집 더 보기</button>
+            <button
+              className="btn-outline"
+              onClick={() => navigate('/restaurants')}
+            >
+              맛집 더 보기
+            </button>
           </div>
         )}
 
