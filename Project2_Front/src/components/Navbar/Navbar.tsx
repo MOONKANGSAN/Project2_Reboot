@@ -34,9 +34,11 @@ interface UserMenuProps {
   profileImageUrl?: string;
   onLogout: () => void;
   onMyProfile: () => void;
+  onMyReviews: () => void;
+  onMyLiked: () => void;
 }
 
-function UserMenu({ nickname, profileImageUrl, onLogout, onMyProfile }: UserMenuProps): JSX.Element {
+function UserMenu({ nickname, profileImageUrl, onLogout, onMyProfile, onMyReviews, onMyLiked }: UserMenuProps): JSX.Element {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -93,14 +95,14 @@ function UserMenu({ nickname, profileImageUrl, onLogout, onMyProfile }: UserMenu
             </svg>
             내 프로필
           </button>
-          <button className="navbar__dropdown-item">
+          <button className="navbar__dropdown-item" onClick={() => { onMyReviews(); setOpen(false); }}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
             </svg>
             내 리뷰 관리
           </button>
-          <button className="navbar__dropdown-item">
+          <button className="navbar__dropdown-item" onClick={() => { onMyLiked(); setOpen(false); }}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
@@ -246,6 +248,8 @@ function Navbar({ isLoggedIn, userNickname, userProfileImageUrl, onOpenLoginModa
                 profileImageUrl={userProfileImageUrl}
                 onLogout={onLogout}
                 onMyProfile={() => navigate('/profile')}
+                onMyReviews={() => navigate('/my/reviews')}
+                onMyLiked={() => navigate('/my/liked')}
               />
             </>
           ) : (

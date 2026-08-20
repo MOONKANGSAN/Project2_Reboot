@@ -101,6 +101,42 @@ public class ReviewController {
         }
     }
 
+    // GET /api/reviews/liked?userId=xxx — 내가 좋아요한 리뷰 목록 (최신순, 활성만)
+    @GetMapping("/liked")
+    public ResponseEntity<?> likedReviews(@RequestParam String userId) {
+        try {
+            List<PublicReviewDto> data = reviewService.getMyLikedReviews(userId);
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("data", data);
+            response.put("total", data.size());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "좋아요 기록 조회 중 오류가 발생했습니다.");
+            return ResponseEntity.status(500).body(error);
+        }
+    }
+
+    // GET /api/reviews/my?userId=xxx — 내가 작성한 리뷰 목록 (최신순, 활성만)
+    @GetMapping("/my")
+    public ResponseEntity<?> myReviews(@RequestParam String userId) {
+        try {
+            List<PublicReviewDto> data = reviewService.getMyReviews(userId);
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("data", data);
+            response.put("total", data.size());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "내 리뷰 조회 중 오류가 발생했습니다.");
+            return ResponseEntity.status(500).body(error);
+        }
+    }
+
     // GET /api/reviews/my-likes?userId=xxx — 내가 좋아요한 리뷰 idx 목록
     @GetMapping("/my-likes")
     public ResponseEntity<?> myLikes(@RequestParam String userId) {

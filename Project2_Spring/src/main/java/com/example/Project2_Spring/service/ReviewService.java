@@ -6,6 +6,7 @@ import com.example.Project2_Spring.entity.Review;
 import com.example.Project2_Spring.entity.UserInfo;
 import com.example.Project2_Spring.entity.restaurant;
 import com.example.Project2_Spring.repository.RestaurantImgRepository;
+import com.example.Project2_Spring.repository.ReviewLikeRepository;
 import com.example.Project2_Spring.repository.RestaurantRepository;
 import com.example.Project2_Spring.repository.ReviewRepository;
 import com.example.Project2_Spring.repository.UserInfoRepository;
@@ -31,10 +32,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReviewService {
 
-    private final ReviewRepository      reviewRepository;
-    private final RestaurantRepository  restaurantRepository;
+    private final ReviewRepository        reviewRepository;
+    private final ReviewLikeRepository    reviewLikeRepository;
+    private final RestaurantRepository    restaurantRepository;
     private final RestaurantImgRepository restaurantImgRepository;
-    private final UserInfoRepository    userInfoRepository;
+    private final UserInfoRepository      userInfoRepository;
 
     @Value("${app.upload.review.dir}")
     private String uploadDir;
@@ -177,6 +179,81 @@ public class ReviewService {
                     );
                 })
                 .collect(Collectors.toList());
+    }
+
+    // 내가 작성한 활성 리뷰 (최신순)
+    @Transactional(readOnly = true)
+    public List<PublicReviewDto> getMyReviews(String userId) {
+        List<Review> reviews = reviewRepository
+                .findByUserEntityUserIdAndStateOrderByRegDateDesc(userId, 1);
+        if (reviews.isEmpty()) return List.of();
+
+        List<Integer> imgIdxList = reviews.stream()
+                .map(rv -> rv.getRestaurantEntity().getImgIdx())
+                .filter(imgIdx -> imgIdx != null)
+                .distinct()
+                .collect(Collectors.toList());
+
+        Map<Integer, String> imgUrlMap = new HashMap<>();
+        if (!imgIdxList.isEmpty()) {
+            restaurantImgRepository.findAllById(imgIdxList)
+                    .forEach(img -> imgUrlMap.put(img.getIdx(), img.getImgUrl()));
+        }
+
+        return reviews.stream().map(rv -> {
+            restaurant r = rv.getRestaurantEntity();
+            String restaurantImageUrl = (r.getImgIdx() != null && imgUrlMap.containsKey(r.getImgIdx()))
+                    ? imgUrlMap.get(r.getImgIdx())
+                    : r.getImageUrl();
+            return new PublicReviewDto(
+                    rv.getIdx(), r.getIdx(), r.getName(),
+                    r.getCategory(), r.getLocation(),
+                    restaurantImageUrl,
+                    rv.getUserEntity().getNickname(),
+                    rv.getRating(), rv.getContent(),
+                    rv.getLikeCount(), rv.getImageUrl(),
+                    rv.getRegDate()
+            );
+        }).collect(Collectors.toList());
+    }
+
+    // 내가 좋아요한 활성 리뷰 (최신순)
+    @Transactional(readOnly = true)
+    public List<PublicReviewDto> getMyLikedReviews(String userId) {
+        List<Integer> likedIdxList = reviewLikeRepository.findLikedReviewIdxByUserId(userId);
+        if (likedIdxList.isEmpty()) return List.of();
+
+        List<Review> reviews = reviewRepository
+                .findByIdxInAndStateOrderByRegDateDesc(likedIdxList, 1);
+        if (reviews.isEmpty()) return List.of();
+
+        List<Integer> imgIdxList = reviews.stream()
+                .map(rv -> rv.getRestaurantEntity().getImgIdx())
+                .filter(imgIdx -> imgIdx != null)
+                .distinct()
+                .collect(Collectors.toList());
+
+        Map<Integer, String> imgUrlMap = new HashMap<>();
+        if (!imgIdxList.isEmpty()) {
+            restaurantImgRepository.findAllById(imgIdxList)
+                    .forEach(img -> imgUrlMap.put(img.getIdx(), img.getImgUrl()));
+        }
+
+        return reviews.stream().map(rv -> {
+            restaurant r = rv.getRestaurantEntity();
+            String restaurantImageUrl = (r.getImgIdx() != null && imgUrlMap.containsKey(r.getImgIdx()))
+                    ? imgUrlMap.get(r.getImgIdx())
+                    : r.getImageUrl();
+            return new PublicReviewDto(
+                    rv.getIdx(), r.getIdx(), r.getName(),
+                    r.getCategory(), r.getLocation(),
+                    restaurantImageUrl,
+                    rv.getUserEntity().getNickname(),
+                    rv.getRating(), rv.getContent(),
+                    rv.getLikeCount(), rv.getImageUrl(),
+                    rv.getRegDate()
+            );
+        }).collect(Collectors.toList());
     }
 
     // ── 백오피스 전용 ──────────────────────────────────────
