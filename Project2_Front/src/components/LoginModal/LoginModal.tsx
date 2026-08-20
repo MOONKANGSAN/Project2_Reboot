@@ -6,7 +6,7 @@ import './LoginModal.css';
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onLoginSuccess: (userId: string, nickname: string) => void;
+  onLoginSuccess: (userId: string, nickname: string, profileImageUrl?: string) => void;
 }
 
 interface FormData {
@@ -71,7 +71,7 @@ function LoginModal({ isOpen, onClose, onLoginSuccess }: LoginModalProps): JSX.E
       });
 
       if (data.success) {
-        onLoginSuccess(data.userId, data.nickname);
+        onLoginSuccess(data.userId, data.nickname, data.profileImageUrl ?? undefined);
         onClose();
       } else {
         setErrorMsg(data.message);

@@ -14,6 +14,7 @@ import RestaurantDetailPage from "@/pages/RestaurantDetailPage";
 import ReviewWritePage from "@/pages/ReviewWritePage";
 import ReviewListPage from "@/pages/ReviewListPage";
 import LikedPage from "@/pages/LikedPage";
+import ProfilePage from "@/pages/ProfilePage";
 import CustomerServicePage from "@/pages/CustomerServicePage";
 import InquiryWritePage from "@/pages/InquiryWritePage";
 import SignupPage from "@/pages/SignupPage";
@@ -32,6 +33,7 @@ import BackofficeNotice from "@/pages/backoffice/support/notice/index";
 import BackofficeErrorLog from "@/pages/backoffice/support/error-log/index";
 import BackofficeInquiry from "@/pages/backoffice/support/inquiry/index";
 import PublicLayout from "@/layouts/PublicLayout";
+import PublicProtectedRoute from "@/layouts/PublicProtectedRoute";
 import BackofficeLayout from "@/layouts/BackofficeLayout";
 import BackofficeProtectedRoute from "@/layouts/BackofficeProtectedRoute";
 
@@ -61,6 +63,11 @@ function App(): JSX.Element {
 
         {/* 좋아요 기록 페이지 */}
         <Route path="/liked" element={<LikedPage />} />
+
+        {/* 로그인이 필요한 페이지 — 비로그인 시 홈으로 리다이렉트 */}
+        <Route element={<PublicProtectedRoute />}>
+          <Route path="/profile" element={<ProfilePage />} />
+        </Route>
 
         {/* 고객센터 */}
         <Route path="/inquiry"       element={<CustomerServicePage />} />

@@ -9,6 +9,7 @@ interface UserSession {
   userId: string;
   nickname: string;
   loginTime: string;
+  profileImageUrl?: string;
 }
 
 function PublicLayout(): JSX.Element {
@@ -26,11 +27,22 @@ function PublicLayout(): JSX.Element {
     }
   }, []);
 
-  const handleLoginSuccess = (userId: string, nickname: string): void => {
+  // ProfilePage 등에서 세션 갱신 시 Navbar 즉시 반영
+  useEffect(() => {
+    const handler = () => {
+      const raw = sessionStorage.getItem('userSession');
+      if (raw) setUserSession(JSON.parse(raw));
+    };
+    window.addEventListener('sessionUpdated', handler);
+    return () => window.removeEventListener('sessionUpdated', handler);
+  }, []);
+
+  const handleLoginSuccess = (userId: string, nickname: string, profileImageUrl?: string): void => {
     const session: UserSession = {
       userId,
       nickname,
       loginTime: new Date().toISOString(),
+      profileImageUrl,
     };
     sessionStorage.setItem('userSession', JSON.stringify(session));
     setUserSession(session);
@@ -48,6 +60,7 @@ function PublicLayout(): JSX.Element {
       <Navbar
         isLoggedIn={isLoggedIn}
         userNickname={userSession?.nickname}
+        userProfileImageUrl={userSession?.profileImageUrl}
         onOpenLoginModal={() => setLoginModalOpen(true)}
         onLogout={handleLogout}
       />
