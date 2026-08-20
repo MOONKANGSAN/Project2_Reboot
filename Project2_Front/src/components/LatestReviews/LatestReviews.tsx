@@ -2,6 +2,7 @@
 // 역할: 메인 페이지의 "최신 리뷰" 섹션 — ReviewListPage와 동일한 패턴으로 DB에서 조회
 
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   fetchLatestReviews,
   fetchMyLikes,
@@ -14,6 +15,7 @@ import ReportModal from '@/components/ReportModal/ReportModal';
 import './LatestReviews.css';
 
 function LatestReviews(): JSX.Element {
+  const navigate = useNavigate();
   const [items, setItems]       = useState<PublicReviewItem[]>([]);
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState<string | null>(null);
@@ -69,7 +71,10 @@ function LatestReviews(): JSX.Element {
         <div className="section-header latest-reviews__header">
           <h2 className="section-title">최신 리뷰</h2>
           <p className="section-subtitle">방금 올라온 따끈따끈한 맛집 후기</p>
-          <button className="btn-outline latest-reviews__more-btn">
+          <button
+            className="btn-outline latest-reviews__more-btn"
+            onClick={() => navigate('/reviews')}
+          >
             전체 보기 →
           </button>
         </div>
