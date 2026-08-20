@@ -31,6 +31,13 @@ function validatePhone(v: string): string | undefined {
   return undefined;
 }
 
+const formatPhoneNumber = (raw: string): string => {
+  const digits = raw.replace(/\D/g, '').slice(0, 11);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 7) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
+};
+
 function validateEmail(v: string): string | undefined {
   if (!v.trim()) return '이메일을 입력해주세요.';
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return '올바른 이메일 형식이 아닙니다.';
@@ -152,7 +159,8 @@ function ProfilePage(): JSX.Element {
   // ─────────────────────────────────────────
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    const formatted = name === 'phoneNumber' ? formatPhoneNumber(value) : value;
+    setForm((prev) => ({ ...prev, [name]: formatted }));
     setErrors((prev) => ({ ...prev, [name]: undefined }));
     setSuccessMsg(null);
     setServerError(null);

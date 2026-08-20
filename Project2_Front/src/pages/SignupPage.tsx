@@ -120,6 +120,15 @@ const validateEmail = (email: string): string | undefined => {
   return undefined;
 };
 
+// 전화번호 자동 하이픈 포맷터
+// 숫자만 추출 후 010-XXXX-XXXX 형식으로 변환
+const formatPhoneNumber = (raw: string): string => {
+  const digits = raw.replace(/\D/g, '').slice(0, 11);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 7) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
+};
+
 // ─────────────────────────────────────────
 // 메인 컴포넌트
 // ─────────────────────────────────────────
@@ -146,17 +155,14 @@ function SignupPage(): JSX.Element {
   // 입력 필드 변경 핸들러
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
 
-    // 입력 중 에러 메시지 초기화
+    // 전화번호 필드는 자동 하이픈 포맷 적용
+    const formatted = name === 'phoneNumber' ? formatPhoneNumber(value) : value;
+
+    setFormData((prev) => ({ ...prev, [name]: formatted }));
+
     if (errors[name as keyof FormErrors]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: undefined,
-      }));
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
   };
 
