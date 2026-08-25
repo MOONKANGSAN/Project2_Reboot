@@ -217,15 +217,14 @@ function Navbar({ isLoggedIn, userNickname, userProfileImageUrl, onOpenLoginModa
               onChange={e => setSearchQuery(e.target.value)}
               onKeyDown={e => { if (e.key === "Enter") { /* 검색 실행 */ } }}
             />
-            <button className="navbar__search-close" onClick={closeSearch} aria-label="검색 닫기">
-              <CloseIcon />
-            </button>
           </div>
         </div>
 
         {/* 우측 액션 */}
         <div className="navbar__actions">
 
+          {/* 검색 아이콘 버튼: 검색창을 열고 닫는 유일한 토글 버튼
+              (검색창이 열리면 아이콘이 검색→닫기(X)로 바뀌어 이 버튼이 닫기 역할까지 겸함) */}
           <button
             className={`navbar__icon-btn ${searchOpen ? "navbar__icon-btn--active" : ""}`}
             onClick={searchOpen ? closeSearch : openSearch}

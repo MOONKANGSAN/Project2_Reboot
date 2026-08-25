@@ -19,7 +19,17 @@ import '../register/BackofficeRestaurantRegisterPage.css';
 const CATEGORIES: RestaurantCategory[] = ['한식', '일식', '중식', '양식', '카페', '분식'];
 const PRICE_RANGES: PriceRange[]       = ['₩', '₩₩', '₩₩₩', '₩₩₩₩'];
 const MAX_IMAGES     = 5;
+// 브라우저가 보고하는 MIME 타입 목록 (jfif/jpg는 OS/브라우저에 따라 'image/jpeg'로 잡히거나
+// 아예 빈 문자열로 잡히는 경우가 있어 아래 ALLOWED_EXTENSIONS로 한 번 더 검증함)
 const ALLOWED_TYPES  = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+// 확장자 기반 허용 목록 — MIME 타입 판별이 불확실한 jfif/jpg 파일을 위한 보조 검증
+const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'jfif', 'png', 'webp', 'gif'];
+
+// 파일의 MIME 타입 또는 확장자가 허용 목록에 있는지 검사
+function isAllowedImageFile(file: File): boolean {
+  const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
+  return ALLOWED_TYPES.includes(file.type) || ALLOWED_EXTENSIONS.includes(ext);
+}
 
 const EMPTY_FORM: RestaurantEditFormData = {
   name: '', category: '', address: '', location: '',
@@ -147,7 +157,7 @@ function BackofficeRestaurantEditPage(): JSX.Element {
 
     const valid: File[] = [];
     for (const file of selected.slice(0, remaining)) {
-      if (!ALLOWED_TYPES.includes(file.type)) { setImgError('JPG, PNG, WEBP, GIF만 가능합니다.'); continue; }
+      if (!isAllowedImageFile(file)) { setImgError('JPG, JPEG, JFIF, PNG, WEBP, GIF만 가능합니다.'); continue; }
       if (file.size > 10 * 1024 * 1024)       { setImgError('각 이미지는 10MB 이하여야 합니다.');  continue; }
       valid.push(file);
     }
@@ -319,7 +329,7 @@ function BackofficeRestaurantEditPage(): JSX.Element {
           <div className="bo-form-group">
             <label className="bo-form-label">
               점포 이미지
-              <span className="bo-img-limit-hint">최대 {MAX_IMAGES}장 · JPG, PNG, WEBP, GIF · 각 10MB 이하</span>
+              <span className="bo-img-limit-hint">최대 {MAX_IMAGES}장 · JPG, JPEG, JFIF, PNG, WEBP, GIF · 각 10MB 이하</span>
             </label>
 
             {/* 기존 이미지 + 신규 미리보기 통합 그리드 */}
@@ -381,7 +391,8 @@ function BackofficeRestaurantEditPage(): JSX.Element {
             )}
 
             <input ref={fileInputRef} type="file"
-              accept="image/jpeg,image/png,image/webp,image/gif"
+              /* jfif는 OS/브라우저가 MIME 타입을 못 잡는 경우가 있어 확장자(.jfif 등)를 함께 명시 */
+              accept="image/jpeg,image/png,image/webp,image/gif,.jpg,.jpeg,.jfif,.png,.webp,.gif"
               multiple onChange={handleImageSelect}
               className="bo-img-file-input" />
 
