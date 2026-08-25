@@ -31,7 +31,7 @@ public class RestaurantImgService {
     @Value("${app.upload.restaurant.dir}")
     private String uploadDir;
 
-    private static final List<String> ALLOWED_EXTENSIONS = List.of(".jpg", ".jpeg", ".png", ".webp", ".gif");
+    private static final List<String> ALLOWED_EXTENSIONS = List.of(".jpg", ".jpeg", ".png", ".webp", ".gif", ".jfif");
     private static final Logger log = Logger.getLogger(RestaurantImgService.class.getName());
 
     // 점포 이미지 목록 조회
